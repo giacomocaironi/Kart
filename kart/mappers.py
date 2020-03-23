@@ -21,26 +21,3 @@ class DefaultMapper:
             self.urls.append(rule(site))
 
         return self.urls
-
-
-class ManualMapper:
-    def __init__(self):
-        self.urls = []
-
-    def map(self, site):
-        return [
-            {
-                "name": "about",
-                "url": "/blog/about/",
-                "data": site["pages"]["about"],
-                "default_template": "minimal.html",
-                "renderers": ["main_renderer"],
-            },
-            {
-                "name": "index",
-                "url": "/blog/",
-                "data": site["pages"]["index"],
-                "default_template": "minimal.html",
-                "renderers": ["main_renderer"],
-            },
-        ]
