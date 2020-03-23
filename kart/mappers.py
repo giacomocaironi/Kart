@@ -18,7 +18,7 @@ class DefaultMapper:
     def map(self, site):
 
         for rule in self.rules:
-            self.url.append(rule(site))
+            self.urls.append(rule(site))
 
         return self.urls
 
