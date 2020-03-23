@@ -1,0 +1,11 @@
+{% extends "minimal.html" %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-lg-9">
+      <h1>{{ page.title }}</h1>
+      <p>{{ page.date | date_to_string }} - {{ page.author }}</p>
+
+      {{ content }}
+    </div>
+  </div>
+{% endblock content %}

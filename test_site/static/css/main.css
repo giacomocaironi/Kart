@@ -1,0 +1,35 @@
+html{
+  font-size: 115%;
+}
+
+.main-content{
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+}
+
+.footer{
+  margin-top: auto;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+a, a:hover{
+  color: black;
+}
+
+.main-post, .main-post a{
+  color: #fff !important;
+}
+
+.post-list{
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+.blog-pagination .btn{
+  border-radius: 2rem;
+}
