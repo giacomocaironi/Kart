@@ -1,0 +1,28 @@
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+import os
+import shutil
+
+
+class JinjaSiteRenderer:
+    def __init__(self, name="main_renderer", template_folder="templates"):
+        self.name = name
+        self.template_folder = template_folder
+
+    def render(self, map, site, build_location="_site"):
+        env = Environment(
+            loader=FileSystemLoader(self.template_folder),
+            autoescape=select_autoescape(["html", "xml"]),
+        )
+        shutil.copytree("static", os.path.join(build_location, "static"))
+        for page in map:
+            if self.name not in page["renderers"]:
+                continue
+            template = ""
+            if "template" in page["data"].keys():
+                template = page["data"]["template"]
+            if not template:
+                template = page["default_template"]
+            rendered_file = env.get_template(template).render(page=page["data"], **site)
+            os.makedirs(build_location + page["url"], exist_ok=True)
+            with open(build_location + page["url"] + "index.html", "w") as f:
+                f.write(rendered_file)
