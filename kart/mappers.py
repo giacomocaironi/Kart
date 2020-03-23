@@ -18,6 +18,6 @@ class DefaultMapper:
     def map(self, site):
 
         for rule in self.rules:
-            self.urls.append(rule(site))
+            self.urls.extend(rule(site))
 
         return self.urls

@@ -10,23 +10,27 @@ main_mapper = mappers.DefaultMapper()
 
 
 def about(site):
-    return {
-        "name": "about",
-        "url": "/blog/about/",
-        "data": site["pages"]["about"],
-        "default_template": "minimal.html",
-        "renderers": ["main_renderer"],
-    }
+    return [
+        {
+            "name": "about",
+            "url": "/blog/about/",
+            "data": site["pages"]["about"],
+            "default_template": "minimal.html",
+            "renderers": ["main_renderer"],
+        }
+    ]
 
 
 def index(site):
-    return {
-        "name": "index",
-        "url": "/blog/",
-        "data": site["pages"]["index"],
-        "default_template": "minimal.html",
-        "renderers": ["main_renderer"],
-    }
+    return [
+        {
+            "name": "index",
+            "url": "/blog/",
+            "data": site["pages"]["index"],
+            "default_template": "minimal.html",
+            "renderers": ["main_renderer"],
+        }
+    ]
 
 
 main_mapper.rules = [about, index]
