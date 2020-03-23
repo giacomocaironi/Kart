@@ -57,4 +57,4 @@ class DefaultDataMiner(Miner):
         for file in os.listdir(self.location):
             with open(os.path.join(self.location, file), "r") as f:
                 self.data[file.split(".")[0]] = yaml.full_load(f.read())
-        return {"pages": self.data}
+        return {"data": self.data}
