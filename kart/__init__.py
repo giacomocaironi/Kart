@@ -1,11 +1,26 @@
-from kart import collectors
+from kart import miners
 from kart import mappers
 
 
 class Kart:
     def __init__(self):
-        self.collector = collectors.DefaultCollector
-        self.mapper = mappers.ManualMapper
+        self.miners = [
+            miners.DefaultCollectionMiner(),
+            miners.DefaultDataMiner(),
+            miners.DefaultPageMiner(),
+        ]
+        self.mappers = [mappers.ManualMapper()]
 
     def build(self):
-        print(self.collector().parse())
+
+        self.site = {}
+        for miner in self.miners:
+            self.site.update(miner.collect())
+
+        self.map = {}
+        for mapper in self.mappers:
+            self.map.update(mapper.map(self.site))
+
+        print(self.site)
+        print()
+        print(self.map)
