@@ -140,4 +140,4 @@ main_mapper.rules = [about, index, posts, projects, blog_index]
 
 kart.mappers = [main_mapper]
 # kart.mappers.apped(main_mapper)
-kart.build()
+kart.run()

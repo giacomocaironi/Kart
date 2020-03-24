@@ -1,6 +1,5 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import os
-import shutil
 
 
 class JinjaSiteRenderer:
@@ -13,7 +12,6 @@ class JinjaSiteRenderer:
             loader=FileSystemLoader(self.template_folder),
             autoescape=select_autoescape(["html", "xml"]),
         )
-        shutil.copytree("static", os.path.join(build_location, "static"))
         for page in map:
             if self.name not in page["renderers"]:
                 continue
