@@ -30,7 +30,10 @@ class Kart:
 
         os.makedirs(build_location, exist_ok=True)
         for x in os.listdir(build_location):
-            shutil.rmtree(os.path.join(build_location, x))
+            if os.path.isdir(os.path.join(build_location, x)):
+                shutil.rmtree(os.path.join(build_location, x))
+            else:
+                os.remove(os.path.join(build_location, x))
         shutil.copytree("static", os.path.join(build_location, "static"))
         for renderer in self.renderers:
             renderer.render(self.map, self.site, build_location=build_location)

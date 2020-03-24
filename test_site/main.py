@@ -25,7 +25,7 @@ def index(site):
     return [
         {
             "name": "index",
-            "url": "/blog/",
+            "url": "/",
             "data": site["pages"]["index"],
             "default_template": "minimal.html",
             "renderers": ["main_renderer"],
@@ -63,6 +63,20 @@ def projects(site):
         )
 
     return urls
+
+
+def project_index(site):
+    projects = site["collections"]["projects"]
+    data = {"title": "Projects", "projects": projects}
+    return [
+        {
+            "name": "project_index",
+            "url": "/projects/",
+            "data": data,
+            "default_template": "minimal.html",
+            "renderers": ["main_renderer"],
+        }
+    ]
 
 
 def blog_index(site):
@@ -139,7 +153,7 @@ def tags(site):
     return urls
 
 
-main_mapper.rules = [about, index, posts, projects, blog_index, tags]
+main_mapper.rules = [about, index, posts, projects, blog_index, tags, project_index]
 
 
 kart.mappers = [main_mapper]
