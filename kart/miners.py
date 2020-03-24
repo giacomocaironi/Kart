@@ -1,6 +1,7 @@
 import os
 import frontmatter
 import yaml
+import markdown
 
 
 class Miner:
@@ -28,7 +29,7 @@ class DefaultCollectionMiner(Miner):
                     metadata, content = frontmatter.parse(f.read())
                     object = metadata
                     object["slug"] = file.split(".")[0]
-                    object["content"] = content
+                    object["content"] = markdown.markdown(content)
                     self.data[dir].append(object)
         return {"collections": self.data}
 
@@ -43,7 +44,7 @@ class DefaultPageMiner(Miner):
             with open(os.path.join(self.location, file), "r") as f:
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
-                object["content"] = content
+                object["content"] = markdown.markdown(content)
                 self.data[file.split(".")[0]] = object
         return {"pages": self.data}
 

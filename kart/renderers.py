@@ -1,4 +1,4 @@
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader
 import os
 
 
@@ -8,10 +8,7 @@ class JinjaSiteRenderer:
         self.template_folder = template_folder
 
     def render(self, map, site, build_location="_site"):
-        env = Environment(
-            loader=FileSystemLoader(self.template_folder),
-            autoescape=select_autoescape(["html", "xml"]),
-        )
+        env = Environment(loader=FileSystemLoader(self.template_folder))
         for page in map:
             if self.name not in page["renderers"]:
                 continue
