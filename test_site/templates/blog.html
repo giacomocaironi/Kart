@@ -3,8 +3,8 @@
   <div class="jumbotron p-4 p-md-3 main-post rounded bg-dark">
     <div class="col-md-6 px-0">
       <h3>Latest post</h3>
-      <h1><a href="{{ site.posts[0].url }}">{{ site.posts[0].title }}</a></h1>
-      <p>{{ site.posts[0].excerpt }}</p>
+      <h1><a href="{{ collections.posts[0].url }}">{{ collections.posts[0].title }}</a></h1>
+      <p>{{ collections.posts[0].content }}</p>
     </div>
   </div>
 
@@ -13,10 +13,10 @@
       <h2>Older posts</h2>
       <hr>
       <ul class='post-list'>
-        {% for post in paginator.posts %}
+        {% for post in page.paginator.posts %}
           <li>
             <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-            <p>{{ post.excerpt }}</p>
+            <p>{{ post.content }}</p>
           </li>
         {% endfor %}
       </ul>
@@ -24,16 +24,17 @@
   </div>
 
   <nav class='blog-pagination'>
-    {% if paginator.previous_page %}
-      <a class='btn btn-outline-dark' href="{{ paginator.previous_page_path | prepend: site.baseurl }}">Newer</a>
+    {% if page.paginator.previous_page %}
+      <a class='btn btn-outline-dark' href="">Newer</a>
     {% else %}
-      <a class='btn btn-outline-dark disabled' href="{{ paginator.previous_page_path | prepend: site.baseurl }}">Newer</a>
+      <a class='btn btn-outline-dark disabled' href="">Newer</a>
     {% endif %}
 
-    {% if paginator.next_page %}
-      <a class='btn btn-outline-dark' href="{{ paginator.next_page_path | prepend: site.baseurl }}">Older</a>
+    {% if page.paginator.next_page %}
+      <a class='btn btn-outline-dark' href="">Older</a>
     {% else %}
-      <a class='btn btn-outline-dark disabled' href="{{ paginator.next_page_path | prepend: site.baseurl }}">Older</a>
+      <a class='btn btn-outline-dark disabled' href="">Older</a>
     {% endif %}
   </nav>
+
 {% endblock content %}

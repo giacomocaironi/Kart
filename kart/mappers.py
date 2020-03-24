@@ -10,7 +10,7 @@ class AutomaticMapper:
         return {}
 
 
-class DefaultMapper:
+class ManualMapper:
     def __init__(self):
         self.rules = []  # a rule is a function
         self.urls = []

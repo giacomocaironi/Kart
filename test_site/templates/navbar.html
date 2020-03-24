@@ -6,7 +6,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-2 mr-auto">
-        {% for item in data.navigation%}
+        {% for item in data.navigation[1:] %}
         <li class="nav-item"><a class="nav-link" href="{{ item.link }}">{{ item.name }}</a></li>
         {% endfor %}
       </ul>
