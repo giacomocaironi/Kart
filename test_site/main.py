@@ -105,6 +105,7 @@ def tags(site):
     for tag in site["collections"]["tags"]:
 
         posts = site["collections"]["posts"]
+        posts = [post for post in posts if tag["name"] in post["tags"]]
 
         per_page = 5
         paginated_posts = [
@@ -120,7 +121,7 @@ def tags(site):
                 "previous_page": i - 1,
             }
             data = {
-                "title": f"{tag['name']}",
+                "title": f"Posts tagged {tag['name']}",
                 "paginator": paginator,
             }
             urls.append(
@@ -128,9 +129,9 @@ def tags(site):
                     "name": f"tag.f{tag['slug']}.{i}",
                     "url": f"/blog/tags/{tag['slug']}/{i}/"
                     if i > 1
-                    else "/blog/tags/{tag['slug']}/",
+                    else f"/blog/tags/{tag['slug']}/",
                     "data": data,
-                    "default_template": "minimal.html",
+                    "default_template": "tag.html",
                     "renderers": ["main_renderer"],
                 }
             )
