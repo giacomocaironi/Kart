@@ -103,6 +103,7 @@ def tags(site):
     urls = []
 
     for tag in site["collections"]["tags"]:
+
         posts = site["collections"]["posts"]
 
         per_page = 5
@@ -119,15 +120,17 @@ def tags(site):
                 "previous_page": i - 1,
             }
             data = {
-                "title": "blog",
+                "title": f"{tag['name']}",
                 "paginator": paginator,
             }
             urls.append(
                 {
-                    "name": f"blog_index.{i}",
-                    "url": f"/blog/{i}/" if i > 1 else "/blog/",
+                    "name": f"tag.f{tag['slug']}.{i}",
+                    "url": f"/blog/tags/{tag['slug']}/{i}/"
+                    if i > 1
+                    else "/blog/tags/{tag['slug']}/",
                     "data": data,
-                    "default_template": "blog.html",
+                    "default_template": "minimal.html",
                     "renderers": ["main_renderer"],
                 }
             )
@@ -135,7 +138,7 @@ def tags(site):
     return urls
 
 
-main_mapper.rules = [about, index, posts, projects, blog_index]
+main_mapper.rules = [about, index, posts, projects, blog_index, tags]
 
 
 kart.mappers = [main_mapper]

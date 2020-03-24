@@ -1,0 +1,8 @@
+<div class="card p-3 tags-list">
+  <h2>Tags</h2>
+  <ul>
+    {% for tag in site.collections.tags %}
+      <li><a href="">{{tag.name}}</a></li>
+    {% endfor %}
+  </ul>
+</div>

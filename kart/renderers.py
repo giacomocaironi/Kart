@@ -21,7 +21,7 @@ class JinjaSiteRenderer:
             if not template:
                 template = page["default_template"]
             jinja_template = env.get_template(template)
-            rendered_file = jinja_template.render(page=page["data"], **site)
+            rendered_file = jinja_template.render(page=page["data"], site=site)
             os.makedirs(build_location + page["url"], exist_ok=True)
             with open(build_location + page["url"] + "index.html", "w") as f:
                 f.write(rendered_file)

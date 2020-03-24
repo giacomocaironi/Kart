@@ -1,40 +1,44 @@
 {% extends "minimal.html" %}
-  {% block content %}
-  <div class="jumbotron p-4 p-md-3 main-post rounded bg-dark">
-    <div class="col-md-6 px-0">
-      <h3>Latest post</h3>
-      <h1><a href="{{ collections.posts[0].url }}">{{ collections.posts[0].title }}</a></h1>
-      <p>{{ collections.posts[0].content }}</p>
-    </div>
+{% block content %}
+<div class="jumbotron p-4 p-md-3 main-post rounded bg-dark">
+  <div class="col-md-6 px-0">
+    <h3>Latest post</h3>
+    <h1><a href="{{ site.collections.posts[0].url }}">{{ site.collections.posts[0].title }}</a></h1>
+    <p>{{ site.collections.posts[0].content }}</p>
   </div>
+</div>
 
-  <div class="row">
-    <div class="col-md-12 col-lg-9">
+<div class="row">
+  <div class="col-md-12 col-lg-9">
+    {% if page.paginator.index == 1 %}
       <h2>Older posts</h2>
-      <hr>
-      <ul class='post-list'>
-        {% for post in page.paginator.posts %}
-          <li>
-            <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-            <p>{{ post.content }}</p>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
+    {% else %}
+      <h2>Older posts - page {{page.paginator.index}}</h2>
+    {% endif %}
+    <hr>
+    <ul class='post-list'>
+      {% for post in page.paginator.posts %}
+        {% include "post_front.html" %}
+      {% endfor %}
+    </ul>
   </div>
+  <div class="col-md-12 col-lg-3">
+    {% include "tag_cloud.html" %}
+  </div>
+</div>
 
-  <nav class='blog-pagination'>
-    {% if page.paginator.previous_page %}
-      <a class='btn btn-outline-dark' href="">Newer</a>
-    {% else %}
-      <a class='btn btn-outline-dark disabled' href="">Newer</a>
-    {% endif %}
+<nav class='blog-pagination'>
+  {% if page.paginator.previous_page %}
+    <a class='btn btn-outline-dark' href="">Newer</a>
+  {% else %}
+    <a class='btn btn-outline-dark disabled' href="">Newer</a>
+  {% endif %}
 
-    {% if page.paginator.next_page %}
-      <a class='btn btn-outline-dark' href="">Older</a>
-    {% else %}
-      <a class='btn btn-outline-dark disabled' href="">Older</a>
-    {% endif %}
-  </nav>
+  {% if page.paginator.next_page %}
+    <a class='btn btn-outline-dark' href="">Older</a>
+  {% else %}
+    <a class='btn btn-outline-dark disabled' href="">Older</a>
+  {% endif %}
+</nav>
 
 {% endblock content %}
