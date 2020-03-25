@@ -1,8 +1,8 @@
 - name: Giacomo Caironi
-  link: /
+  link: index
 - name: About
-  link: /about.html
+  link: about
 - name: Blog
-  link: /blog
+  link: blog_index
 - name: Projects
-  link: /projects.html
+  link: projects_index

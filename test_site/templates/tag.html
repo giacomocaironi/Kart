@@ -19,13 +19,13 @@
 
   <nav class='blog-pagination'>
     {% if page.paginator.previous_page %}
-      <a class='btn btn-outline-dark' href="">Newer</a>
+      <a class='btn btn-outline-dark' href="{{ url('tags.' + page.tag_slug + '.' + (page.paginator.index - 1)|string) }}">Newer</a>
     {% else %}
       <a class='btn btn-outline-dark disabled' href="">Newer</a>
     {% endif %}
 
     {% if page.paginator.next_page %}
-      <a class='btn btn-outline-dark' href="">Older</a>
+      <a class='btn btn-outline-dark' href="{{ url("tags." + page.tag_slug + '.' + (page.paginator.index + 1)|string) }}">Older</a>
     {% else %}
       <a class='btn btn-outline-dark disabled' href="">Older</a>
     {% endif %}

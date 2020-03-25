@@ -3,7 +3,7 @@
 <div class="jumbotron p-4 p-md-3 main-post rounded bg-dark">
   <div class="col-md-6 px-0">
     <h3>Latest post</h3>
-    <h1><a href="{{ site.collections.posts[0].url }}">{{ site.collections.posts[0].title }}</a></h1>
+    <h1><a href="{{ url("posts." + site.collections.posts[0].slug) }}">{{ site.collections.posts[0].title }}</a></h1>
     <p>{{ site.collections.posts[0].content }}</p>
   </div>
 </div>
@@ -29,13 +29,13 @@
 
 <nav class='blog-pagination'>
   {% if page.paginator.previous_page %}
-    <a class='btn btn-outline-dark' href="">Newer</a>
+    <a class='btn btn-outline-dark' href="{{ url('blog_index.' + (page.paginator.index - 1)|string) }}">Newer</a>
   {% else %}
     <a class='btn btn-outline-dark disabled' href="">Newer</a>
   {% endif %}
 
   {% if page.paginator.next_page %}
-    <a class='btn btn-outline-dark' href="">Older</a>
+    <a class='btn btn-outline-dark' href="{{ url("blog_index." + (page.paginator.index + 1)|string) }}">Older</a>
   {% else %}
     <a class='btn btn-outline-dark disabled' href="">Older</a>
   {% endif %}

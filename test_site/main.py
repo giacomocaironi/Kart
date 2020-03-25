@@ -70,10 +70,10 @@ def project_index(site):
     data = {"title": "Projects", "projects": projects}
     return [
         {
-            "name": "project_index",
+            "name": "projects_index",
             "url": "/projects/",
             "data": data,
-            "default_template": "minimal.html",
+            "default_template": "projects_index.html",
             "renderers": ["main_renderer"],
         }
     ]
@@ -105,7 +105,7 @@ def blog_index(site):
                 "name": f"blog_index.{i}",
                 "url": f"/blog/{i}/" if i > 1 else "/blog/",
                 "data": data,
-                "default_template": "blog.html",
+                "default_template": "blog_index.html",
                 "renderers": ["main_renderer"],
             }
         )
@@ -136,11 +136,12 @@ def tags(site):
             }
             data = {
                 "title": f"Posts tagged {tag['name']}",
+                "tag_slug": tag["slug"],
                 "paginator": paginator,
             }
             urls.append(
                 {
-                    "name": f"tag.f{tag['slug']}.{i}",
+                    "name": f"tags.{tag['slug']}.{i}",
                     "url": f"/blog/tags/{tag['slug']}/{i}/"
                     if i > 1
                     else f"/blog/tags/{tag['slug']}/",

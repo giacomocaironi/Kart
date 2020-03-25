@@ -1,0 +1,16 @@
+{% extends "minimal.html" %}
+{% block content %}
+
+<h1>Projects</h1>
+<div class="row">
+  {% for project in site.collections.projects %}
+    <div class="col-12 col-lg-4 col-md-6 mb-3 mt-3">
+      <div class="card p-3">
+        <h2><a href="{{ url('projects.' + project.slug) }}">{{ project.name }}</a></h2>
+        <p>{{ project.content }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock content %}
