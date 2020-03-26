@@ -6,11 +6,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Kart",
-    version="0.0.0",
+    version="0.1.0",
     author="Giacomo Caironi",
     author_email="giacomo.caironi@gmail.com",
-    description="A small static site generator",
+    description="A very flexible static site generator written in python",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/giacomocaironi/Kart",
     packages=setuptools.find_packages(),
+    install_requires=["jinja2", "pyyaml", "markdown", "python-frontmatter"],
 )
