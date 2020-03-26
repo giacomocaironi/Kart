@@ -15,23 +15,24 @@ class Miner:
     pass
 
 
-class DefaultCollectionMiner(Miner):
-    def __init__(self, model=None, location="collections"):
+class CollectionMiner(Miner):
+    def __init__(self, collection_name, model=None, location="collections"):
         self.model = model
+        self.collection_name = collection_name
         self.location = location
-        self.data = {}
+        self.data = []
 
     def collect(self):
-        for dir in os.listdir("collections"):
-            self.data[dir] = []
-            for file in os.listdir(os.path.join(self.location, dir)):
-                with open(os.path.join(self.location, dir, file), "r") as f:
-                    metadata, content = frontmatter.parse(f.read())
-                    object = metadata
-                    object["slug"] = file.split(".")[0]
-                    object["content"] = markdown.markdown(content)
-                    self.data[dir].append(object)
-        return {"collections": self.data}
+        for file in os.listdir(os.path.join(self.location, self.collection_name)):
+            with open(
+                os.path.join(self.location, self.collection_name, file), "r"
+            ) as f:
+                metadata, content = frontmatter.parse(f.read())
+                object = metadata
+                object["slug"] = file.split(".")[0]
+                object["content"] = markdown.markdown(content)
+                self.data.append(object)
+        return {self.collection_name: self.data}
 
 
 class DefaultPageMiner(Miner):

@@ -3,7 +3,7 @@
 
 <h1>Projects</h1>
 <div class="row">
-  {% for project in site.collections.projects %}
+  {% for project in site.projects %}
     <div class="col-12 col-lg-4 col-md-6 mb-3 mt-3">
       <div class="card p-3">
         <h2><a href="{{ url('projects.' + project.slug) }}">{{ project.name }}</a></h2>

@@ -1,7 +1,7 @@
 <div class="card p-3 tags-list">
   <h2>Tags</h2>
   <ul>
-    {% for tag in site.collections.tags %}
+    {% for tag in site.tags %}
       <li><a href="{{ url('tags.' + tag.slug + '.1') }}">{{tag.name}}</a></li>
     {% endfor %}
   </ul>

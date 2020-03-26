@@ -1,13 +1,6 @@
 from kart import Kart
 from kart import miners, mappers, renderers
 
-kart = Kart()
-
-# kart.miners = []
-# kart.renderers = []
-
-main_mapper = mappers.ManualMapper()
-
 
 def about(site):
     return {
@@ -33,7 +26,7 @@ def index(site):
 
 def posts(site):
     urls = {}
-    for post in site["collections"]["posts"]:
+    for post in site["posts"]:
         urls.update(
             {
                 f"posts.{post['slug']}": {
@@ -50,7 +43,7 @@ def posts(site):
 
 def projects(site):
     urls = {}
-    for project in site["collections"]["projects"]:
+    for project in site["projects"]:
         urls.update(
             {
                 f"projects.{project['slug']}": {
@@ -66,7 +59,7 @@ def projects(site):
 
 
 def project_index(site):
-    projects = site["collections"]["projects"]
+    projects = site["projects"]
     data = {"title": "Projects", "projects": projects}
     return {
         "projects_index": {
@@ -80,7 +73,7 @@ def project_index(site):
 
 def blog_index(site):
     urls = {}
-    posts = site["collections"]["posts"][1:]
+    posts = site["posts"][1:]
 
     per_page = 5
     paginated_posts = [
@@ -116,9 +109,9 @@ def blog_index(site):
 def tags(site):
     urls = {}
 
-    for tag in site["collections"]["tags"]:
+    for tag in site["tags"]:
 
-        posts = site["collections"]["posts"]
+        posts = site["posts"]
         posts = [post for post in posts if tag["name"] in post["tags"]]
 
         per_page = 5
@@ -155,9 +148,21 @@ def tags(site):
     return urls
 
 
+kart = Kart()
+
+
+kart.miners = [
+    miners.DefaultDataMiner(),
+    miners.DefaultPageMiner(),
+    miners.CollectionMiner("posts"),
+    miners.CollectionMiner("tags"),
+    miners.CollectionMiner("projects"),
+]
+# kart.renderers = []
+
+
+main_mapper = mappers.ManualMapper()
 main_mapper.rules = [about, index, posts, projects, blog_index, tags, project_index]
-
-
 kart.mappers = [main_mapper]
-# kart.mappers.apped(main_mapper)
+
 kart.run()

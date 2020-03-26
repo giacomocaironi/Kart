@@ -6,7 +6,7 @@
       Tags:
         {% for tag in post.tags %}
           <a href="{{ url("tags." + tag|lower + ".1") }}">{{ tag }}</a>
-          {# <a href="{{ url("tags." + (site.collections.tags|selectattr('name', tag)|first).slug + ".1") }}">{{ tag }}</a> #}
+          {# <a href="{{ url("tags." + (site.tags|selectattr('name', tag)|first).slug + ".1") }}">{{ tag }}</a> #}
         {% endfor %}
     </span>
     <p>{{ post.content }}</p>
