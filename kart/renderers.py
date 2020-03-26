@@ -9,7 +9,7 @@ class JinjaSiteRenderer:
 
     def render(self, map, site, url_function, build_location="_site"):
         env = Environment(loader=FileSystemLoader(self.template_folder))
-        for page in map:
+        for page in map.values():
             if self.name != page["renderer"]:
                 continue
             template = ""

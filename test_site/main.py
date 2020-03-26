@@ -10,39 +10,38 @@ main_mapper = mappers.ManualMapper()
 
 
 def about(site):
-    return [
-        {
-            "name": "about",
+    return {
+        "about": {
             "url": "/blog/about/",
             "data": site["pages"]["about"],
             "default_template": "minimal.html",
             "renderer": "main_renderer",
         }
-    ]
+    }
 
 
 def index(site):
-    return [
-        {
-            "name": "index",
+    return {
+        "index": {
             "url": "/",
             "data": site["pages"]["index"],
             "default_template": "minimal.html",
             "renderer": "main_renderer",
         }
-    ]
+    }
 
 
 def posts(site):
-    urls = []
+    urls = {}
     for post in site["collections"]["posts"]:
-        urls.append(
+        urls.update(
             {
-                "name": f"posts.{post['slug']}",
-                "url": f"/blog/posts/{post['slug']}/",
-                "data": post,
-                "default_template": "post.html",
-                "renderer": "main_renderer",
+                f"posts.{post['slug']}": {
+                    "url": f"/blog/posts/{post['slug']}/",
+                    "data": post,
+                    "default_template": "post.html",
+                    "renderer": "main_renderer",
+                }
             }
         )
 
@@ -50,15 +49,16 @@ def posts(site):
 
 
 def projects(site):
-    urls = []
+    urls = {}
     for project in site["collections"]["projects"]:
-        urls.append(
+        urls.update(
             {
-                "name": f"projects.{project['slug']}",
-                "url": f"/projects/{project['slug']}/",
-                "data": project,
-                "default_template": "project.html",
-                "renderer": "main_renderer",
+                f"projects.{project['slug']}": {
+                    "url": f"/projects/{project['slug']}/",
+                    "data": project,
+                    "default_template": "project.html",
+                    "renderer": "main_renderer",
+                }
             }
         )
 
@@ -68,19 +68,18 @@ def projects(site):
 def project_index(site):
     projects = site["collections"]["projects"]
     data = {"title": "Projects", "projects": projects}
-    return [
-        {
-            "name": "projects_index",
+    return {
+        "projects_index": {
             "url": "/projects/",
             "data": data,
             "default_template": "projects_index.html",
             "renderer": "main_renderer",
         }
-    ]
+    }
 
 
 def blog_index(site):
-    urls = []
+    urls = {}
     posts = site["collections"]["posts"][1:]
 
     per_page = 5
@@ -100,13 +99,14 @@ def blog_index(site):
             "title": "blog",
             "paginator": paginator,
         }
-        urls.append(
+        urls.update(
             {
-                "name": f"blog_index.{i}",
-                "url": f"/blog/{i}/" if i > 1 else "/blog/",
-                "data": data,
-                "default_template": "blog_index.html",
-                "renderer": "main_renderer",
+                f"blog_index.{i}": {
+                    "url": f"/blog/{i}/" if i > 1 else "/blog/",
+                    "data": data,
+                    "default_template": "blog_index.html",
+                    "renderer": "main_renderer",
+                }
             }
         )
 
@@ -114,7 +114,7 @@ def blog_index(site):
 
 
 def tags(site):
-    urls = []
+    urls = {}
 
     for tag in site["collections"]["tags"]:
 
@@ -139,15 +139,16 @@ def tags(site):
                 "tag_slug": tag["slug"],
                 "paginator": paginator,
             }
-            urls.append(
+            urls.update(
                 {
-                    "name": f"tags.{tag['slug']}.{i}",
-                    "url": f"/blog/tags/{tag['slug']}/{i}/"
-                    if i > 1
-                    else f"/blog/tags/{tag['slug']}/",
-                    "data": data,
-                    "default_template": "tag.html",
-                    "renderer": "main_renderer",
+                    f"tags.{tag['slug']}.{i}": {
+                        "url": f"/blog/tags/{tag['slug']}/{i}/"
+                        if i > 1
+                        else f"/blog/tags/{tag['slug']}/",
+                        "data": data,
+                        "default_template": "tag.html",
+                        "renderer": "main_renderer",
+                    }
                 }
             )
 

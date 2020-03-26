@@ -13,11 +13,11 @@ class AutomaticMapper:
 class ManualMapper:
     def __init__(self):
         self.rules = []  # a rule is a function
-        self.urls = []
+        self.urls = {}
 
     def map(self, site):
 
         for rule in self.rules:
-            self.urls.extend(rule(site))
+            self.urls.update(rule(site))
 
         return self.urls
