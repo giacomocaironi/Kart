@@ -16,7 +16,7 @@ def about(site):
             "url": "/blog/about/",
             "data": site["pages"]["about"],
             "default_template": "minimal.html",
-            "renderers": ["main_renderer"],
+            "renderer": "main_renderer",
         }
     ]
 
@@ -28,7 +28,7 @@ def index(site):
             "url": "/",
             "data": site["pages"]["index"],
             "default_template": "minimal.html",
-            "renderers": ["main_renderer"],
+            "renderer": "main_renderer",
         }
     ]
 
@@ -42,7 +42,7 @@ def posts(site):
                 "url": f"/blog/posts/{post['slug']}/",
                 "data": post,
                 "default_template": "post.html",
-                "renderers": ["main_renderer"],
+                "renderer": "main_renderer",
             }
         )
 
@@ -58,7 +58,7 @@ def projects(site):
                 "url": f"/projects/{project['slug']}/",
                 "data": project,
                 "default_template": "project.html",
-                "renderers": ["main_renderer"],
+                "renderer": "main_renderer",
             }
         )
 
@@ -74,7 +74,7 @@ def project_index(site):
             "url": "/projects/",
             "data": data,
             "default_template": "projects_index.html",
-            "renderers": ["main_renderer"],
+            "renderer": "main_renderer",
         }
     ]
 
@@ -106,7 +106,7 @@ def blog_index(site):
                 "url": f"/blog/{i}/" if i > 1 else "/blog/",
                 "data": data,
                 "default_template": "blog_index.html",
-                "renderers": ["main_renderer"],
+                "renderer": "main_renderer",
             }
         )
 
@@ -147,7 +147,7 @@ def tags(site):
                     else f"/blog/tags/{tag['slug']}/",
                     "data": data,
                     "default_template": "tag.html",
-                    "renderers": ["main_renderer"],
+                    "renderer": "main_renderer",
                 }
             )
 
