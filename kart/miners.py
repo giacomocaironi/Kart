@@ -31,7 +31,6 @@ class PostMiner(Miner):
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
                 object["slug"] = file.split(".")[0]
-                object["date"] = datetime.strptime(object["date"], "%Y-%m-%d").date()
                 object["content"] = markdown.markdown(content)
                 self.data.append(object)
         self.data.sort(key=lambda x: x["date"])

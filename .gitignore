@@ -3,5 +3,5 @@ __pycache__
 dist
 *.egg-info
 _site
-big_test_site
+big_test_blog
 build
