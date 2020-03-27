@@ -9,7 +9,7 @@ import argparse
 class Kart:
     def __init__(self):
         self.miners = [
-            miners.CollectionMiner("projects"),
+            miners.PostMiner("posts"),
             miners.CollectionMiner("tags"),
             miners.DefaultDataMiner(),
             miners.DefaultPageMiner(),

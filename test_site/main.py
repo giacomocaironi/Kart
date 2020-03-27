@@ -180,7 +180,7 @@ kart = Kart()
 kart.miners = [
     miners.DefaultDataMiner(),
     miners.DefaultPageMiner(),
-    miners.CollectionMiner("posts"),
+    miners.PostMiner("posts"),
     miners.CollectionMiner("tags"),
     miners.CollectionMiner("projects"),
 ]

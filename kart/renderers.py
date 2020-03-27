@@ -1,5 +1,4 @@
 from jinja2 import Environment, FileSystemLoader
-from datetime import datetime
 import os
 
 
@@ -16,7 +15,7 @@ class JinjaSiteRenderer:
         return result
 
     def date_to_string(self, date):
-        return datetime.strptime(date, "%Y-%m-%d").date().strftime("%b %d, %Y")
+        return date.strftime("%b %d, %Y")
 
     def render(self, map, site, build_location="_site"):
         self.map = map

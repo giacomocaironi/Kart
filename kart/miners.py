@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import frontmatter
 import yaml
@@ -13,6 +14,29 @@ class Miner:
     # def parse(self):
     #     pass
     pass
+
+
+class PostMiner(Miner):
+    def __init__(self, collection_name="posts", model=None, location="collections"):
+        self.model = model
+        self.collection_name = collection_name
+        self.location = location
+        self.data = []
+
+    def collect(self):
+        for file in os.listdir(os.path.join(self.location, self.collection_name)):
+            with open(
+                os.path.join(self.location, self.collection_name, file), "r"
+            ) as f:
+                metadata, content = frontmatter.parse(f.read())
+                object = metadata
+                object["slug"] = file.split(".")[0]
+                object["date"] = datetime.strptime(object["date"], "%Y-%m-%d").date()
+                object["content"] = markdown.markdown(content)
+                self.data.append(object)
+        self.data.sort(key=lambda x: x["date"])
+        self.data.reverse()
+        return {self.collection_name: self.data}
 
 
 class CollectionMiner(Miner):
