@@ -82,11 +82,23 @@ def blog_index(site):
     ]
 
     for i, posts in enumerate(paginated_posts, 1):
+        url = f"/blog/{i}/" if i > 1 else "/blog/"
+        if i > 2:
+            previous_page_url = f"/blog/{i-1}/"
+        elif i == 2:
+            previous_page_url = "/blog/"
+        else:
+            previous_page_url = ""
+        if i < len(posts):
+            next_page_url = f"/blog/{i+1}/"
+        else:
+            next_page_url = ""
+
         paginator = {
             "posts": posts,
             "index": i,
-            "next_page": i + 1 if i < len(paginated_posts) else 0,
-            "previous_page": i - 1,
+            "next_page_url": next_page_url,
+            "previous_page_url": previous_page_url,
         }
         data = {
             "title": "blog",
@@ -95,7 +107,7 @@ def blog_index(site):
         urls.update(
             {
                 f"blog_index.{i}": {
-                    "url": f"/blog/{i}/" if i > 1 else "/blog/",
+                    "url": url,
                     "data": data,
                     "default_template": "blog_index.html",
                     "renderer": "main_renderer",
@@ -121,11 +133,27 @@ def tags(site):
         ]
 
         for i, posts in enumerate(paginated_posts, 1):
+            url = (
+                f"/blog/tags/{tag['slug']}/{i}/"
+                if i > 1
+                else f"/blog/tags/{tag['slug']}/"
+            )
+            if i > 2:
+                previous_page_url = f"/blog/tags/{tag['slug']}/{i-1}/"
+            elif i == 2:
+                previous_page_url = f"/blog/tags/{tag['slug']}/"
+            else:
+                previous_page_url = ""
+            if i < len(posts):
+                next_page_url = f"/blog/tags/{tag['slug']}/{i+1}/"
+            else:
+                next_page_url = ""
+
             paginator = {
                 "posts": posts,
                 "index": i,
-                "next_page": i + 1 if i < len(paginated_posts) else 0,
-                "previous_page": i - 1,
+                "next_page_url": next_page_url,
+                "previous_page_url": previous_page_url,
             }
             data = {
                 "title": f"Posts tagged {tag['name']}",
@@ -135,9 +163,7 @@ def tags(site):
             urls.update(
                 {
                     f"tags.{tag['slug']}.{i}": {
-                        "url": f"/blog/tags/{tag['slug']}/{i}/"
-                        if i > 1
-                        else f"/blog/tags/{tag['slug']}/",
+                        "url": url,
                         "data": data,
                         "default_template": "tag.html",
                         "renderer": "main_renderer",
