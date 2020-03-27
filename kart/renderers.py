@@ -1,4 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
+from datetime import datetime
 import os
 
 
@@ -14,6 +15,9 @@ class JinjaSiteRenderer:
             result = self.map[name + ".1"]["url"]
         return result
 
+    def date_to_string(self, date):
+        return datetime.strptime(date, "%Y-%m-%d").date().strftime("%b %d, %Y")
+
     def render(self, map, site, build_location="_site"):
         self.map = map
         env = Environment(loader=FileSystemLoader(self.template_folder))
@@ -26,9 +30,10 @@ class JinjaSiteRenderer:
             if not template:
                 template = page["default_template"]
             jinja_template = env.get_template(template)
-            rendered_file = jinja_template.render(
-                page=page["data"], site=site, url=self.url
+            jinja_template.globals.update(
+                url=self.url, date_to_string=self.date_to_string
             )
+            rendered_file = jinja_template.render(page=page["data"], site=site)
             os.makedirs(build_location + page["url"], exist_ok=True)
             with open(build_location + page["url"] + "index.html", "w") as f:
                 f.write(rendered_file)
