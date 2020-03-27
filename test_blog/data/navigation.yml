@@ -1,5 +1,5 @@
 - name: Test blog
-  link: index
+  link: blog_index
 - name: About
   link: about
 - name: Contact

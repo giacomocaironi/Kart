@@ -23,14 +23,33 @@ class ManualMapper:
         return self.urls
 
 
-class BlogMapper:
+class PageMapper:
     def __init__(self):
         self.urls = {}
 
     def map(self, site):
+        for slug in site["pages"]:
+            self.urls.update(
+                {
+                    slug: {
+                        "url": f"/{slug}/",
+                        "data": site["pages"][slug],
+                        "default_template": "page.html",
+                        "renderer": "main_renderer",
+                    }
+                }
+            )
+        return self.urls
+
+
+class BlogMapper:
+    def __init__(self, base_url=""):
+        self.urls = {}
+        self.base_url = base_url
+
+    def map(self, site):
         self.urls.update(self.posts(site))
-        self.urls.update(self.pages(site))
-        self.urls.update(self.index(site))
+        self.urls.update(self.blog_index(site))
         self.urls.update(self.tags(site))
 
         return self.urls
@@ -41,7 +60,7 @@ class BlogMapper:
             urls.update(
                 {
                     f"posts.{post['slug']}": {
-                        "url": f"/posts/{post['slug']}/",
+                        "url": self.base_url + f"/posts/{post['slug']}/",
                         "data": post,
                         "default_template": "post.html",
                         "renderer": "main_renderer",
@@ -51,22 +70,7 @@ class BlogMapper:
 
         return urls
 
-    def pages(self, site):
-        urls = {}
-        for slug in site["pages"]:
-            urls.update(
-                {
-                    slug: {
-                        "url": f"/{slug}/",
-                        "data": site["pages"][slug],
-                        "default_template": "page.html",
-                        "renderer": "main_renderer",
-                    }
-                }
-            )
-        return urls
-
-    def index(self, site):
+    def blog_index(self, site):
         urls = {}
         posts = site["posts"][1:]
 
@@ -92,8 +96,8 @@ class BlogMapper:
             paginator = {
                 "posts": posts,
                 "index": i,
-                "next_page_url": next_page_url,
-                "previous_page_url": previous_page_url,
+                "next_page_url": self.base_url + next_page_url,
+                "previous_page_url": self.base_url + previous_page_url,
             }
             data = {
                 "title": "blog",
@@ -101,8 +105,8 @@ class BlogMapper:
             }
             urls.update(
                 {
-                    f"index.{i}": {
-                        "url": url,
+                    f"blog_index.{i}": {
+                        "url": self.base_url + url,
                         "data": data,
                         "default_template": "blog_index.html",
                         "renderer": "main_renderer",
@@ -142,8 +146,8 @@ class BlogMapper:
                 paginator = {
                     "posts": posts,
                     "index": i,
-                    "next_page_url": next_page_url,
-                    "previous_page_url": previous_page_url,
+                    "next_page_url": self.base_url + next_page_url,
+                    "previous_page_url": self.base_url + previous_page_url,
                 }
                 data = {
                     "title": f"Posts tagged {tag['name']}",
@@ -153,7 +157,7 @@ class BlogMapper:
                 urls.update(
                     {
                         f"tags.{tag['slug']}.{i}": {
-                            "url": url,
+                            "url": self.base_url + url,
                             "data": data,
                             "default_template": "tag.html",
                             "renderer": "main_renderer",
