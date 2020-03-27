@@ -3,6 +3,7 @@ import os
 import frontmatter
 import yaml
 import markdown
+from paka import cmark
 
 
 class Miner:
@@ -31,7 +32,8 @@ class PostMiner(Miner):
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
                 object["slug"] = file.split(".")[0]
-                object["content"] = markdown.markdown(content)
+                object["content"] = cmark.to_html(content)  # speed improvement
+                # object["content"] = markdown.markdown(content)
                 self.data.append(object)
         self.data.sort(key=lambda x: x["date"])
         self.data.reverse()
