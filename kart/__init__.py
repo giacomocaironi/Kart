@@ -25,6 +25,8 @@ class Kart:
         for miner in self.miners:
             self.site.update(miner.collect())
 
+        # for key, value in self.site.items():
+        #     print(key, value)
         # print(self.site)
 
         self.map = {}
@@ -42,20 +44,8 @@ class Kart:
         shutil.copytree("static", os.path.join(build_location, "static"))
         for renderer in self.renderers:
             renderer.render(
-                self.map,
-                self.site,
-                build_location=build_location,
-                url_function=self.url,
+                self.map, self.site, build_location=build_location,
             )
-
-        # print(self.map)
-
-    def url(self, name):
-        try:
-            result = self.map[name]["url"]
-        except:
-            result = self.map[name + ".1"]["url"]
-        return result
 
     def serve(self, port=9000):
         os.chdir(self.build_location)
