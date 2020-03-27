@@ -1,0 +1,9 @@
+<nav class="footer navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container flex-row">
+    <ul class="navbar-nav mr-2 mr-auto">
+      {% for item in site.data.footer%}
+      <li class="nav-item"><a class="nav-link" href="{{ url(item.link) }}">{{ item.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</nav>

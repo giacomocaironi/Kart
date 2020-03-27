@@ -14,7 +14,7 @@ class Kart:
             miners.DefaultDataMiner(),
             miners.DefaultPageMiner(),
         ]
-        self.mappers = [mappers.ManualMapper()]
+        self.mappers = [mappers.BlogMapper()]
         self.renderers = [renderers.JinjaSiteRenderer()]
 
     def build(self, build_location="_site"):
@@ -58,9 +58,12 @@ class Kart:
         parser.add_argument(
             "command", help="command to execute", choices={"build", "serve"}
         )
+        parser.add_argument(
+            "-p", "--port", help="port to bind to", default=9000, type=int
+        )
         args = parser.parse_args()
         if args.command == "build":
             self.build()
         if args.command == "serve":
             self.build()
-            self.serve()
+            self.serve(args.port)

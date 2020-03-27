@@ -1,0 +1,6 @@
+- name: Test blog
+  link: index
+- name: About
+  link: about
+- name: Contact
+  link: contact

@@ -1,0 +1,34 @@
+{% extends "minimal.html" %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-12 col-lg-9">
+      <h1>{{page.title}}</h1>
+      <hr>
+      <ul class='post-list'>
+        {% for post in page.paginator.posts %}
+          {% include "post_front.html" %}
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-12 col-lg-3">
+      {% include "tag_cloud.html" %}
+    </div>
+  </div>
+
+  <nav class='blog-pagination'>
+    {% if page.paginator.previous_page_url %}
+      <a class='btn btn-outline-dark' href="{{ page.paginator.previous_page_url }}">Newer</a>
+    {% else %}
+      <a class='btn btn-outline-dark disabled' href="">Newer</a>
+    {% endif %}
+
+    {% if page.paginator.next_page_url %}
+      <a class='btn btn-outline-dark' href="{{ page.paginator.next_page_url }}">Older</a>
+    {% else %}
+      <a class='btn btn-outline-dark disabled' href="">Older</a>
+    {% endif %}
+  </nav>
+
+{% endblock content %}
