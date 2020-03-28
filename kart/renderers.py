@@ -44,13 +44,13 @@ class DefaultFeedRenderer:
         self.name = name
 
     def render(self, map, site, build_location="_site"):
-        base_url = "http://test.com"
+        base_url = site["config"]["base_url"]
         for name, page in map.items():
             if self.name != page["renderer"]:
                 continue
             fg = FeedGenerator()
             fg.title(site["config"]["name"])
-            fg.id(site["config"]["base_url"])
+            fg.id(base_url)
             fg.link({"href": base_url})
             fg.link({"href": base_url + "/" + name, "rel": "self"})
             for post in site["posts"][:10]:
