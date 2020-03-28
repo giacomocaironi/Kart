@@ -1,4 +1,4 @@
-from datetime import datetime
+from lxml.html.clean import clean_html
 import os
 import frontmatter
 import yaml
@@ -32,8 +32,8 @@ class PostMiner(Miner):
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
                 object["slug"] = file.split(".")[0]
-                object["content"] = cmark.to_html(content)  # speed improvement
-                # object["content"] = markdown.markdown(content)
+                object["content"] = cmark.to_html(content)
+                object["short_content"] = clean_html(object["content"][:1000])
                 self.data.append(object)
         self.data.sort(key=lambda x: x["date"])
         self.data.reverse()
@@ -55,7 +55,7 @@ class CollectionMiner(Miner):
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
                 object["slug"] = file.split(".")[0]
-                object["content"] = markdown.markdown(content)
+                object["content"] = cmark.to_html(content)
                 self.data.append(object)
         return {self.collection_name: self.data}
 
@@ -70,7 +70,7 @@ class DefaultPageMiner(Miner):
             with open(os.path.join(self.location, file), "r") as f:
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
-                object["content"] = markdown.markdown(content)
+                object["content"] = cmark.to_html(content)
                 self.data[file.split(".")[0]] = object
         return {"pages": self.data}
 
