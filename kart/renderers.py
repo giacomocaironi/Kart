@@ -2,7 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 import os
 
 
-class JinjaSiteRenderer:
+class DefaultSiteRenderer:
     def __init__(self, name="main_renderer", template_folder="templates"):
         self.name = name
         self.template_folder = template_folder

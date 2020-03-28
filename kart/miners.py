@@ -2,22 +2,10 @@ from lxml.html.clean import clean_html
 import os
 import frontmatter
 import yaml
-import markdown
 from paka import cmark
 
 
-class Miner:
-    # def __init__(self, model, location):
-    #     self.model = model
-    #     self.location = location
-    #     self.data = {}
-    #
-    # def parse(self):
-    #     pass
-    pass
-
-
-class PostMiner(Miner):
+class DefaultPostMiner:
     def __init__(self, collection_name="posts", model=None, location="collections"):
         self.model = model
         self.collection_name = collection_name
@@ -40,7 +28,7 @@ class PostMiner(Miner):
         return {self.collection_name: self.data}
 
 
-class CollectionMiner(Miner):
+class DefaultCollectionMiner:
     def __init__(self, collection_name, model=None, location="collections"):
         self.model = model
         self.collection_name = collection_name
@@ -60,7 +48,7 @@ class CollectionMiner(Miner):
         return {self.collection_name: self.data}
 
 
-class DefaultPageMiner(Miner):
+class DefaultPageMiner:
     def __init__(self, location="pages"):
         self.location = location
         self.data = {}
@@ -75,7 +63,7 @@ class DefaultPageMiner(Miner):
         return {"pages": self.data}
 
 
-class DefaultDataMiner(Miner):
+class DefaultDataMiner:
     def __init__(self, location="data"):
         self.location = location
         self.data = {}

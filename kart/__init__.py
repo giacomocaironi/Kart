@@ -9,13 +9,14 @@ import argparse
 class Kart:
     def __init__(self):
         self.miners = [
-            miners.PostMiner("posts"),
-            miners.CollectionMiner("tags"),
+            miners.DefaultPostMiner("posts"),
+            miners.DefaultCollectionMiner("tags"),
             miners.DefaultDataMiner(),
             miners.DefaultPageMiner(),
         ]
-        self.mappers = [mappers.BlogMapper(), mappers.PageMapper()]
-        self.renderers = [renderers.JinjaSiteRenderer()]
+        self.mappers = [mappers.DefaultBlogMapper(), mappers.DefaultPageMapper()]
+        self.renderers = [renderers.DefaultSiteRenderer()]
+        self.config = {}
 
     def build(self, build_location="_site"):
 

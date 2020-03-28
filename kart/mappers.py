@@ -23,7 +23,7 @@ class ManualMapper:
         return self.urls
 
 
-class PageMapper:
+class DefaultPageMapper:
     def __init__(self):
         self.urls = {}
 
@@ -42,7 +42,7 @@ class PageMapper:
         return self.urls
 
 
-class BlogMapper:
+class DefaultBlogMapper:
     def __init__(self, base_url=""):
         self.urls = {}
         self.base_url = base_url
