@@ -23,6 +23,21 @@ class ManualMapper:
         return self.urls
 
 
+class DefaultFeedMapper:
+    def __init__(self, collections=[]):
+        self.urls = {}
+        self.collections = collections
+
+    def map(self, site):
+        return {
+            "atom_feeds": {
+                "url": "/atom.xml",
+                "data": site["posts"],
+                "renderer": "feed_renderer",
+            }
+        }
+
+
 class PageMapper:
     def __init__(self):
         self.urls = {}

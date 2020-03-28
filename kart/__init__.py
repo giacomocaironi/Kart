@@ -14,8 +14,15 @@ class Kart:
             miners.DefaultDataMiner(),
             miners.DefaultPageMiner(),
         ]
-        self.mappers = [mappers.BlogMapper(), mappers.PageMapper()]
-        self.renderers = [renderers.JinjaSiteRenderer()]
+        self.mappers = [
+            mappers.BlogMapper(),
+            mappers.PageMapper(),
+            mappers.DefaultFeedMapper(),
+        ]
+        self.renderers = [
+            renderers.JinjaSiteRenderer(),
+            renderers.DefaultFeedRenderer(),
+        ]
 
     def build(self, build_location="_site"):
 

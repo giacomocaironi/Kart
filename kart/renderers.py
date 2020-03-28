@@ -1,4 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
+from feedgen.feed import FeedGenerator
 import os
 
 
@@ -36,3 +37,28 @@ class JinjaSiteRenderer:
             os.makedirs(build_location + page["url"], exist_ok=True)
             with open(build_location + page["url"] + "index.html", "w") as f:
                 f.write(rendered_file)
+
+
+class DefaultFeedRenderer:
+    def __init__(self, name="feed_renderer"):
+        self.name = name
+
+    def render(self, map, site, build_location="_site"):
+        base_url = "http://test.com"
+        for name, page in map.items():
+            if self.name != page["renderer"]:
+                continue
+            fg = FeedGenerator()
+            fg.title(site["data"]["config"]["name"])
+            fg.id(base_url)
+            fg.link({"href": base_url})
+            fg.link({"href": base_url + "/" + name, "rel": "self"})
+            for post in site["posts"][:10]:
+                fe = fg.add_entry()
+                fe.title(post["title"])
+                fe.id(base_url + map["posts." + post["slug"]]["url"])
+                fe.link(
+                    {"href": base_url + map["posts." + post["slug"]]["url"],}
+                )
+                fe.description(post["content"])
+            fg.atom_file(os.path.join(build_location, "atom.xml"))
