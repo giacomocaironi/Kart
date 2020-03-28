@@ -14,8 +14,15 @@ class Kart:
             miners.DefaultDataMiner(),
             miners.DefaultPageMiner(),
         ]
-        self.mappers = [mappers.DefaultBlogMapper(), mappers.DefaultPageMapper()]
-        self.renderers = [renderers.DefaultSiteRenderer()]
+        self.mappers = [
+            mappers.DefaultBlogMapper(),
+            mappers.DefaultPageMapper(),
+            mappers.DefaultFeedMapper(),
+        ]
+        self.renderers = [
+            renderers.DefaultSiteRenderer(),
+            renderers.DefaultFeedRenderer(),
+        ]
         self.config = {}
 
     def build(self, build_location="_site"):

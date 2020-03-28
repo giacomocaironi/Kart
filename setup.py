@@ -14,5 +14,12 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/giacomocaironi/Kart",
     packages=setuptools.find_packages(),
-    install_requires=["jinja2", "pyyaml", "markdown", "python-frontmatter"],
+    install_requires=[
+        "jinja2",
+        "pyyaml",
+        "markdown",
+        "python-frontmatter",
+        "feedgen",
+        "paka.cmark",
+    ],
 )
