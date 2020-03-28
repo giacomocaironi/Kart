@@ -89,7 +89,10 @@ class DefaultBlogMapper:
         urls = {}
         posts = site["posts"][1:]
 
-        per_page = 5
+        try:
+            per_page = site["config"]["pagination"]["per_page"]
+        except:
+            per_page = 5
         paginated_posts = [
             posts[x * per_page : (x + 1) * per_page]
             for x in range(len(posts) // per_page + 1)
@@ -139,7 +142,10 @@ class DefaultBlogMapper:
             posts = site["posts"]
             posts = [post for post in posts if tag["name"] in post["tags"]]
 
-            per_page = 5
+            try:
+                per_page = site["config"]["pagination"]["per_page"]
+            except:
+                per_page = 5
             paginated_posts = [
                 posts[x * per_page : (x + 1) * per_page]
                 for x in range(len(posts) // per_page + 1)

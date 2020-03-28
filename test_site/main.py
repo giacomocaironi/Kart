@@ -54,6 +54,6 @@ main_mapper.rules = [index, projects, project_index]
 kart.mappers.extend([main_mapper])
 
 kart.config["name"] = "Kart test"
-kart.config["base_url"] = ""
+kart.config["base_url"] = "http://base_url"
 
 kart.run()
