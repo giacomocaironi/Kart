@@ -45,12 +45,15 @@ def project_index(site):
 
 kart = Kart()
 
-kart.miners.extend([miners.CollectionMiner("projects")])
+kart.miners.extend([miners.DefaultCollectionMiner("projects")])
 # kart.renderers = []
 kart.mappers[0].base_url = "/blog"
 
 main_mapper = mappers.ManualMapper()
 main_mapper.rules = [index, projects, project_index]
 kart.mappers.extend([main_mapper])
+
+kart.config["name"] = "Kart test"
+kart.config["base_url"] = ""
 
 kart.run()

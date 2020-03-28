@@ -25,6 +25,7 @@ class Kart:
         self.site = {}
         for miner in self.miners:
             self.site.update(miner.collect())
+        self.site["config"] = self.config
 
         # for key, value in self.site.items():
         #     print(key, value)
