@@ -49,8 +49,8 @@ class DefaultFeedRenderer:
             if self.name != page["renderer"]:
                 continue
             fg = FeedGenerator()
-            fg.title(site["data"]["config"]["name"])
-            fg.id(base_url)
+            fg.title(site["config"]["name"])
+            fg.id(site["config"]["base_url"])
             fg.link({"href": base_url})
             fg.link({"href": base_url + "/" + name, "rel": "self"})
             for post in site["posts"][:10]:
@@ -60,5 +60,5 @@ class DefaultFeedRenderer:
                 fe.link(
                     {"href": base_url + map["posts." + post["slug"]]["url"],}
                 )
-                fe.description(post["content"])
+                fe.description(post["short_content"])
             fg.atom_file(os.path.join(build_location, "atom.xml"))
