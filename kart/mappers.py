@@ -106,7 +106,7 @@ class DefaultBlogMapper:
                 previous_page_url = "/"
             else:
                 previous_page_url = ""
-            if i < len(posts):
+            if i < len(paginated_posts):
                 next_page_url = f"/index/{i+1}/"
             else:
                 next_page_url = ""
@@ -114,8 +114,10 @@ class DefaultBlogMapper:
             paginator = {
                 "posts": posts,
                 "index": i,
-                "next_page_url": self.base_url + next_page_url,
-                "previous_page_url": self.base_url + previous_page_url,
+                "next_page_url": self.base_url + next_page_url if next_page_url else "",
+                "previous_page_url": self.base_url + previous_page_url
+                if previous_page_url
+                else "",
             }
             data = {
                 "title": "blog",
@@ -159,7 +161,7 @@ class DefaultBlogMapper:
                     previous_page_url = f"/tags/{tag['slug']}/"
                 else:
                     previous_page_url = ""
-                if i < len(posts):
+                if i < len(paginated_posts):
                     next_page_url = f"/tags/{tag['slug']}/{i+1}/"
                 else:
                     next_page_url = ""
@@ -167,8 +169,12 @@ class DefaultBlogMapper:
                 paginator = {
                     "posts": posts,
                     "index": i,
-                    "next_page_url": self.base_url + next_page_url,
-                    "previous_page_url": self.base_url + previous_page_url,
+                    "next_page_url": self.base_url + next_page_url
+                    if next_page_url
+                    else "",
+                    "previous_page_url": self.base_url + previous_page_url
+                    if previous_page_url
+                    else "",
                 }
                 data = {
                     "title": f"Posts tagged {tag['name']}",
