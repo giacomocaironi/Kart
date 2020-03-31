@@ -1,6 +1,0 @@
-- name: Test blog
-  link: blog_index
-- name: About
-  link: about
-- name: Contact
-  link: contact
