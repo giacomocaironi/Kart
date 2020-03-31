@@ -76,7 +76,7 @@ class DefaultPageMapper:
             self.urls.update(
                 {
                     slug: {
-                        "url": f"/{slug}/",
+                        "url": url,
                         "data": site["pages"][slug],
                         "default_template": "page.html",
                         "renderer": "main_renderer",
