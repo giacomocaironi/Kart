@@ -11,8 +11,8 @@ class AutomaticMapper:
 
 
 class ManualMapper:
-    def __init__(self):
-        self.rules = []  # a rule is a function
+    def __init__(self, rules=[]):
+        self.rules = rules  # a rule is a function
         self.urls = {}
 
     def map(self, site):
@@ -38,12 +38,41 @@ class DefaultFeedMapper:
         }
 
 
+class DefaultCollectionMapper:
+    def __init__(self, collection_name, base_url="", template="collection_item.html"):
+        self.urls = {}
+        self.default_template = template
+        self.base_url = base_url
+        self.collection_name = collection_name
+
+    def map(self, site):
+        urls = {}
+        collection = site[self.collection_name]
+        for object in collection:
+            urls.update(
+                {
+                    f"{self.collection_name}.{object['slug']}": {
+                        "url": self.base_url
+                        + f"/{self.collection_name}/{object['slug']}/",
+                        "data": object,
+                        "default_template": self.default_template,
+                        "renderer": "main_renderer",
+                    }
+                }
+            )
+
+        return urls
+
+
 class DefaultPageMapper:
     def __init__(self):
         self.urls = {}
 
     def map(self, site):
         for slug in site["pages"]:
+            url = f"/{slug}/"
+            if slug == "index":
+                url = "/"
             self.urls.update(
                 {
                     slug: {
@@ -63,27 +92,15 @@ class DefaultBlogMapper:
         self.base_url = base_url
 
     def map(self, site):
-        self.urls.update(self.posts(site))
+        self.urls.update(
+            DefaultCollectionMapper(
+                base_url=self.base_url, collection_name="posts", template="post.html"
+            ).map(site)
+        )
         self.urls.update(self.blog_index(site))
         self.urls.update(self.tags(site))
 
         return self.urls
-
-    def posts(self, site):
-        urls = {}
-        for post in site["posts"]:
-            urls.update(
-                {
-                    f"posts.{post['slug']}": {
-                        "url": self.base_url + f"/posts/{post['slug']}/",
-                        "data": post,
-                        "default_template": "post.html",
-                        "renderer": "main_renderer",
-                    }
-                }
-            )
-
-        return urls
 
     def blog_index(self, site):
         urls = {}

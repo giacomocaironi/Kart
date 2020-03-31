@@ -9,6 +9,8 @@ class DefaultSiteRenderer:
         self.template_folder = template_folder
 
     def url(self, name):
+        if not name:
+            return ""
         try:
             result = self.map[name]["url"]
         except:
