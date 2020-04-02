@@ -1,0 +1,8 @@
+- name: Home
+  link: index
+- name: Tutorials
+  link: tutorial_index
+- name: Documentation
+  link: documentation_index
+- name: News
+  link: news_index
