@@ -35,6 +35,7 @@ class DefaultSiteRenderer:
             jinja_template.globals.update(
                 url=self.url, date_to_string=self.date_to_string
             )
+            page["data"]["url"] = page["url"]
             rendered_file = jinja_template.render(page=page["data"], site=site)
             os.makedirs(build_location + page["url"], exist_ok=True)
             with open(build_location + page["url"] + "index.html", "w") as f:
