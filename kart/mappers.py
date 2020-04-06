@@ -65,20 +65,25 @@ class DefaultCollectionMapper:
 
 
 class DefaultPageMapper:
-    def __init__(self):
+    def __init__(self, template="page.html"):
         self.urls = {}
+        self.default_template = template
 
     def map(self, site):
         for slug in site["pages"]:
-            url = f"/{slug}/"
-            if slug == "index":
-                url = "/"
+            page = site["pages"][slug]
+            try:
+                url = page["url"]
+            except:
+                url = f"/{slug}/"
+                if slug == "index":
+                    url = "/"
             self.urls.update(
                 {
                     slug: {
                         "url": url,
-                        "data": site["pages"][slug],
-                        "default_template": "page.html",
+                        "data": page,
+                        "default_template": self.default_template,
                         "renderer": "main_renderer",
                     }
                 }

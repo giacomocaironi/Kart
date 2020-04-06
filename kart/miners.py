@@ -45,6 +45,10 @@ class DefaultCollectionMiner:
                 object["slug"] = file.split(".")[0]
                 object["content"] = cmark.to_html(content)
                 self.data.append(object)
+        try:
+            self.data.sort(key=lambda x: x["index"])
+        except Exception:
+            pass
         return {self.collection_name: self.data}
 
 
