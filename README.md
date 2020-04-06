@@ -24,6 +24,4 @@ python3 main.py serve
 # Disclaimer
 Kart is not yet ready to use in a real-world scenario because it is in its early stage of its life and its api can change abruptly each minor verision.
 
-If you want an example of a simple site you can look at the test_* folders
-
-A complete explanation of the architecture and a step-by-step tutorial will be written soon
+I am currently writing the [documentation](https://giacomocaironi.github.io/Kart) of kart but it is by no mean complete. If you want to know how to use Kart in the meantime you can look at the docs folder, where the documentation is held, and the the source code of [my personal site](https://giacomocaironi.github.io) which is generated using kart
