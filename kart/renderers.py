@@ -8,7 +8,8 @@ class DefaultSiteRenderer:
         self.name = name
         self.template_folder = template_folder
 
-    def url(self, name):
+    def url(self, *name):
+        name = ".".join(name)
         if not name:
             return ""
         try:
