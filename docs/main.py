@@ -29,7 +29,7 @@ kart.miners = [
 
 
 kart.mappers = [
-    mappers.DefaultPageMapper(),
+    mappers.DefaultPageMapper(template="default.html"),
     mappers.DefaultCollectionMapper(
         collection_name="documentation", template="default.html"
     ),
@@ -48,7 +48,7 @@ kart.mappers = [
     mappers.ManualMapper([]),
 ]
 
-kart.config["name"] = "Kart documentation"
+kart.config["name"] = "Kart"
 kart.config["base_url"] = "http://giacomocaironi.github.io/Kart"
 
 kart.run()

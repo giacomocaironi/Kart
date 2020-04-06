@@ -1,0 +1,56 @@
+<a href="{{ url('tutorial_index') }}"><h2>Tutorials</h2></a>
+<a href="{{ url('getting_started.' + site.getting_started[0].slug) }}"><h3>Getting started</h3></a>
+<ul>
+  {% for article in site.getting_started %}
+  {% set _url = url('getting_started.' + article.slug) %}
+  {% if _url == page.url %}
+  <li><a href="{{ _url }}" style='color:orange'>{{article.title}}</a></li>
+  {% else %}
+  <li><a href="{{ _url }}">{{article.title}}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+<a href="{{ url('step_by_step.' + site.step_by_step[0].slug) }}"><h3>Step by step tutorial</h3></a>
+<ul>
+  {% for article in site.step_by_step %}
+  {% set _url = url('step_by_step.' + article.slug) %}
+  {% if _url == page.url %}
+  <li><a href="{{ _url }}" style='color:orange'>{{article.title}}</a></li>
+  {% else %}
+  <li><a href="{{ _url }}">{{article.title}}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+<a href="{{ url('examples', site.examples[0].slug) }}"><h3>Examples</h3></a>
+<ul>
+  {% for article in site.examples %}
+  {% set _url = url('examples.' + article.slug) %}
+  {% if _url == page.url %}
+  <li><a href="{{ _url }}" style='color:orange'>{{article.title}}</a></li>
+  {% else %}
+  <li><a href="{{ _url }}">{{article.title}}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+<a href="{{ url('documentation_index') }}"><h2>Documentation</h2></a>
+<ul>
+  {% for article in site.documentation %}
+  {% set _url = url('documentation.' + article.slug) %}
+  {% if _url == page.url %}
+  <li><a href="{{ _url }}" style='color:orange'>{{article.title}}</a></li>
+  {% else %}
+  <li><a href="{{ _url }}">{{article.title}}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+<a href="{{ url('news_index') }}"><h2>News</h2></a>
+<ul>
+  {% for article in site.news %}
+  {% set _url = url('news', article.slug) %}
+  {% if _url == page.url %}
+  <li><a href="{{ _url }}" style='color:orange'>{{article.title}}</a></li>
+  {% else %}
+  <li><a href="{{ _url }}">{{article.title}}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>

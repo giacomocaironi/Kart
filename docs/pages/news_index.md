@@ -1,5 +1,8 @@
 ---
 title: News
 url: /news/
+template:
 ---
-# News index
+# News
+
+In this section you can look at past versions of Kart
