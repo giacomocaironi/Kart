@@ -53,9 +53,24 @@ class Kart:
                 os.remove(os.path.join(build_location, x))
         shutil.copytree("static", os.path.join(build_location, "static"))
         for renderer in self.renderers:
+            renderer.url_function = self.url
             renderer.render(
                 self.map, self.site, build_location=build_location,
             )
+
+    def url(self, *name):
+        name = ".".join(name)
+        if not name:
+            return ""
+        if name in self.map.keys():
+            result = self.map[name]["url"]
+        elif name + ".1" in self.map.keys():
+            result = self.map[name + ".1"]["url"]
+        elif "/" in name:
+            result = name
+        else:
+            return ""
+        return self.config["base_url"] + result
 
     def serve(self, port=9000):
         os.chdir(self.build_location)
@@ -64,7 +79,7 @@ class Kart:
         with ThreadingHTTPServer(server_address, handler) as httpd:
             try:
                 httpd.serve_forever()
-            except KeyboardInterrupt as e:
+            except KeyboardInterrupt:
                 print("Stopping dev server")
                 sys.exit(0)
 
@@ -76,7 +91,10 @@ class Kart:
         parser.add_argument(
             "-p", "--port", help="port to bind to", default=9000, type=int
         )
+        parser.add_argument("--production")
         args = parser.parse_args()
+        if not args.production:
+            self.config["base_url"] = ""
         if args.command == "build":
             self.build()
         if args.command == "serve":

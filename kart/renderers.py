@@ -4,19 +4,12 @@ import os
 
 
 class DefaultSiteRenderer:
-    def __init__(self, name="main_renderer", template_folder="templates"):
+    def __init__(
+        self, url_function=None, name="main_renderer", template_folder="templates"
+    ):
         self.name = name
         self.template_folder = template_folder
-
-    def url(self, *name):
-        name = ".".join(name)
-        if not name:
-            return ""
-        try:
-            result = self.map[name]["url"]
-        except:
-            result = self.map[name + ".1"]["url"]
-        return result
+        self.url_function = url_function
 
     def date_to_string(self, date):
         return date.strftime("%b %d, %Y")
@@ -34,7 +27,7 @@ class DefaultSiteRenderer:
                 template = page["default_template"]
             jinja_template = env.get_template(template)
             jinja_template.globals.update(
-                url=self.url, date_to_string=self.date_to_string
+                url=self.url_function, date_to_string=self.date_to_string
             )
             page["data"]["url"] = page["url"]
             rendered_file = jinja_template.render(page=page["data"], site=site)
