@@ -1,0 +1,12 @@
+{% extends "minimal.html" %}
+{% block content %}
+  <div class="row">
+    <div class="col-lg-3">
+      {% include "sidebar.html" %}
+    </div>
+    <div class="col-md-12 col-lg-9">
+      <h1>Version {{page.title}}</h1>
+      {{ page.content }}
+    </div>
+  </div>
+{% endblock content %}
