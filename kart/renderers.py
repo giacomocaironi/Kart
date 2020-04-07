@@ -47,10 +47,13 @@ class DefaultFeedRenderer:
                 continue
             fg = FeedGenerator()
             fg.title(site["config"]["name"])
-            fg.id(base_url)
+            if not base_url:
+                fg.id("base_url/")
+            else:
+                fg.id(base_url)
             fg.link({"href": base_url})
             fg.link({"href": base_url + "/" + name, "rel": "self"})
-            for post in site["posts"][:10]:
+            for post in site["posts"]:
                 fe = fg.add_entry()
                 fe.title(post["title"])
                 fe.id(base_url + map["posts." + post["slug"]]["url"])
