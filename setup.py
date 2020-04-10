@@ -21,5 +21,6 @@ setuptools.setup(
         "python-frontmatter",
         "feedgen",
         "paka.cmark",
+        "livereload",
     ],
 )

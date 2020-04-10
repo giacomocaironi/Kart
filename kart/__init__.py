@@ -1,8 +1,6 @@
 from kart import miners, mappers, renderers
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-import threading
+from livereload import Server
 import os
-import sys
 import shutil
 import argparse
 
@@ -73,15 +71,10 @@ class Kart:
         return self.config["base_url"] + result
 
     def serve(self, port=9000):
-        os.chdir(self.build_location)
-        server_address = ("", port)
-        handler = SimpleHTTPRequestHandler
-        with ThreadingHTTPServer(server_address, handler) as httpd:
-            try:
-                httpd.serve_forever()
-            except KeyboardInterrupt:
-                print("Stopping dev server")
-                sys.exit(0)
+        server = Server()
+        server.watcher.ignore_dirs("_site")
+        server.watch(".", self.build)
+        server.serve(root=self.build_location, port=port)
 
     def run(self):
         parser = argparse.ArgumentParser()

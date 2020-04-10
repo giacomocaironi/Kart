@@ -10,9 +10,9 @@ class DefaultPostMiner:
         self.model = model
         self.collection_name = collection_name
         self.location = location
-        self.data = []
 
     def collect(self):
+        self.data = []
         for file in os.listdir(os.path.join(self.location, self.collection_name)):
             with open(
                 os.path.join(self.location, self.collection_name, file), "r"
@@ -33,9 +33,9 @@ class DefaultCollectionMiner:
         self.model = model
         self.collection_name = collection_name
         self.location = location
-        self.data = []
 
     def collect(self):
+        self.data = []
         for file in os.listdir(os.path.join(self.location, self.collection_name)):
             with open(
                 os.path.join(self.location, self.collection_name, file), "r"
@@ -55,9 +55,9 @@ class DefaultCollectionMiner:
 class DefaultPageMiner:
     def __init__(self, location="pages"):
         self.location = location
-        self.data = {}
 
     def collect(self):
+        self.data = {}
         for file in os.listdir(self.location):
             with open(os.path.join(self.location, file), "r") as f:
                 metadata, content = frontmatter.parse(f.read())
@@ -70,9 +70,9 @@ class DefaultPageMiner:
 class DefaultDataMiner:
     def __init__(self, location="data"):
         self.location = location
-        self.data = {}
 
     def collect(self):
+        self.data = {}
         for file in os.listdir(self.location):
             with open(os.path.join(self.location, file), "r") as f:
                 self.data[file.split(".")[0]] = yaml.full_load(f.read())
