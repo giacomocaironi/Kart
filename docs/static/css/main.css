@@ -3,7 +3,7 @@
 }
 
 h1, h2, h3, h4, h5, h6{
- color: orange;
+ color: darkorange;
 }
 
 .navbar{
@@ -11,26 +11,26 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .nav-link{
-  color: orange;
+  color: darkorange;
   opacity: 0.5;
   padding: 0.5rem;
   margin: auto;
 }
 
 .nav-link:hover{
-  color: orange;
+  color: darkorange;
   opacity: 0.75;
   text-decoration: none;
 }
 
 .nav-title{
-  color: orange;
+  color: darkorange;
   font-size: 1.8em;
   margin: auto;
 }
 
 .nav-title:hover{
-  color: orange;
+  color: darkorange;
   opacity: 0.75;
   text-decoration: none;
 }

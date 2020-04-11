@@ -50,6 +50,13 @@ class Kart:
             else:
                 os.remove(os.path.join(build_location, x))
         shutil.copytree("static", os.path.join(build_location, "static"))
+
+        for top_level_file in os.listdir("root"):
+            shutil.copyfile(
+                os.path.join("root", top_level_file),
+                os.path.join(build_location, top_level_file),
+            )
+
         for renderer in self.renderers:
             renderer.url_function = self.url
             renderer.render(
@@ -74,7 +81,7 @@ class Kart:
         server = Server()
         server.watcher.ignore_dirs("_site")
         server.watch(".", self.build)
-        server.serve(root=self.build_location, port=port)
+        server.serve(root=self.build_location, port=port, host="0.0.0.0")
 
     def run(self):
         parser = argparse.ArgumentParser()
