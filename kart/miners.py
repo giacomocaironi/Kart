@@ -19,6 +19,9 @@ class DefaultPostMiner:
             ) as f:
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
+                if "draft" in object.keys():
+                    if object["draft"]:
+                        continue
                 object["slug"] = file.split(".")[0]
                 object["content"] = cmark.to_html(content)
                 object["short_content"] = clean_html(object["content"][:1000])
