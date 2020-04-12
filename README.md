@@ -28,6 +28,4 @@ I am currently writing the [documentation](https://giacomocaironi.github.io/Kart
 
 # Missing features
 
-* The built-in dev server doesn't auto update the site when you modify the source, but you have to stop it and restart it to apply the changes.
-
 * the feed generation can only be applied to posts for now and is not very precise

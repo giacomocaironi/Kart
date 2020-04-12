@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Kart",
-    version="0.3.0",
+    version="0.4.0",
     author="Giacomo Caironi",
     author_email="giacomo.caironi@gmail.com",
     description="A very flexible static site generator written in python",
