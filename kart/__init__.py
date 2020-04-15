@@ -1,3 +1,12 @@
+"""
+Kart
+
+A very flexible static site generator written in python
+"""
+
+__version__ = "0.4.1"
+
+
 from kart import miners, mappers, renderers
 from livereload import Server
 import os
