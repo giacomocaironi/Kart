@@ -161,6 +161,9 @@ class DefaultBlogMapper:
     def tags(self, site):
         urls = {}
 
+        if "tags" not in site.keys():
+            return urls
+
         for tag in site["tags"]:
 
             posts = site["posts"]
