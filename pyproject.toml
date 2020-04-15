@@ -1,24 +1,16 @@
+[tool.poetry]
+name = "Kart"
+version = "0.4.2"
+description = "A very flexible static site generator written in python"
+authors = ["Giacomo Caironi <giacomo.caironi@gmail.com>"]
+license = "MIT"
+include = ["kart_quickstart/*"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+
 [build-system]
-requires = ["flit_core >=2,<4"]
-build-backend = "flit_core.buildapi"
-
-[tool.flit.metadata]
-module = "kart"
-author = "Giacomo Caironi"
-author-email = "giacomo.caironi@gmail.com"
-home-page = "https://giacomocaironi.github.io/Kart"
-classifiers = ["License :: OSI Approved :: MIT License"]
-requires = [
-      "jinja2",
-      "pyyaml",
-      "markdown",
-      "python-frontmatter",
-      "feedgen",
-      "paka.cmark",
-      "livereload",
-  ]
-description-file = 'README.md'
-
-[tool.flit.sdist]
-include = []
-exclude = ['docs/', '.github/']
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
