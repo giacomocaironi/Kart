@@ -1,0 +1,17 @@
+<nav class="navbar bg-main" id="navbar">
+  <div class="container flex p0">
+    <div class="col-md-4 col-sm-12 flex p0">
+      <a class="nav-title" href="{{ url("/") }}">{{ site.config.name }}</a>
+    </div>
+    <div class="col-md-8 col-sm-12 flex p0">
+      {% for page_name in site.pages %}
+        {% set item = site.pages[page_name] %}
+        {% if url(page_name) == page.url %}
+          <a class="nav-link active" href="{{ url(page_name) }}">{{ item.title }}</a>
+        {% else %}
+          <a class="nav-link" href="{{ url(page_name) }}">{{ item.title }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    </div>
+</nav>

@@ -12,6 +12,10 @@ def build_quickstart():
                 shutil.copytree(os.path.join(base, i), i)
             else:
                 shutil.copyfile(os.path.join(base, i), i)
+    os.makedirs("collections/posts", exist_ok=True)
+    os.makedirs("collections/tags", exist_ok=True)
+    os.makedirs("data", exist_ok=True)
+    os.makedirs("pages", exist_ok=True)
 
 
 if __name__ == "__main__":

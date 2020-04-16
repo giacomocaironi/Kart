@@ -1,0 +1,21 @@
+{% extends "minimal.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12 col-lg-9">
+    <h1>{{page.title}}</h1>
+    <hr>
+    <ul id='post-list'>
+      {% for post in page.paginator.posts %}
+        {% include "post_front.html" %}
+      {% endfor %}
+    </ul>
+    {% include 'pagination.html' %}
+  </div>
+  <div class="col-md-12 col-lg-3">
+    {% include "tag_list.html" %}
+  </div>
+</div>
+
+{% endblock content %}

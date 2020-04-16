@@ -1,0 +1,12 @@
+<div id='blog-pagination'>
+  {% if page.paginator.previous_page_url %}
+    <a class='btn btn-dark' href="{{ page.paginator.previous_page_url }}">Newer</a>
+  {% else %}
+    <a class='btn btn-dark disabled' href="">Newer</a>
+  {% endif %}
+  {% if page.paginator.next_page_url %}
+    <a class='btn btn-dark' href="{{ page.paginator.next_page_url }}">Older</a>
+  {% else %}
+    <a class='btn btn-dark disabled' href="">Older</a>
+  {% endif %}
+</div>

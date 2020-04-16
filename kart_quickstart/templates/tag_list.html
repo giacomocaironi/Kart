@@ -1,0 +1,8 @@
+<div id="tag-list" class='card'>
+  <h2>Tags</h2>
+  <ul>
+    {% for tag in site.tags %}
+      <li><a href="{{ url('tags.' + tag.slug + '.1') }}">{{tag.name}}</a></li>
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,88 @@
+.bg-main{
+  background-color: #343a40;
+}
+
+.navbar{
+  font-size: 125%;
+}
+
+.nav-link{
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem;
+  margin: auto;
+}
+
+.nav-link.active{
+  color: white;
+}
+
+.nav-link:hover{
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+
+.nav-title{
+  color: white;
+  font-size: 1.8em;
+  margin: auto;
+}
+
+.nav-title:hover{
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+
+.button-dark:hover{
+  color: white;
+  background-color: #343a40;
+}
+
+.disabled:hover{
+  color: black;
+  background-color: white;
+}
+
+.align-center{
+  margin: auto;
+}
+
+#tag-list{
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+#main-post{
+  color: #fff;
+  padding: .5rem;
+  padding-top: 1rem;
+  /* margin-right: -1rem; */
+  /* margin-left: -1rem; */
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+}
+
+#main-post a{
+  color: #fff;
+}
+
+#post-list{
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+#blog-pagination .button{
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+}
+
+.icon{
+  height: 30px;
+}
+
+.feed-icon{
+  width: 30px;
+}
+
+.github-icon{
+  width: 37px;
+}
