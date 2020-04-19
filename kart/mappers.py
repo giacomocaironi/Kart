@@ -167,7 +167,7 @@ class DefaultBlogMapper:
         for tag in site["tags"]:
 
             posts = site["posts"]
-            posts = [post for post in posts if tag["name"] in post["tags"]]
+            posts = [post for post in posts if tag["slug"] in post["tags"]]
 
             try:
                 per_page = site["config"]["pagination"]["per_page"]

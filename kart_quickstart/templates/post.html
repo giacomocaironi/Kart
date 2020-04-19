@@ -6,9 +6,10 @@
       <span>{{ date_to_string(page.date) }}</span>
       <span style='float:right'>
         Tags:
-          {% for tag in page.tags %}
-            <a href="{{ url("tags." + tag|lower + ".1") }}">{{ tag }}</a>
-          {% endfor %}
+        {% set filtered_tags = site.tags|selectattr('slug', 'equalto', tag)|list %}
+        {% if filtered_tags|length > 0 %}
+        <a href="{{ url("tags." + tag + ".1") }}">{{ (filtered_tags|first).name }}</a>
+        {% endif %}
       </span>
 
       {{ page.content }}
