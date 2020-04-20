@@ -7,9 +7,12 @@
   <title>Kart - Installation</title>
 
   <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css">
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
   <link rel="stylesheet" href=https://giacomocaironi.github.io/Kart/static/css/base.css>
   <link rel="stylesheet" href=https://giacomocaironi.github.io/Kart/static/css/main.css>
+
+  <link rel="stylesheet" href=https://giacomocaironi.github.io/Kart/static/css/prism.css>
 
   <link rel="apple-touch-icon" sizes="180x180" href=https://giacomocaironi.github.io/Kart/apple-touch-icon.png>
   <link rel="icon" type="image/png" sizes="32x32" href=https://giacomocaironi.github.io/Kart/favicon-32x32.png>
@@ -21,7 +24,8 @@
 <body>
 
   
-<nav class="navbar" id="navbar">
+<div class="sidebar">
+  <nav class="navbar" id="navbar">
   <div class="container flex p0">
     <div class="col-md-4 col-sm-12 flex p0">
       <a class="nav-title" href="https://giacomocaironi.github.io/Kart/">Kart</a>
@@ -39,6 +43,7 @@
     </div>
     </div>
 </nav>
+</div>
 <div class="main-content">
   
   <div class="row">
@@ -55,6 +60,21 @@
   
   
   <li><a href="https://giacomocaironi.github.io/Kart/tutorials/getting_started/writing_posts/">Writing posts</a></li>
+  
+  
+  
+  
+  <li><a href="https://giacomocaironi.github.io/Kart/tutorials/getting_started/build_site/">Build the site</a></li>
+  
+  
+  
+  
+  <li><a href="https://giacomocaironi.github.io/Kart/tutorials/getting_started/adding_tags/">Adding tags</a></li>
+  
+  
+  
+  
+  <li><a href="https://giacomocaironi.github.io/Kart/tutorials/getting_started/adding_pages/">Adding pages</a></li>
   
   
   
@@ -107,13 +127,13 @@
     </div>
     <div class="col-md-12 col-lg-9">
       <h1>Installation</h1>
-<h3>Install Python</h3>
+<h2>Install Python</h2>
 <p>To build a site using Kart you will need python3. Probably it will come with your OS, but anyway it is useful to install the latest version. You can find the precompiled packages <a href="https://www.python.org/downloads/">here</a>. If you use linux you can the latest version of python with your packet manager.</p>
 <p>For linux based distribution I will suggest also checking out <a href="https://github.com/pyenv/pyenv">pyenv</a>, which will let you manage in a better way multiple versions of python at the same time.</p>
-<h3>Virtual environments</h3>
+<h2>Virtual environments</h2>
 <p>When creating a python project it is often useful to create a virtual environment. A complete explanation of virtual environments can be found <a href="https://docs.python.org/3/tutorial/venv.html">here</a>. In a nutshell it enables you to separate the project dependencies from code run outside of the project. If you use pyenv creating virtualenvs is a little different, but the instructions can be found in the pyenv repository.</p>
 <p>Even though creating a virtual environment is not required, it is recommended.</p>
-<h3>Kart</h3>
+<h2>Kart</h2>
 <p>Enter a shell and install Kart using pip, the package manager for python. If you are using a virtual environment, you should first head over to your project directory and activate the virtualenv</p>
 <pre><code class="language-bash">$ pip install Kart
 </code></pre>
@@ -129,6 +149,11 @@
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/prism.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/components/prism-core.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
