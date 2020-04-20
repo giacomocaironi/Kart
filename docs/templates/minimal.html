@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block main %}
-{% include "navbar.html" %}
+<div class="sidebar">
+  {% include "navbar.html" %}
+</div>
 <div class="main-content">
   {% block content %}
     {{page.content}}
