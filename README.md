@@ -6,18 +6,16 @@ Install Kart with pip
 ```bash
 pip install Kart
 ```
-Create a new file named main.py in your top directory with this code
-```python
-from kart import Kart
 
-kart = Kart()
-kart.run()
+Build the basic strcucture
+```bash
+$ python -m kart init
 ```
+
 In this configuration Kart will only build a basic blog with a paginated blog index and paginated tags. If you want to customize the urls of the blog you will have to modify main.py with custom python code
 
-For the folder structure you can look at the test_blog example
 
-You can then build and serve your site executing this script
+You can then build and serve your site with this command
 ```bash
 python3 main.py serve
 ```
