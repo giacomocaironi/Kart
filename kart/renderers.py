@@ -52,7 +52,7 @@ class DefaultFeedRenderer:
             else:
                 fg.id(base_url)
             fg.link({"href": base_url})
-            fg.link({"href": base_url + "/" + name, "rel": "self"})
+            fg.link({"href": base_url + page["url"], "rel": "self"})
             for post in site["posts"]:
                 fe = fg.add_entry()
                 fe.title(post["title"])
@@ -61,4 +61,4 @@ class DefaultFeedRenderer:
                     {"href": base_url + map["posts." + post["slug"]]["url"],}
                 )
                 fe.description(post["short_content"])
-            fg.atom_file(os.path.join(build_location, "atom.xml"))
+            fg.atom_file(build_location + page["url"])
