@@ -1,6 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
 from feedgen.feed import FeedGenerator
 import os
+from datetime import timezone, time, datetime
 
 
 class DefaultSiteRenderer:
@@ -37,8 +38,10 @@ class DefaultSiteRenderer:
 
 
 class DefaultFeedRenderer:
-    def __init__(self, name="feed_renderer"):
+    def __init__(self, name="feed_renderer", collections=["posts"]):
         self.name = name
+        self.collections = collections
+        self.url_function = None
 
     def render(self, map, site, build_location="_site"):
         base_url = site["config"]["base_url"]
@@ -53,12 +56,28 @@ class DefaultFeedRenderer:
                 fg.id(base_url)
             fg.link({"href": base_url})
             fg.link({"href": base_url + page["url"], "rel": "self"})
-            for post in site["posts"]:
+
+            feed_entries = []
+
+            for collection in self.collections:
+                for object in site[collection]:
+                    feed_entries.append([collection, object])
+
+            feed_entries.sort(key=lambda x: x[1]["date"])
+
+            for collection, entry in feed_entries:
                 fe = fg.add_entry()
-                fe.title(post["title"])
-                fe.id(base_url + map["posts." + post["slug"]]["url"])
-                fe.link(
-                    {"href": base_url + map["posts." + post["slug"]]["url"],}
+                if "title" in entry.keys():
+                    fe.title(entry["title"])
+                elif "name" in entry.keys():
+                    fe.title(entry["name"])
+                if "description" in entry.keys():
+                    fe.description(entry["description"])
+                elif "short_content" in entry.keys():
+                    fe.description(entry["short_content"])
+                fe.updated(
+                    datetime.combine(entry["date"], time(12), tzinfo=timezone.utc)
                 )
-                fe.description(post["short_content"])
+                fe.id(self.url_function(collection, entry["slug"]))
+                fe.link({"href": self.url_function(collection, entry["slug"])})
             fg.atom_file(build_location + page["url"])

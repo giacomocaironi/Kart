@@ -15,7 +15,10 @@ pyyaml = '^5.1'
 "paka.cmark" = '^2.2'
 python-frontmatter = '^0.5'
 feedgen = '^0.9'
-livereload = '^2.6'
+livereload = {version = "^2.6", optional = true}
+
+[tool.poetry.extras]
+all = ['livereload']
 
 [tool.poetry.dev-dependencies]
 

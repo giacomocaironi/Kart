@@ -21,7 +21,7 @@ Even though creating a virtual environment is not required, it is recommended.
 Enter a shell and install Kart using pip, the package manager for python. If you are using a virtual environment, you should first head over to your project directory and activate the virtualenv
 
 ```bash
-$ pip install Kart
+$ pip install Kart[all]
 ```
 This command will install Kart and all its dependencies
 
