@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Kart"
-version = "0.5.0"
+version = "0.5.1"
 description = "A very flexible static site generator written in python"
 authors = ["Giacomo Caironi <giacomo.caironi@gmail.com>"]
 license = "MIT"
@@ -15,10 +15,7 @@ pyyaml = '^5.1'
 "paka.cmark" = '^2.2'
 python-frontmatter = '^0.5'
 feedgen = '^0.9'
-livereload = {version = "^2.6", optional = true}
-
-[tool.poetry.extras]
-all = ['livereload']
+livereload = "^2.6"
 
 [tool.poetry.dev-dependencies]
 
