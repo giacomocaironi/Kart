@@ -1,5 +1,5 @@
 from kart import Kart
-from kart import miners, mappers
+from kart import miners, mappers, renderers
 
 kart = Kart()
 
@@ -14,6 +14,11 @@ kart.mappers = [
     mappers.DefaultBlogMapper(),
     mappers.DefaultPageMapper(),
     mappers.DefaultFeedMapper(),
+]
+
+kart.renderers = [
+    renderers.DefaultSiteRenderer(),
+    renderers.DefaultFeedRenderer(collections=["posts"]),
 ]
 
 kart.config["name"] = "My blog"

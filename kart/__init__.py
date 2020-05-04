@@ -1,4 +1,4 @@
-from kart import miners, mappers, renderers
+# from kart import miners, mappers, renderers
 from livereload import Server
 import os
 import shutil
@@ -6,23 +6,11 @@ import argparse
 
 
 class Kart:
-    def __init__(self):
-        self.miners = [
-            miners.DefaultPostMiner("posts"),
-            miners.DefaultCollectionMiner("tags"),
-            miners.DefaultDataMiner(),
-            miners.DefaultPageMiner(),
-        ]
-        self.mappers = [
-            mappers.DefaultBlogMapper(),
-            mappers.DefaultPageMapper(),
-            mappers.DefaultFeedMapper(),
-        ]
-        self.renderers = [
-            renderers.DefaultSiteRenderer(),
-            renderers.DefaultFeedRenderer(),
-        ]
-        self.config = {}
+    def __init__(self, miners=[], mappers=[], renderers=[], config={}):
+        self.miners = miners
+        self.mappers = mappers
+        self.renderers = renderers
+        self.config = config
 
     def build(self, build_location="_site"):
 
@@ -61,9 +49,7 @@ class Kart:
 
         for renderer in self.renderers:
             renderer.url_function = self.url
-            renderer.render(
-                self.map, self.site, build_location=build_location,
-            )
+            renderer.render(self.map, self.site, build_location=build_location)
 
     def url(self, *name):
         name = ".".join(name)
