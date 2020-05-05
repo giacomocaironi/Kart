@@ -12,25 +12,19 @@ class Kart:
         self.renderers = renderers
         self.config = config
 
-    def build(self, build_location="_site"):
-
-        self.build_location = build_location
-
+    def prepare(self):
         self.site = {}
+
         for miner in self.miners:
             self.site.update(miner.collect())
         self.site["config"] = self.config
-
-        # for key, value in self.site.items():
-        #     print(key, value)
-        # print(self.site)
 
         self.map = {}
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
 
-        # print(self.map)
-
+    def move_static(self):
+        build_location = self.build_location
         os.makedirs(build_location, exist_ok=True)
         for x in os.listdir(build_location):
             if os.path.isdir(os.path.join(build_location, x)):
@@ -46,6 +40,9 @@ class Kart:
                     os.path.join("root", top_level_file),
                     os.path.join(build_location, top_level_file),
                 )
+
+    def write(self):
+        build_location = self.build_location
 
         for renderer in self.renderers:
             renderer.url_function = self.url
@@ -70,6 +67,11 @@ class Kart:
         server.watcher.ignore_dirs("_site")
         server.watch(".", self.build)
         server.serve(root=self.build_location, port=port, host="0.0.0.0")
+    def build(self, build_location="_site"):
+        self.build_location = build_location
+        self.prepare()
+        self.move_static()
+        self.write()
 
     def run(self):
         parser = argparse.ArgumentParser()
@@ -86,5 +88,4 @@ class Kart:
         if args.command == "build":
             self.build()
         if args.command == "serve":
-            self.build()
             self.serve(args.port)

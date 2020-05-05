@@ -11,11 +11,11 @@ class DefaultCollectionMiner:
         self.collection_name = collection_name
         self.location = location
 
-    def collect_single_file(self, file):
-        with open(os.path.join(self.location, self.collection_name, file), "r") as f:
+    def collect_single_file(self, filename, file_location):
+        with open(file_location, "r") as f:
             metadata, content = frontmatter.parse(f.read())
             object = metadata
-            object["slug"] = file.split(".")[0]
+            object["slug"] = filename.split(".")[0]
             object["content"] = cmark.to_html(content)
             return object
 
@@ -27,8 +27,10 @@ class DefaultCollectionMiner:
 
     def collect(self):
         self.data = []
-        for file in os.listdir(os.path.join(self.location, self.collection_name)):
-            object = self.collect_single_file(file)
+        working_dir = os.path.join(self.location, self.collection_name)
+        for filename in os.listdir(working_dir):
+            file_location = os.path.join(working_dir, filename)
+            object = self.collect_single_file(filename, file_location)
             if object:
                 self.data.append(object)
         self.process()
@@ -43,8 +45,8 @@ class DefaultPostMiner(DefaultCollectionMiner):
         self.data.sort(key=lambda x: x["date"])
         self.data.reverse()
 
-    def collect_single_file(self, file):
-        object = super().collect_single_file(file)
+    def collect_single_file(self, filename, file_location):
+        object = super().collect_single_file(filename, file_location)
         object["short_content"] = clean_html(object["content"][:1000])
         if "draft" in object.keys():
             if object["draft"]:

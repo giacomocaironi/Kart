@@ -11,30 +11,35 @@ class DefaultSiteRenderer:
         self.name = name
         self.template_folder = template_folder
         self.url_function = url_function
+        self.env = Environment(loader=FileSystemLoader(self.template_folder))
 
     def date_to_string(self, date):
         return date.strftime("%b %d, %Y")
 
+    def render_single(self, page, site):
+        if self.name != page["renderer"]:
+            return
+        template = ""
+        if "template" in page["data"].keys():
+            template = page["data"]["template"]
+        if not template:
+            template = page["default_template"]
+        jinja_template = self.env.get_template(template)
+        page["data"]["url"] = page["url"]
+
+        jinja_template.globals.update(
+            url=self.url_function, date_to_string=self.date_to_string
+        )
+        return jinja_template.render(page=page["data"], site=site)
+
     def render(self, map, site, build_location="_site"):
         self.map = map
-        env = Environment(loader=FileSystemLoader(self.template_folder))
         for page in map.values():
-            if self.name != page["renderer"]:
-                continue
-            template = ""
-            if "template" in page["data"].keys():
-                template = page["data"]["template"]
-            if not template:
-                template = page["default_template"]
-            jinja_template = env.get_template(template)
-            jinja_template.globals.update(
-                url=self.url_function, date_to_string=self.date_to_string
-            )
-            page["data"]["url"] = page["url"]
-            rendered_file = jinja_template.render(page=page["data"], site=site)
-            os.makedirs(build_location + page["url"], exist_ok=True)
-            with open(build_location + page["url"] + "index.html", "w") as f:
-                f.write(rendered_file)
+            rendered_file = self.render_single(page, site)
+            if rendered_file:
+                os.makedirs(build_location + page["url"], exist_ok=True)
+                with open(build_location + page["url"] + "index.html", "w") as f:
+                    f.write(rendered_file)
 
 
 class DefaultFeedRenderer:
@@ -42,6 +47,9 @@ class DefaultFeedRenderer:
         self.name = name
         self.collections = collections
         self.url_function = None
+
+    def render_single(self, page, site):
+        return
 
     def render(self, map, site, build_location="_site"):
         base_url = site["config"]["base_url"]
