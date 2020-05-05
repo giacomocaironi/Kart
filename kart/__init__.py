@@ -14,39 +14,36 @@ class Kart:
 
     def prepare(self):
         self.site = {}
-
         for miner in self.miners:
             self.site.update(miner.collect())
         self.site["config"] = self.config
 
+    def create_map(self):
         self.map = {}
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
 
     def move_static(self):
-        build_location = self.build_location
-        os.makedirs(build_location, exist_ok=True)
-        for x in os.listdir(build_location):
-            if os.path.isdir(os.path.join(build_location, x)):
-                shutil.rmtree(os.path.join(build_location, x))
+        os.makedirs(self.build_location, exist_ok=True)
+        for x in os.listdir(self.build_location):
+            if os.path.isdir(os.path.join(self.build_location, x)):
+                shutil.rmtree(os.path.join(self.build_location, x))
             else:
-                os.remove(os.path.join(build_location, x))
+                os.remove(os.path.join(self.build_location, x))
         if "static" in os.listdir():
-            shutil.copytree("static", os.path.join(build_location, "static"))
+            shutil.copytree("static", os.path.join(self.build_location, "static"))
 
         if "root" in os.listdir():
             for top_level_file in os.listdir("root"):
                 shutil.copyfile(
                     os.path.join("root", top_level_file),
-                    os.path.join(build_location, top_level_file),
+                    os.path.join(self.build_location, top_level_file),
                 )
 
     def write(self):
-        build_location = self.build_location
-
         for renderer in self.renderers:
             renderer.url_function = self.url
-            renderer.render(self.map, self.site, build_location=build_location)
+            renderer.render(self.map, self.site, build_location=self.build_location)
 
     def url(self, *name):
         name = ".".join(name)
@@ -63,13 +60,16 @@ class Kart:
         return self.config["base_url"] + result
 
     def serve(self, port=9000):
+        self.build()
         server = Server()
         server.watcher.ignore_dirs("_site")
         server.watch(".", self.build)
         server.serve(root=self.build_location, port=port, host="0.0.0.0")
+
     def build(self, build_location="_site"):
         self.build_location = build_location
         self.prepare()
+        self.create_map()
         self.move_static()
         self.write()
 
@@ -88,4 +88,5 @@ class Kart:
         if args.command == "build":
             self.build()
         if args.command == "serve":
+            self.build_location = "_site"
             self.serve(args.port)
