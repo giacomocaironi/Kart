@@ -1,19 +1,5 @@
 from kart import Kart
-from kart import miners, mappers
-
-
-# def documentation_index(site):
-#     projects = site["projects"]
-#     data = {"title": "Projects", "projects": projects}
-#     return {
-#         "projects_index": {
-#             "url": "/projects/",
-#             "data": data,
-#             "default_template": "projects_index.html",
-#             "renderer": "main_renderer",
-#         }
-#     }
-#
+from kart import miners, mappers, renderers
 
 kart = Kart()
 
@@ -47,6 +33,8 @@ kart.mappers = [
     mappers.DefaultCollectionMapper(collection_name="news", template="versions.html"),
     mappers.ManualMapper([]),
 ]
+
+kart.renderers = [renderers.DefaultSiteRenderer()]
 
 kart.config["name"] = "Kart"
 kart.config["base_url"] = "https://giacomocaironi.github.io/Kart"

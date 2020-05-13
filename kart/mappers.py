@@ -92,14 +92,25 @@ class DefaultPageMapper:
 
 
 class DefaultBlogMapper:
-    def __init__(self, base_url=""):
+    def __init__(
+        self,
+        base_url="",
+        templates={
+            "post_template": "post.html",
+            "index_template": "blog_index.html",
+            "tag_template": "tag.html",
+        },
+    ):
         self.urls = {}
         self.base_url = base_url
+        self.templates = templates
 
     def map(self, site):
         self.urls.update(
             DefaultCollectionMapper(
-                base_url=self.base_url, collection_name="posts", template="post.html"
+                base_url=self.base_url,
+                collection_name="posts",
+                template=self.templates["post_template"],
             ).map(site)
         )
         self.urls.update(self.blog_index(site))
@@ -141,16 +152,13 @@ class DefaultBlogMapper:
                 if previous_page_url
                 else "",
             }
-            data = {
-                "title": "blog",
-                "paginator": paginator,
-            }
+            data = {"title": "blog", "paginator": paginator}
             urls.update(
                 {
                     f"blog_index.{i}": {
                         "url": self.base_url + url,
                         "data": data,
-                        "default_template": "blog_index.html",
+                        "default_template": self.templates["index_template"],
                         "renderer": "main_renderer",
                     }
                 }
@@ -201,17 +209,14 @@ class DefaultBlogMapper:
                     if previous_page_url
                     else "",
                 }
-                data = {
-                    "title": f"Posts tagged {tag['name']}",
-                    "tag_slug": tag["slug"],
-                    "paginator": paginator,
-                }
+                data = {"title": f"{tag['name']}", "paginator": paginator}
+                data.update(tag)
                 urls.update(
                     {
                         f"tags.{tag['slug']}.{i}": {
                             "url": self.base_url + url,
                             "data": data,
-                            "default_template": "tag.html",
+                            "default_template": self.templates["tag_template"],
                             "renderer": "main_renderer",
                         }
                     }
