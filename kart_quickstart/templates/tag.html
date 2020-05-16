@@ -4,10 +4,19 @@
 
 <div class="row">
   <div class="col-md-12 col-lg-9">
-    <h1>Posts tagged {{page.title}}</h1>
+
+    {% if page.content|length > 0 %}
+    <h1>{{page.name}}</h1>
+    {{page.content}}
     <hr>
+    <h3>Posts tagged {{page.name}}</h3>
+    {% else %}
+    <h1>Posts tagged {{page.name}}</h1>
+    <hr>
+    {% endif %}
+
     <ul id='post-list'>
-      {% for post in page.paginator.posts %}
+      {% for post in page.paginator.objects %}
         {% include "post_front.html" %}
       {% endfor %}
     </ul>

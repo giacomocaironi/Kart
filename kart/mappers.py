@@ -1,13 +1,42 @@
-def url(name, object):
-    pass
-
-
-class AutomaticMapper:
-    def __init__(self):
-        self.urls = []
-
-    def map(self, site):
-        return {}
+def paginate(self, objects, per_page, template, base_url, slug, additional_data={}):
+    urls = {}
+    paginated_objects = [
+        objects[x * per_page : (x + 1) * per_page]
+        for x in range(len(objects) // per_page + 1)
+    ]
+    for i, objects in enumerate(paginated_objects, 1):
+        url = f"/{i}/" if i > 1 else "/"
+        if i > 2:
+            previous_page_url = f"/{i-1}/"
+        elif i == 2:
+            previous_page_url = "/"
+        else:
+            previous_page_url = ""
+        if i < len(paginated_objects):
+            next_page_url = f"/{i+1}/"
+        else:
+            next_page_url = ""
+        paginator = {
+            "objects": objects,
+            "index": i,
+            "next_page_url": base_url + next_page_url if next_page_url else "",
+            "previous_page_url": base_url + previous_page_url
+            if previous_page_url
+            else "",
+        }
+        data = {"paginator": paginator}
+        data.update(additional_data)
+        urls.update(
+            {
+                f"{slug}.{i}": {
+                    "url": base_url + url,
+                    "data": data,
+                    "default_template": template,
+                    "renderer": "main_renderer",
+                }
+            }
+        )
+    return urls
 
 
 class ManualMapper:
@@ -16,10 +45,8 @@ class ManualMapper:
         self.urls = {}
 
     def map(self, site):
-
         for rule in self.rules:
             self.urls.update(rule(site))
-
         return self.urls
 
 
@@ -60,7 +87,6 @@ class DefaultCollectionMapper:
                     }
                 }
             )
-
         return urls
 
 
@@ -74,7 +100,7 @@ class DefaultPageMapper:
             page = site["pages"][slug]
             try:
                 url = page["url"]
-            except:
+            except Exception:
                 url = f"/{slug}/"
                 if slug == "index":
                     url = "/"
@@ -115,111 +141,45 @@ class DefaultBlogMapper:
         )
         self.urls.update(self.blog_index(site))
         self.urls.update(self.tags(site))
-
         return self.urls
 
     def blog_index(self, site):
         urls = {}
         posts = site["posts"][1:]
-
         try:
             per_page = site["config"]["pagination"]["per_page"]
-        except:
+        except Exception:
             per_page = 5
-        paginated_posts = [
-            posts[x * per_page : (x + 1) * per_page]
-            for x in range(len(posts) // per_page + 1)
-        ]
-
-        for i, posts in enumerate(paginated_posts, 1):
-            url = f"/index/{i}/" if i > 1 else "/"
-            if i > 2:
-                previous_page_url = f"/index/{i-1}/"
-            elif i == 2:
-                previous_page_url = "/"
-            else:
-                previous_page_url = ""
-            if i < len(paginated_posts):
-                next_page_url = f"/index/{i+1}/"
-            else:
-                next_page_url = ""
-
-            paginator = {
-                "posts": posts,
-                "index": i,
-                "next_page_url": self.base_url + next_page_url if next_page_url else "",
-                "previous_page_url": self.base_url + previous_page_url
-                if previous_page_url
-                else "",
-            }
-            data = {"title": "blog", "paginator": paginator}
-            urls.update(
-                {
-                    f"blog_index.{i}": {
-                        "url": self.base_url + url,
-                        "data": data,
-                        "default_template": self.templates["index_template"],
-                        "renderer": "main_renderer",
-                    }
-                }
+        urls.update(
+            paginate(
+                posts,
+                per_page,
+                self.templates["index_template"],
+                self.base_url + "/index",
+                "blog_index",
             )
-
+        )
         return urls
 
     def tags(self, site):
         urls = {}
-
         if "tags" not in site.keys():
             return urls
-
         for tag in site["tags"]:
-
             posts = site["posts"]
             posts = [post for post in posts if tag["slug"] in post["tags"]]
-
             try:
                 per_page = site["config"]["pagination"]["per_page"]
-            except:
+            except Exception:
                 per_page = 5
-            paginated_posts = [
-                posts[x * per_page : (x + 1) * per_page]
-                for x in range(len(posts) // per_page + 1)
-            ]
-
-            for i, posts in enumerate(paginated_posts, 1):
-                url = f"/tags/{tag['slug']}/{i}/" if i > 1 else f"/tags/{tag['slug']}/"
-                if i > 2:
-                    previous_page_url = f"/tags/{tag['slug']}/{i-1}/"
-                elif i == 2:
-                    previous_page_url = f"/tags/{tag['slug']}/"
-                else:
-                    previous_page_url = ""
-                if i < len(paginated_posts):
-                    next_page_url = f"/tags/{tag['slug']}/{i+1}/"
-                else:
-                    next_page_url = ""
-
-                paginator = {
-                    "posts": posts,
-                    "index": i,
-                    "next_page_url": self.base_url + next_page_url
-                    if next_page_url
-                    else "",
-                    "previous_page_url": self.base_url + previous_page_url
-                    if previous_page_url
-                    else "",
-                }
-                data = {"title": f"{tag['name']}", "paginator": paginator}
-                data.update(tag)
-                urls.update(
-                    {
-                        f"tags.{tag['slug']}.{i}": {
-                            "url": self.base_url + url,
-                            "data": data,
-                            "default_template": self.templates["tag_template"],
-                            "renderer": "main_renderer",
-                        }
-                    }
+            urls.update(
+                paginate(
+                    posts,
+                    per_page,
+                    self.templates["tag_template"],
+                    self.base_url + f"/tags/{tag['slug']}",
+                    f"tags.{tag['slug']}",
+                    additional_data=tag,
                 )
-
+            )
         return urls
