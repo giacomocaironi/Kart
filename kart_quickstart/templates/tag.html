@@ -1,7 +1,10 @@
 {% extends "minimal.html" %}
 
-{% block content %}
+{% block title %}
+<title>{{site.config.name}} - Tags - {{ page.name }}</title>
+{% endblock title %}
 
+{% block content %}
 <div class="row">
   <div class="col-md-12 col-lg-9">
 
@@ -26,5 +29,4 @@
     {% include "tag_list.html" %}
   </div>
 </div>
-
 {% endblock content %}

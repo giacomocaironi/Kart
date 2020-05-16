@@ -1,4 +1,9 @@
 {% extends "minimal.html" %}
+
+{% block title %}
+<title>{{site.config.name}} - {{ page.title }}</title>
+{% endblock title %}
+
 {% block content %}
   <div class="row">
     <div class="col-md-12 col-lg-9">
