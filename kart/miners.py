@@ -3,28 +3,6 @@ import os
 import frontmatter
 import yaml
 from paka import cmark
-import functools
-import time
-
-
-class cached(object):
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-        self.last_time = 0
-
-    def __call__(self, *args):
-        file_location = args[2]
-        if args in self.cache and os.stat(file_location)[8] < self.last_time:
-            return self.cache[args]
-        else:
-            value = self.func(*args)
-            self.cache[args] = value
-            return value
-        self.last_time = time.time()
-
-    def __get__(self, obj, objtype):
-        return functools.partial(self.__call__, obj)
 
 
 class DefaultCollectionMiner:

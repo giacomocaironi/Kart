@@ -1,4 +1,4 @@
-def paginate(self, objects, per_page, template, base_url, slug, additional_data={}):
+def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     urls = {}
     paginated_objects = [
         objects[x * per_page : (x + 1) * per_page]
