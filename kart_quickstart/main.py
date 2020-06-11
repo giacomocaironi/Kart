@@ -19,6 +19,7 @@ kart.mappers = [
 kart.renderers = [
     renderers.DefaultSiteRenderer(),
     renderers.DefaultFeedRenderer(collections=["posts"]),
+    renderers.DefaultSitemapRenderer(),
 ]
 
 kart.config["name"] = "My blog"

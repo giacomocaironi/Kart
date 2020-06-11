@@ -2,6 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 from feedgen.feed import FeedGenerator
 import os
 from datetime import timezone, time, datetime
+import xml.etree.ElementTree as xml
 
 
 class DefaultSiteRenderer:
@@ -87,3 +88,18 @@ class DefaultFeedRenderer:
                 fe.id(self.url_function(collection, entry["slug"]))
                 fe.link({"href": self.url_function(collection, entry["slug"])})
             fg.atom_file(build_location + page["url"])
+
+
+class DefaultSitemapRenderer:
+    def render(self, map, site, build_location="_site"):
+        base_url = site["config"]["base_url"]
+        root = xml.Element("urlset")
+        root.set("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
+        for x in [x["url"] for x in map.values() if x["renderer"] == "main_renderer"]:
+            url = xml.SubElement(root, "url")
+            loc = xml.SubElement(url, "loc")
+            loc.text = base_url + x
+        with open(build_location + "/sitemap.xml", "w") as f:
+            f.write(
+                '<?xml version="1.0" encoding="UTF-8"?>' + xml.tostring(root).decode()
+            )
