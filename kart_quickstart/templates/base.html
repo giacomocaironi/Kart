@@ -8,6 +8,18 @@
   <title>{{site.config.name}}</title>
   {% endblock title %}
 
+  <meta name="Description" CONTENT="
+  {{site.config['name']}}
+  {% if page.title %}
+    - {{page.title}}
+  {% elif page.name %}
+    - {{page.name}}
+  {% endif %}
+  {% if page.description %}
+  - {{page.description}}
+  {% endif %}
+  ">
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href={{ url("/static/css/base.css") }}>

@@ -18,6 +18,9 @@ class DefaultCollectionMiner:
             object = metadata
             object["slug"] = filename.split(".")[0]
             object["content"] = cmark.to_html(content)
+            if "draft" in object.keys():
+                if object["draft"]:
+                    return False
             return object
 
     def process(self):
@@ -45,15 +48,6 @@ class DefaultPostMiner(DefaultCollectionMiner):
     def process(self):
         self.data.sort(key=lambda x: x["date"])
         self.data.reverse()
-
-    # @cached
-    def collect_single_file(self, filename, file_location):
-        object = super().collect_single_file(filename, file_location)
-        object["short_content"] = clean_html(object["content"][:1000])
-        if "draft" in object.keys():
-            if object["draft"]:
-                return False
-        return object
 
 
 class DefaultPageMiner:

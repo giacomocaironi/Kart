@@ -81,8 +81,6 @@ class DefaultFeedRenderer:
                     fe.title(entry["name"])
                 if "description" in entry.keys():
                     fe.description(entry["description"])
-                elif "short_content" in entry.keys():
-                    fe.description(entry["short_content"])
                 fe.updated(
                     datetime.combine(entry["date"], time(12), tzinfo=timezone.utc)
                 )
