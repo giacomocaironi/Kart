@@ -39,7 +39,7 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     return urls
 
 
-class ManualMapper:
+class RuleMapper:
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
         self.urls = {}

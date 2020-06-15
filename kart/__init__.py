@@ -6,9 +6,10 @@ import argparse
 
 
 class Kart:
-    def __init__(self, miners=[], mappers=[], renderers=[], config={}):
+    def __init__(self, miners=[], mappers=[], modifiers=[], renderers=[], config={}):
         self.miners = miners
         self.mappers = mappers
+        self.modifiers = modifiers
         self.renderers = renderers
         self.config = config
 
@@ -22,6 +23,8 @@ class Kart:
         self.map = {}
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
+        for modifier in self.modifiers:
+            modifier.modify(self.site)
 
     def move_static(self):
         os.makedirs(self.build_location, exist_ok=True)

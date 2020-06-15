@@ -1,5 +1,5 @@
 from kart import Kart
-from kart import miners, mappers, renderers
+from kart import miners, mappers, renderers, modifiers
 
 kart = Kart()
 
@@ -15,6 +15,8 @@ kart.mappers = [
     mappers.DefaultPageMapper(),
     mappers.DefaultFeedMapper(),
 ]
+
+kart.modifiers = [modifiers.TagModifier()]
 
 kart.renderers = [
     renderers.DefaultSiteRenderer(),
