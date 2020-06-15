@@ -31,7 +31,6 @@ kart.mappers = [
         collection_name="step_by_step", template="default.html", base_url="/tutorials"
     ),
     mappers.DefaultCollectionMapper(collection_name="news", template="versions.html"),
-    mappers.ManualMapper([]),
 ]
 
 kart.renderers = [renderers.DefaultSiteRenderer()]
