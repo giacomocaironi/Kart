@@ -23,12 +23,6 @@ class DefaultCollectionMiner:
                     return False
             return object
 
-    def process(self):
-        try:
-            self.data.sort(key=lambda x: x["index"])
-        except Exception:
-            pass
-
     def collect(self):
         self.data = []
         working_dir = os.path.join(self.location, self.collection_name)
@@ -37,17 +31,7 @@ class DefaultCollectionMiner:
             object = self.collect_single_file(filename, file_location)
             if object:
                 self.data.append(object)
-        self.process()
         return {self.collection_name: self.data}
-
-
-class DefaultPostMiner(DefaultCollectionMiner):
-    def __init__(self, collection_name="posts", **kwargs):
-        super().__init__(collection_name=collection_name, **kwargs)
-
-    def process(self):
-        self.data.sort(key=lambda x: x["date"])
-        self.data.reverse()
 
 
 class DefaultPageMiner:

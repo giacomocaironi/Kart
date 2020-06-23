@@ -1,5 +1,5 @@
 from kart import Kart
-from kart import miners, mappers, renderers
+from kart import miners, mappers, renderers, modifiers
 
 kart = Kart()
 
@@ -13,6 +13,7 @@ kart.miners = [
     miners.DefaultPageMiner(),
 ]
 
+kart.modifiers = [modifiers.CollectionSorter("news", "title", True)]
 
 kart.mappers = [
     mappers.DefaultPageMapper(template="default.html"),

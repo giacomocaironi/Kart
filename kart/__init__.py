@@ -18,13 +18,13 @@ class Kart:
         for miner in self.miners:
             self.site.update(miner.collect())
         self.site["config"] = self.config
+        for modifier in self.modifiers:
+            modifier.modify(self.site)
 
     def create_map(self):
         self.map = {}
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
-        for modifier in self.modifiers:
-            modifier.modify(self.site)
 
     def move_static(self):
         os.makedirs(self.build_location, exist_ok=True)
