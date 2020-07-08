@@ -37,6 +37,10 @@ kart.mappers = [
 kart.renderers = [renderers.DefaultSiteRenderer()]
 
 kart.config["name"] = "Kart"
+kart.config["icon"] = "/favicon-32x32.png"
+kart.config["theme_repo_type"] = "github"
+kart.config["theme_repo_url"] = "https://github.com/giacomocaironi/Kart"
+kart.config["theme_repo_name"] = "giacomocaironi/Kart"
 kart.config["base_url"] = "https://giacomocaironi.github.io/Kart"
 
 kart.run()

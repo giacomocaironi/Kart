@@ -1,11 +1,38 @@
-{% extends "minimal.html" %}
-{% block content %}
-  <div class="row">
-    <div class="col-lg-3">
-      {% include "sidebar.html" %}
+{% extends "base.html" %}
+{% block main %}
+
+{% include "header.html" %}
+
+<div class="md-container">
+  {% block content %}
+  <main class='md-main'>
+    <div class="md-main__inner md-grid" data-md-component="container">
+      {% block site_nav %}
+        <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+          <div class="md-sidebar__scrollwrap">
+            <div class="md-sidebar__inner">
+              {% include "sidebar.html" %}
+            </div>
+          </div>
+        </div>
+        <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+          <div class="md-sidebar__scrollwrap">
+            <div class="md-sidebar__inner">
+              {% include "blank.html" %}
+            </div>
+          </div>
+        </div>
+      {% endblock site_nav %}
+      <div class="md-content">
+        <article class="md-content__inner md-typeset" role="main">
+          {{ page.content }}
+        </article>
+      </div>
     </div>
-    <div class="col-md-12 col-lg-9">
-      {{ page.content }}
-    </div>
-  </div>
-{% endblock content %}
+  </main>
+  {% endblock content %}
+</div>
+
+{% include "footer.html" %}
+
+{% endblock main %}
