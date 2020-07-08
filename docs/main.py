@@ -8,12 +8,12 @@ kart.miners = [
     miners.DefaultCollectionMiner("examples"),
     miners.DefaultCollectionMiner("getting_started"),
     miners.DefaultCollectionMiner("step_by_step"),
-    miners.DefaultCollectionMiner("news"),
+    miners.DefaultCollectionMiner("versions"),
     miners.DefaultDataMiner(),
     miners.DefaultPageMiner(),
 ]
 
-kart.modifiers = [modifiers.CollectionSorter("news", "title", True)]
+kart.modifiers = [modifiers.CollectionSorter("versions", "title", True)]
 
 kart.mappers = [
     mappers.DefaultPageMapper(template="default.html"),
@@ -31,7 +31,6 @@ kart.mappers = [
     mappers.DefaultCollectionMapper(
         collection_name="step_by_step", template="default.html", base_url="/tutorials"
     ),
-    mappers.DefaultCollectionMapper(collection_name="news", template="versions.html"),
 ]
 
 kart.renderers = [renderers.DefaultSiteRenderer()]
