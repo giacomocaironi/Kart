@@ -33,7 +33,11 @@ kart.mappers = [
     ),
 ]
 
-kart.renderers = [renderers.DefaultSiteRenderer()]
+kart.renderers = [
+    renderers.DefaultSiteRenderer(),
+    renderers.DefaultStaticSiteRenderer(),
+    renderers.DefaultSitemapRenderer(),
+]
 
 kart.config["name"] = "Kart"
 kart.config["icon"] = "/favicon-32x32.png"

@@ -3,6 +3,7 @@ from feedgen.feed import FeedGenerator
 import os
 from datetime import timezone, time, datetime
 import xml.etree.ElementTree as xml
+import shutil
 
 
 class DefaultSiteRenderer:
@@ -41,6 +42,12 @@ class DefaultSiteRenderer:
                 os.makedirs(build_location + page["url"], exist_ok=True)
                 with open(build_location + page["url"] + "index.html", "w") as f:
                     f.write(rendered_file)
+
+
+class DefaultStaticSiteRenderer:
+    def render(self, map, site, build_location):
+        if "static" in os.listdir():
+            shutil.copytree("static", os.path.join(build_location, "static"))
 
 
 class DefaultFeedRenderer:
