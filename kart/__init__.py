@@ -27,21 +27,15 @@ class Kart:
             self.map.update(mapper.map(self.site))
 
     def move_static(self):
-        os.makedirs(self.build_location, exist_ok=True)
-        for x in os.listdir(self.build_location):
-            if os.path.isdir(os.path.join(self.build_location, x)):
-                shutil.rmtree(os.path.join(self.build_location, x))
-            else:
-                os.remove(os.path.join(self.build_location, x))
-        if "static" in os.listdir():
-            shutil.copytree("static", os.path.join(self.build_location, "static"))
+        shutil.rmtree(self.build_location, ignore_errors=True)
 
         if "root" in os.listdir():
-            for top_level_file in os.listdir("root"):
-                shutil.copyfile(
-                    os.path.join("root", top_level_file),
-                    os.path.join(self.build_location, top_level_file),
-                )
+            shutil.copytree("root", self.build_location)
+        else:
+            os.makedirs(self.build_location, exist_ok=True)
+
+        if "static" in os.listdir():
+            shutil.copytree("static", os.path.join(self.build_location, "static"))
 
     def write(self):
         for renderer in self.renderers:
