@@ -35,12 +35,16 @@
 
   <label class="md-nav__link" for="{{path}}">
     {{nav_item[0]}}
-    <span class="md-nav__icon md-icon"></span>
+    <span class="md-nav__icon md-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"></path></svg>
+    </span>
   </label>
     <nav class="md-nav" data-md-level="1">
       <label class="md-nav__title" for="{{path}}">
         {{nav_item[0]}}
-        <span class="md-nav__icon md-icon"></span>
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+        </span>
       </label>
       <ul class='md-nav__list'>
         {% for article in site[nav_item[1][0]] %}

@@ -1,7 +1,43 @@
 from kart import Kart
 from kart import miners, mappers, renderers, modifiers
 
+from bs4 import BeautifulSoup
+import json
+import os
+
 kart = Kart()
+
+
+class lunr_renderer:
+    def render(self, map, site, build_location):
+        index = {
+            "config": {
+                "lang": ["en"],
+                "min_search_length": 3,
+                "prebuild_index": False,
+                "separator": "[\\s\\-]+",
+            },
+            "docs": [],
+        }
+        for page in map.values():
+            index["docs"].append(
+                {
+                    "location": page["url"][1:],
+                    "text": (
+                        "".join(
+                            BeautifulSoup(
+                                page["data"]["content"], features="lxml"
+                            ).findAll(text=True)
+                        ).replace("\n", " ")
+                    ),
+                    "title": page["data"]["title"],
+                }
+            )
+        os.makedirs(os.path.join(build_location, "search"), exist_ok=True)
+        filepath = os.path.join(build_location, "search", "search_index.json")
+        with open(filepath, "w") as f:
+            json.dump(index, f)
+
 
 kart.miners = [
     miners.DefaultCollectionMiner("documentation"),
@@ -40,6 +76,7 @@ kart.renderers = [
     renderers.DefaultSiteRenderer(),
     renderers.DefaultStaticSiteRenderer(),
     renderers.DefaultSitemapRenderer(),
+    lunr_renderer(),
 ]
 
 kart.config["name"] = "Kart"

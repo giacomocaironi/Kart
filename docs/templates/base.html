@@ -6,13 +6,11 @@
 
   <title>{{site.config.name}} - {{ page.title }}</title>
 
-  <!-- <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin> -->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href={{ url("/static/css/main.61729dd2.min.css") }}>
   <link rel="stylesheet" href={{ url("/static/css/palette.e185632b.min.css") }}>
-  <link rel="stylesheet" href={{ url("/static/css/prism.css") }}>
 
   <style>
     body,
@@ -42,12 +40,6 @@
   {% block main %}
     {{page.content}}
   {% endblock main %}
-
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/components/prism-core.min.js"></script> -->
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script> -->
-
-  <!-- <script src="{{ url("/static/javascript/application.js") }}"></script> -->
-  <!-- <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script> -->
 
   <script src="{{ url("/static/javascript/vendor.568ba93b.min.js") }}"></script>
   <script src="{{ url("/static/javascript/bundle.2a81e305.min.js") }}"></script>

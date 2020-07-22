@@ -1,8 +1,6 @@
-from lxml.html.clean import clean_html
 import os
 import frontmatter
 import yaml
-from paka import cmark
 from markdown import markdown
 
 
@@ -46,7 +44,9 @@ class DefaultPageMiner:
             with open(os.path.join(self.location, file), "r") as f:
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
-                object["content"] = cmark.to_html(content)
+                object["content"] = markdown(
+                    content, extensions=["fenced_code", "codehilite"]
+                )
                 self.data[file.split(".")[0]] = object
         return {"pages": self.data}
 
