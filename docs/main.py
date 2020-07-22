@@ -13,7 +13,10 @@ kart.miners = [
     miners.DefaultPageMiner(),
 ]
 
-kart.modifiers = [modifiers.CollectionSorter("versions", "title", True)]
+kart.modifiers = [
+    modifiers.CollectionSorter("versions", "title", True),
+    modifiers.CollectionSorter("getting_started", "index"),
+]
 
 kart.mappers = [
     mappers.DefaultPageMapper(template="default.html"),

@@ -3,6 +3,7 @@ import os
 import frontmatter
 import yaml
 from paka import cmark
+from markdown import markdown
 
 
 class DefaultCollectionMiner:
@@ -11,13 +12,14 @@ class DefaultCollectionMiner:
         self.collection_name = collection_name
         self.location = location
 
-    # @cached
     def collect_single_file(self, filename, file_location):
         with open(file_location, "r") as f:
             metadata, content = frontmatter.parse(f.read())
             object = metadata
             object["slug"] = filename.split(".")[0]
-            object["content"] = cmark.to_html(content)
+            object["content"] = markdown(
+                content, extensions=["fenced_code", "codehilite"]
+            )
             if "draft" in object.keys():
                 if object["draft"]:
                     return False
