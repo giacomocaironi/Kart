@@ -1,0 +1,72 @@
+{% set global = {'is_active':False} %}
+
+{% for article in site[nav_item[1][0]] %}
+  {% set _url = url(nav_item[1][0] + '.' + article.slug) %}
+  {% if _url == page.url %}
+    {% set _ = global.update({'is_active':True}) %}
+  {% endif %}
+{% endfor %}
+
+{% set class = "md-nav__item" %}
+{% if global['is_active'] %}
+  {% set class = "md-nav__item md-nav__item--active" %}
+{% endif %}
+
+{% if nav_item[1][1] %}
+
+<li class="{{ class }} md-nav__item--nested">
+
+  {% if global['is_active'] %}
+    <input
+      class="md-nav__toggle md-toggle"
+      data-md-toggle="{{ path }}"
+      type="checkbox"
+      id="{{ path }}"
+      checked
+    />
+  {% else %}
+    <input
+      class="md-nav__toggle md-toggle"
+      data-md-toggle="{{ path }}"
+      type="checkbox"
+      id="{{ path }}"
+    />
+  {% endif %}
+
+  <label class="md-nav__link" for="{{path}}">
+    {{nav_item[0]}}
+    <span class="md-nav__icon md-icon"></span>
+  </label>
+    <nav class="md-nav" data-md-level="1">
+      <label class="md-nav__title" for="{{path}}">
+        {{nav_item[0]}}
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <ul class='md-nav__list'>
+        {% for article in site[nav_item[1][0]] %}
+          {% set _url = url(nav_item[1][0] + '.' + article.slug) %}
+          {% if _url == page.url %}
+          <li class='md-nav__item md-nav__item--active'>
+            <a href="{{ _url }}" class='md-nav__link md-nav__link--active'>{{article.title}}</a>
+          </li>
+          {% else %}
+          <li class='md-nav__item'>
+            <a href="{{ _url }}" class='md-nav__link'>{{article.title}}</a>
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+</li>
+
+{% else %}
+  <li class="{{ class }}">
+    <a
+      href="{{ url(nav_item[1][0]) }}"
+      title="{{ nav_item.title | striptags }}"
+      class="md-nav__link"
+    >
+      {{ nav_item[0] }}
+    </a>
+  </li>
+{% endif %}

@@ -19,6 +19,7 @@ kart.mappers = [
 ]
 
 kart.renderers = [
+    renderers.DefaultStaticSiteRenderer(),
     renderers.DefaultSiteRenderer(),
     renderers.DefaultFeedRenderer(collections=["posts"]),
     renderers.DefaultSitemapRenderer(),

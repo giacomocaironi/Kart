@@ -26,17 +26,6 @@ class Kart:
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
 
-    def move_static(self):
-        shutil.rmtree(self.build_location, ignore_errors=True)
-
-        if "root" in os.listdir():
-            shutil.copytree("root", self.build_location)
-        else:
-            os.makedirs(self.build_location, exist_ok=True)
-
-        if "static" in os.listdir():
-            shutil.copytree("static", os.path.join(self.build_location, "static"))
-
     def write(self):
         for renderer in self.renderers:
             renderer.url_function = self.url
@@ -56,19 +45,23 @@ class Kart:
             return ""
         return self.config["base_url"] + result
 
+    def build(self, build_location="_site"):
+        self.build_location = build_location
+        self.prepare()
+        self.create_map()
+        shutil.rmtree(self.build_location, ignore_errors=True)
+        if "root" in os.listdir():
+            shutil.copytree("root", self.build_location)
+        else:
+            os.makedirs(self.build_location, exist_ok=True)
+        self.write()
+
     def serve(self, port=9000):
         self.build()
         server = Server()
         server.watcher.ignore_dirs("_site")
         server.watch(".", self.build)
         server.serve(root=self.build_location, port=port, host="0.0.0.0")
-
-    def build(self, build_location="_site"):
-        self.build_location = build_location
-        self.prepare()
-        self.create_map()
-        self.move_static()
-        self.write()
 
     def run(self):
         parser = argparse.ArgumentParser()

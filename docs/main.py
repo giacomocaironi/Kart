@@ -13,7 +13,10 @@ kart.miners = [
     miners.DefaultPageMiner(),
 ]
 
-kart.modifiers = [modifiers.CollectionSorter("versions", "title", True)]
+kart.modifiers = [
+    modifiers.CollectionSorter("versions", "title", True),
+    modifiers.CollectionSorter("getting_started", "index"),
+]
 
 kart.mappers = [
     mappers.DefaultPageMapper(template="default.html"),
@@ -33,7 +36,11 @@ kart.mappers = [
     ),
 ]
 
-kart.renderers = [renderers.DefaultSiteRenderer()]
+kart.renderers = [
+    renderers.DefaultSiteRenderer(),
+    renderers.DefaultStaticSiteRenderer(),
+    renderers.DefaultSitemapRenderer(),
+]
 
 kart.config["name"] = "Kart"
 kart.config["icon"] = "/favicon-32x32.png"
