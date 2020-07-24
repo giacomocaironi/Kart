@@ -16,7 +16,7 @@ class DefaultCollectionMiner:
             object = metadata
             object["slug"] = filename.split(".")[0]
             object["content"] = markdown(
-                content, extensions=["fenced_code", "codehilite"]
+                content, extensions=["fenced_code", "codehilite", "toc"]
             )
             if "draft" in object.keys():
                 if object["draft"]:
@@ -45,7 +45,7 @@ class DefaultPageMiner:
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
                 object["content"] = markdown(
-                    content, extensions=["fenced_code", "codehilite"]
+                    content, extensions=["fenced_code", "codehilite", "toc"]
                 )
                 self.data[file.split(".")[0]] = object
         return {"pages": self.data}

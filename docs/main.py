@@ -52,6 +52,8 @@ kart.miners = [
 kart.modifiers = [
     modifiers.CollectionSorter("versions", "title", True),
     modifiers.CollectionSorter("getting_started", "index"),
+    modifiers.TocModifier("getting_started"),
+    modifiers.TocModifier("pages"),
 ]
 
 kart.mappers = [

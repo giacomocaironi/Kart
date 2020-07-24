@@ -1,3 +1,6 @@
+from bs4 import BeautifulSoup, Tag
+
+
 class RuleModifier:
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
@@ -8,9 +11,6 @@ class RuleModifier:
 
 
 class TagModifier:
-    def __init__(self, rules=[]):
-        self.rules = rules  # a rule is a function
-
     def modify(self, site):
         site["tag_dict"] = {}
         for tag in site["tags"]:
@@ -27,3 +27,30 @@ class CollectionSorter:
         site[self.collection_name].sort(key=lambda x: x[self.key])
         if self.reverse:
             site[self.collection_name].reverse()
+
+
+class TocModifier:
+    def __init__(self, collection_name):
+        self.collection_name = collection_name
+
+    def modify(self, site):
+        if self.collection_name == "pages":
+            items = list(site["pages"].values())
+        else:
+            items = site[self.collection_name]
+        for item in items:
+            toc = []
+            soup = BeautifulSoup(item["content"], features="lxml")
+            current_list = toc
+            previous_tag = None
+            for header in soup.findAll(["h2", "h3"]):
+                if previous_tag == "h2" and header.name == "h3":
+                    current_list = []
+                elif previous_tag == "h3" and header.name == "h2":
+                    toc.append(current_list)
+                    current_list = toc
+                current_list.append((header["id"], header.string))
+                previous_tag = header.name
+            if current_list != toc:
+                toc.append(current_list)
+            item["toc"] = toc

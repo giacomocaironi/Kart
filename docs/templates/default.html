@@ -3,28 +3,21 @@
 
 {% include "header.html" %}
 
-<div class="md-container">
+<div class="md-container" data-md-component='container'>
   {% block _main %}
-  <main class='md-main'>
+  <main class='md-main' data-md-component='main'>
     <div class="md-main__inner md-grid" data-md-component="container">
 
       {% block site_nav %}
 
         {% include "sidebar.html" %}
 
-          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-            <div class="md-sidebar__scrollwrap">
-              <div class="md-sidebar__inner">
-                {% include "blank.html" %}
-              </div>
-            </div>
-          </div>
+        {% include 'toc.html' %}
 
       {% endblock site_nav %}
 
       <div class="md-content">
         <article class="md-content__inner md-typeset" role="main">
-          <!-- <h1>{{page.title}}</h1> -->
           {% block content %}
             {{ page.content }}
           {% endblock content %}
