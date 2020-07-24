@@ -12,14 +12,9 @@ kart.miners = [
 
 kart.modifiers = [modifiers.TagModifier(), modifiers.CollectionSorter("posts", "date")]
 
-kart.mappers = [
-    mappers.DefaultBlogMapper(),
-    mappers.DefaultPageMapper(),
-    mappers.DefaultFeedMapper(),
-]
+kart.mappers = [mappers.DefaultBlogMapper(), mappers.DefaultPageMapper()]
 
 kart.renderers = [
-    renderers.DefaultStaticSiteRenderer(),
     renderers.DefaultSiteRenderer(),
     renderers.DefaultFeedRenderer(collections=["posts"]),
     renderers.DefaultSitemapRenderer(),

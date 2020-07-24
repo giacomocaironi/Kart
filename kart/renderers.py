@@ -3,12 +3,14 @@ from feedgen.feed import FeedGenerator
 import os
 from datetime import timezone, time, datetime
 import xml.etree.ElementTree as xml
-import shutil
 
 
 class DefaultSiteRenderer:
     def __init__(
-        self, url_function=None, name="main_renderer", template_folder="templates"
+        self,
+        url_function=None,
+        name="default_site_renderer",
+        template_folder="templates",
     ):
         self.name = name
         self.template_folder = template_folder
@@ -44,14 +46,8 @@ class DefaultSiteRenderer:
                     f.write(rendered_file)
 
 
-class DefaultStaticSiteRenderer:
-    def render(self, map, site, build_location):
-        if "static" in os.listdir():
-            shutil.copytree("static", os.path.join(build_location, "static"))
-
-
 class DefaultFeedRenderer:
-    def __init__(self, name="feed_renderer", collections=["posts"]):
+    def __init__(self, name="default_feed_renderer", collections=["posts"]):
         self.name = name
         self.collections = collections
         self.url_function = None
@@ -61,48 +57,48 @@ class DefaultFeedRenderer:
 
     def render(self, map, site, build_location="_site"):
         base_url = site["config"]["base_url"]
-        for name, page in map.items():
-            if self.name != page["renderer"]:
-                continue
-            fg = FeedGenerator()
-            fg.title(site["config"]["name"])
-            if not base_url:
-                fg.id("base_url/")
-            else:
-                fg.id(base_url)
-            fg.link({"href": base_url})
-            fg.link({"href": base_url + page["url"], "rel": "self"})
+        fg = FeedGenerator()
+        fg.title(site["config"]["name"])
+        if not base_url:
+            fg.id("base_url/")
+        else:
+            fg.id(base_url)
+        fg.link({"href": base_url})
+        fg.link({"href": base_url + "/atom.xml", "rel": "self"})
 
-            feed_entries = []
+        feed_entries = []
 
-            for collection in self.collections:
-                for object in site[collection]:
-                    feed_entries.append([collection, object])
+        for collection in self.collections:
+            for object in site[collection]:
+                feed_entries.append([collection, object])
 
-            feed_entries.sort(key=lambda x: x[1]["date"])
+        feed_entries.sort(key=lambda x: x[1]["date"])
 
-            for collection, entry in feed_entries:
-                fe = fg.add_entry()
-                if "title" in entry.keys():
-                    fe.title(entry["title"])
-                elif "name" in entry.keys():
-                    fe.title(entry["name"])
-                if "description" in entry.keys():
-                    fe.description(entry["description"])
-                fe.updated(
-                    datetime.combine(entry["date"], time(12), tzinfo=timezone.utc)
-                )
-                fe.id(self.url_function(collection, entry["slug"]))
-                fe.link({"href": self.url_function(collection, entry["slug"])})
-            fg.atom_file(build_location + page["url"])
+        for collection, entry in feed_entries:
+            fe = fg.add_entry()
+            if "title" in entry.keys():
+                fe.title(entry["title"])
+            elif "name" in entry.keys():
+                fe.title(entry["name"])
+            if "description" in entry.keys():
+                fe.description(entry["description"])
+            fe.updated(datetime.combine(entry["date"], time(12), tzinfo=timezone.utc))
+            fe.id(self.url_function(collection, entry["slug"]))
+            fe.link({"href": self.url_function(collection, entry["slug"])})
+        fg.atom_file(build_location + "/atom.xml")
 
 
 class DefaultSitemapRenderer:
+    def __init__(self, name="default_sitemap_renderer"):
+        self.name = name
+
     def render(self, map, site, build_location="_site"):
         base_url = site["config"]["base_url"]
         root = xml.Element("urlset")
         root.set("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
-        for x in [x["url"] for x in map.values() if x["renderer"] == "main_renderer"]:
+        for x in [
+            x["url"] for x in map.values() if x["renderer"] == "default_site_renderer"
+        ]:
             url = xml.SubElement(root, "url")
             loc = xml.SubElement(url, "loc")
             loc.text = base_url + x

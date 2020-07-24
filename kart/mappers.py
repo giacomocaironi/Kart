@@ -32,7 +32,7 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
                     "url": base_url + url,
                     "data": data,
                     "default_template": template,
-                    "renderer": "main_renderer",
+                    "renderer": "default_site_renderer",
                 }
             }
         )
@@ -48,21 +48,6 @@ class RuleMapper:
         for rule in self.rules:
             self.urls.update(rule(site))
         return self.urls
-
-
-class DefaultFeedMapper:
-    def __init__(self, collections=[]):
-        self.urls = {}
-        self.collections = collections
-
-    def map(self, site):
-        return {
-            "atom_feeds": {
-                "url": "/atom.xml",
-                "data": site["posts"],
-                "renderer": "feed_renderer",
-            }
-        }
 
 
 class DefaultCollectionMapper:
@@ -83,7 +68,7 @@ class DefaultCollectionMapper:
                         + f"/{self.collection_name}/{object['slug']}/",
                         "data": object,
                         "default_template": self.default_template,
-                        "renderer": "main_renderer",
+                        "renderer": "default_site_renderer",
                     }
                 }
             )
@@ -110,7 +95,7 @@ class DefaultPageMapper:
                         "url": url,
                         "data": page,
                         "default_template": self.default_template,
-                        "renderer": "main_renderer",
+                        "renderer": "default_site_renderer",
                     }
                 }
             )

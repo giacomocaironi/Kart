@@ -1,4 +1,3 @@
-# from kart import miners, mappers, renderers
 from livereload import Server
 import os
 import shutil
@@ -29,7 +28,7 @@ class Kart:
     def write(self):
         for renderer in self.renderers:
             renderer.url_function = self.url
-            renderer.render(self.map, self.site, build_location=self.build_location)
+            renderer.render(self.map, self.site, self.build_location)
 
     def url(self, *name):
         name = ".".join(name)
@@ -54,6 +53,8 @@ class Kart:
             shutil.copytree("root", self.build_location)
         else:
             os.makedirs(self.build_location, exist_ok=True)
+        if "static" in os.listdir():
+            shutil.copytree("static", os.path.join(self.build_location, "static"))
         self.write()
 
     def serve(self, port=9000):
