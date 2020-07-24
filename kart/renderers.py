@@ -3,6 +3,7 @@ from feedgen.feed import FeedGenerator
 import os
 from datetime import timezone, time, datetime
 import xml.etree.ElementTree as xml
+import shutil
 
 
 class DefaultSiteRenderer:
@@ -106,3 +107,25 @@ class DefaultSitemapRenderer:
             f.write(
                 '<?xml version="1.0" encoding="UTF-8"?>' + xml.tostring(root).decode()
             )
+
+
+class DefaultStaticFilesRenderer:
+    def __init__(self, name="default_static_files_renderer"):
+        self.name = name
+
+    def render(self, map, site, build_location="_site"):
+        shutil.copytree("static", os.path.join(build_location, "static"))
+
+
+class DefaultRootDirRenderer:
+    def __init__(self, name="default_root_dir_renderer"):
+        self.name = name
+
+    def render(self, map, site, build_location="_site"):
+        for item in os.listdir("root"):
+            s = os.path.join("root", item)
+            d = os.path.join(build_location, item)
+            if os.path.isdir(s):
+                shutil.copytree(s, d)
+            else:
+                shutil.copy2(s, d)

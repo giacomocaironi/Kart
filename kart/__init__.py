@@ -49,12 +49,7 @@ class Kart:
         self.prepare()
         self.create_map()
         shutil.rmtree(self.build_location, ignore_errors=True)
-        if "root" in os.listdir():
-            shutil.copytree("root", self.build_location)
-        else:
-            os.makedirs(self.build_location, exist_ok=True)
-        if "static" in os.listdir():
-            shutil.copytree("static", os.path.join(self.build_location, "static"))
+        os.makedirs(self.build_location, exist_ok=True)
         self.write()
 
     def serve(self, port=9000):

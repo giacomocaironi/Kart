@@ -77,6 +77,8 @@ kart.mappers = [
 kart.renderers = [
     renderers.DefaultSiteRenderer(),
     renderers.DefaultSitemapRenderer(),
+    renderers.DefaultStaticFilesRenderer(),
+    renderers.DefaultRootDirRenderer(),
     lunr_renderer(),
 ]
 

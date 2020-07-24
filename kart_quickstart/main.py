@@ -18,6 +18,8 @@ kart.renderers = [
     renderers.DefaultSiteRenderer(),
     renderers.DefaultFeedRenderer(collections=["posts"]),
     renderers.DefaultSitemapRenderer(),
+    renderers.DefaultStaticFilesRenderer(),
+    renderers.DefaultRootDirRenderer(),
 ]
 
 kart.config["name"] = "My blog"
