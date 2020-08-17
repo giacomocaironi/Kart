@@ -7,15 +7,9 @@ import shutil
 
 
 class DefaultSiteRenderer:
-    def __init__(
-        self,
-        url_function=None,
-        name="default_site_renderer",
-        template_folder="templates",
-    ):
+    def __init__(self, name="default_site_renderer", template_folder="templates"):
         self.name = name
         self.template_folder = template_folder
-        self.url_function = url_function
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
 
     def date_to_string(self, date):
@@ -33,7 +27,7 @@ class DefaultSiteRenderer:
         page["data"]["url"] = page["url"]
 
         jinja_template.globals.update(
-            url=self.url_function, date_to_string=self.date_to_string
+            url=self.map.url, date_to_string=self.date_to_string
         )
         return jinja_template.render(page=page["data"], site=site)
 
@@ -51,7 +45,6 @@ class DefaultFeedRenderer:
     def __init__(self, name="default_feed_renderer", collections=["posts"]):
         self.name = name
         self.collections = collections
-        self.url_function = None
 
     def render_single(self, page, site):
         return
@@ -84,8 +77,8 @@ class DefaultFeedRenderer:
             if "description" in entry.keys():
                 fe.description(entry["description"])
             fe.updated(datetime.combine(entry["date"], time(12), tzinfo=timezone.utc))
-            fe.id(self.url_function(collection, entry["slug"]))
-            fe.link({"href": self.url_function(collection, entry["slug"])})
+            fe.id(map.url(collection, entry["slug"]))
+            fe.link({"href": map.url(collection, entry["slug"])})
         fg.atom_file(build_location + "/atom.xml")
 
 

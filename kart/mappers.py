@@ -1,3 +1,26 @@
+from collections import UserDict
+
+
+class KartMap(UserDict):
+    def __init__(self, base_url, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.base_url = base_url
+
+    def url(self, *name):
+        name = ".".join(name)
+        if not name:
+            return ""
+        if name in self.data.keys():
+            result = self.data[name]["url"]
+        elif name + ".1" in self.data.keys():
+            result = self.data[name + ".1"]["url"]
+        elif "/" in name:
+            result = name
+        else:
+            return ""
+        return self.base_url + result
+
+
 def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     urls = {}
     paginated_objects = [

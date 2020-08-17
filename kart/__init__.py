@@ -1,3 +1,5 @@
+from kart.mappers import KartMap
+
 from livereload import Server
 import os
 import shutil
@@ -21,28 +23,13 @@ class Kart:
             modifier.modify(self.site)
 
     def create_map(self):
-        self.map = {}
+        self.map = KartMap(self.config["base_url"])
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
 
     def write(self):
         for renderer in self.renderers:
-            renderer.url_function = self.url
             renderer.render(self.map, self.site, self.build_location)
-
-    def url(self, *name):
-        name = ".".join(name)
-        if not name:
-            return ""
-        if name in self.map.keys():
-            result = self.map[name]["url"]
-        elif name + ".1" in self.map.keys():
-            result = self.map[name + ".1"]["url"]
-        elif "/" in name:
-            result = name
-        else:
-            return ""
-        return self.config["base_url"] + result
 
     def build(self, build_location="_site"):
         self.build_location = build_location
