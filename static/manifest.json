@@ -1,0 +1,11 @@
+{
+  "static/javascripts/bundle.js": "static/javascripts/bundle.js",
+  "static/javascripts/vendor.js": "static/javascripts/vendor.js",
+  "static/javascripts/worker/search.js": "static/javascripts/worker/search.js",
+  "static/stylesheets/main.css": "static/stylesheets/main.css",
+  "static/stylesheets/main.js": "static/stylesheets/main.js",
+  "static/stylesheets/overrides.css": "static/stylesheets/overrides.css",
+  "static/stylesheets/overrides.js": "static/stylesheets/overrides.js",
+  "static/stylesheets/palette.css": "static/stylesheets/palette.css",
+  "static/stylesheets/palette.js": "static/stylesheets/palette.js"
+}
