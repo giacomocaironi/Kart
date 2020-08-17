@@ -9,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href={{ url("/static/css/main.61729dd2.min.css") }}>
-  <link rel="stylesheet" href={{ url("/static/css/palette.e185632b.min.css") }}>
+  <link rel="stylesheet" href={{ url("/static/stylesheets/main.css") }}>
+  <link rel="stylesheet" href={{ url("/static/stylesheets/palette.css") }}>
 
   <style>
     body,
@@ -41,8 +41,8 @@
     {{page.content}}
   {% endblock main %}
 
-  <script src="{{ url("/static/javascript/vendor.568ba93b.min.js") }}"></script>
-  <script src="{{ url("/static/javascript/bundle.2a81e305.min.js") }}"></script>
+  <script src="{{ url("/static/javascripts/vendor.js") }}"></script>
+  <script src="{{ url("/static/javascripts/bundle.js") }}"></script>
   <script id="__lang" type="application/json">
     {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}
   </script>
@@ -51,7 +51,7 @@
             base: "{{ url("/") }}",
             features: [],
             search: Object.assign({
-              worker : "{{ url("/static/javascript/worker/search.a68abb33.min.js") }}"
+              worker : "{{ url("/static/javascripts/worker/search.js") }}"
             }, typeof search !== "undefined" && search)
           })
   </script>

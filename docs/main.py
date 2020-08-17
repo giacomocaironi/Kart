@@ -39,6 +39,14 @@ class lunr_renderer:
             json.dump(index, f)
 
 
+class WebpackRenderer:
+    def __init__(self, name="webpack_renderer"):
+        self.name = name
+
+    def render(self, map, site, build_location="_site"):
+        os.system("npx webpack --mode development")
+
+
 kart.miners = [
     miners.DefaultCollectionMiner("documentation"),
     miners.DefaultCollectionMiner("examples"),
@@ -77,7 +85,7 @@ kart.mappers = [
 kart.renderers = [
     renderers.DefaultSiteRenderer(),
     renderers.DefaultSitemapRenderer(),
-    renderers.DefaultStaticFilesRenderer(),
+    WebpackRenderer(),
     renderers.DefaultRootDirRenderer(),
     lunr_renderer(),
 ]
