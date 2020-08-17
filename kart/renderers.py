@@ -1,4 +1,4 @@
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, Template
 from feedgen.feed import FeedGenerator
 import os
 from datetime import timezone, time, datetime
@@ -29,6 +29,10 @@ class DefaultSiteRenderer:
         jinja_template.globals.update(
             url=self.map.url, date_to_string=self.date_to_string
         )
+        page["data"]["content"] = Template(page["data"]["content"]).render(
+            site=site, url=self.map.url, date_to_string=self.date_to_string
+        )
+
         return jinja_template.render(page=page["data"], site=site)
 
     def render(self, map, site, build_location="_site"):

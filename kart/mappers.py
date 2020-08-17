@@ -1,4 +1,5 @@
 from collections import UserDict
+import re
 
 
 class KartMap(UserDict):
@@ -8,6 +9,8 @@ class KartMap(UserDict):
 
     def url(self, *name):
         name = ".".join(name)
+        regex = re.compile(f"{name}[.].")
+        regex_list = list(filter(regex.match, self.data.keys()))
         if not name:
             return ""
         if name in self.data.keys():
@@ -16,6 +19,8 @@ class KartMap(UserDict):
             result = self.data[name + ".1"]["url"]
         elif "/" in name:
             result = name
+        elif regex_list:
+            result = self.data[regex_list[0]]["url"]
         else:
             return ""
         return self.base_url + result
