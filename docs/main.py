@@ -57,7 +57,7 @@ kart.miners = [
     miners.DefaultPageMiner(),
 ]
 
-kart.modifiers = [
+kart.content_modifiers = [
     modifiers.CollectionSorter("versions", "title", True),
     modifiers.CollectionSorter("getting_started", "index"),
     modifiers.TocModifier("getting_started"),
@@ -81,6 +81,8 @@ kart.mappers = [
         collection_name="step_by_step", template="default.html", base_url="/tutorials"
     ),
 ]
+
+kart.map_modifiers = []
 
 kart.renderers = [
     renderers.DefaultSiteRenderer(),

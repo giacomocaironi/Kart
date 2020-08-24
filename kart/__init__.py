@@ -7,10 +7,19 @@ import argparse
 
 
 class Kart:
-    def __init__(self, miners=[], mappers=[], modifiers=[], renderers=[], config={}):
+    def __init__(
+        self,
+        miners=[],
+        content_modifiers=[],
+        mappers=[],
+        map_modifiers=[],
+        renderers=[],
+        config={},
+    ):
         self.miners = miners
+        self.content_modifiers = content_modifiers
         self.mappers = mappers
-        self.modifiers = modifiers
+        self.map_modifiers = map_modifiers
         self.renderers = renderers
         self.config = config
 
@@ -19,13 +28,15 @@ class Kart:
         for miner in self.miners:
             self.site.update(miner.collect())
         self.site["config"] = self.config
-        for modifier in self.modifiers:
+        for modifier in self.content_modifiers:
             modifier.modify(self.site)
 
     def create_map(self):
         self.map = KartMap(self.config["base_url"])
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
+        for modifier in self.map_modifiers:
+            modifier.modify(self.map, self.site)
 
     def write(self):
         for renderer in self.renderers:

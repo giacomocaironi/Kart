@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
 
-class RuleModifier:
+class RuleContentModifier:
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
 
@@ -54,3 +54,12 @@ class TocModifier:
             if current_list != toc:
                 toc.append(current_list)
             item["toc"] = toc
+
+
+class RuleMapModifier:
+    def __init__(self, rules=[]):
+        self.rules = rules  # a rule is a function
+
+    def modify(self, map, site):
+        for rule in self.rules:
+            rule(map, site)

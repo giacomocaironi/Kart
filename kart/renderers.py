@@ -29,9 +29,9 @@ class DefaultSiteRenderer:
         jinja_template.globals.update(
             url=self.map.url, date_to_string=self.date_to_string
         )
-        page["data"]["content"] = Template(page["data"]["content"]).render(
-            site=site, url=self.map.url, date_to_string=self.date_to_string
-        )
+        # page["data"]["content"] = Template(page["data"]["content"]).render(
+        #     site=site, url=self.map.url, date_to_string=self.date_to_string
+        # )
 
         return jinja_template.render(page=page["data"], site=site)
 
