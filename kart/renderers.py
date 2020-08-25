@@ -4,9 +4,24 @@ import os
 from datetime import timezone, time, datetime
 import xml.etree.ElementTree as xml
 import shutil
+from http.server import SimpleHTTPRequestHandler
 
 
-class DefaultSiteRenderer:
+class Renderer:
+    def render(self, *args, **kwargs):
+        pass
+
+    def start_serving(self, *args, **kwargs):
+        pass
+
+    def serve(self, *args, **kwargs):
+        pass
+
+    def stop_serving(self, *args, **kwargs):
+        pass
+
+
+class DefaultSiteRenderer(Renderer):
     def __init__(self, name="default_site_renderer", template_folder="templates"):
         self.name = name
         self.template_folder = template_folder
@@ -15,20 +30,18 @@ class DefaultSiteRenderer:
     def date_to_string(self, date):
         return date.strftime("%b %d, %Y")
 
-    def render_single(self, page, site):
+    def render_single(self, page, map, site):
         if self.name != page["renderer"]:
             return
         template = ""
         if "template" in page["data"].keys():
             template = page["data"]["template"]
         if not template:
-            template = page["default_template"]
+            template = page["template"]
         jinja_template = self.env.get_template(template)
         page["data"]["url"] = page["url"]
 
-        jinja_template.globals.update(
-            url=self.map.url, date_to_string=self.date_to_string
-        )
+        jinja_template.globals.update(url=map.url, date_to_string=self.date_to_string)
         # page["data"]["content"] = Template(page["data"]["content"]).render(
         #     site=site, url=self.map.url, date_to_string=self.date_to_string
         # )
@@ -36,24 +49,27 @@ class DefaultSiteRenderer:
         return jinja_template.render(page=page["data"], site=site)
 
     def render(self, map, site, build_location="_site"):
-        self.map = map
         for page in map.values():
-            rendered_file = self.render_single(page, site)
+            if page["renderer"] != self.name:
+                break
+            rendered_file = self.render_single(page, map, site)
             if rendered_file:
                 os.makedirs(build_location + page["url"], exist_ok=True)
                 with open(build_location + page["url"] + "index.html", "w") as f:
                     f.write(rendered_file)
 
+    def serve(self, http_handler, page, map, site):
+        http_handler.send_response(200)
+        http_handler.send_header("Content-type", "text/html")
+        http_handler.end_headers()
+        http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
 
-class DefaultFeedRenderer:
-    def __init__(self, name="default_feed_renderer", collections=["posts"]):
+
+class DefaultFeedRenderer(Renderer):
+    def __init__(self, name="default_feed_renderer"):
         self.name = name
-        self.collections = collections
 
-    def render_single(self, page, site):
-        return
-
-    def render(self, map, site, build_location="_site"):
+    def render_single(self, page, map, site):
         base_url = site["config"]["base_url"]
         fg = FeedGenerator()
         fg.title(site["config"]["name"])
@@ -63,15 +79,11 @@ class DefaultFeedRenderer:
             fg.id(base_url)
         fg.link({"href": base_url})
         fg.link({"href": base_url + "/atom.xml", "rel": "self"})
-
         feed_entries = []
-
-        for collection in self.collections:
+        for collection in page["data"]["collections"]:
             for object in site[collection]:
                 feed_entries.append([collection, object])
-
         feed_entries.sort(key=lambda x: x[1]["date"])
-
         for collection, entry in feed_entries:
             fe = fg.add_entry()
             if "title" in entry.keys():
@@ -83,14 +95,27 @@ class DefaultFeedRenderer:
             fe.updated(datetime.combine(entry["date"], time(12), tzinfo=timezone.utc))
             fe.id(map.url(collection, entry["slug"]))
             fe.link({"href": map.url(collection, entry["slug"])})
-        fg.atom_file(build_location + "/atom.xml")
+        return fg.atom_str().decode()
+
+    def render(self, map, site, build_location="_site"):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                break
+            with open(build_location + page["url"], "w") as f:
+                f.write(self.render_single(self, page, map, site))
+
+    def serve(self, http_handler, page, map, site):
+        http_handler.send_response(200)
+        http_handler.send_header("Content-type", "application/xml")
+        http_handler.end_headers()
+        http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
 
 
-class DefaultSitemapRenderer:
+class DefaultSitemapRenderer(Renderer):
     def __init__(self, name="default_sitemap_renderer"):
         self.name = name
 
-    def render(self, map, site, build_location="_site"):
+    def render_single(self, page, map, site):
         base_url = site["config"]["base_url"]
         root = xml.Element("urlset")
         root.set("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
@@ -100,21 +125,34 @@ class DefaultSitemapRenderer:
             url = xml.SubElement(root, "url")
             loc = xml.SubElement(url, "loc")
             loc.text = base_url + x
-        with open(build_location + "/sitemap.xml", "w") as f:
-            f.write(
-                '<?xml version="1.0" encoding="UTF-8"?>' + xml.tostring(root).decode()
-            )
+        return '<?xml version="1.0" encoding="UTF-8"?>' + xml.tostring(root).decode()
+
+    def render(self, map, site, build_location="_site"):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                break
+            with open(build_location + page["url"], "w") as f:
+                f.write(self.render_single(self, page, map, site))
+
+    def serve(self, http_handler, page, map, site):
+        http_handler.send_response(200)
+        http_handler.send_header("Content-type", "application/xml")
+        http_handler.end_headers()
+        http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
 
 
-class DefaultStaticFilesRenderer:
+class DefaultStaticFilesRenderer(Renderer):
     def __init__(self, name="default_static_files_renderer"):
         self.name = name
 
     def render(self, map, site, build_location="_site"):
         shutil.copytree("static", os.path.join(build_location, "static"))
 
+    def serve(self, http_handler, page, map, site):
+        return SimpleHTTPRequestHandler.do_GET(http_handler)
 
-class DefaultRootDirRenderer:
+
+class DefaultRootDirRenderer(Renderer):
     def __init__(self, name="default_root_dir_renderer"):
         self.name = name
 
@@ -126,3 +164,7 @@ class DefaultRootDirRenderer:
                 shutil.copytree(s, d)
             else:
                 shutil.copy2(s, d)
+
+    def serve(self, http_handler, page, map, site):
+        http_handler.path = "/root" + http_handler.path
+        return SimpleHTTPRequestHandler.do_GET(http_handler)

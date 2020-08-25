@@ -4,11 +4,14 @@ from kart import miners, mappers, renderers, modifiers
 from bs4 import BeautifulSoup
 import json
 import os
+from subprocess import Popen, PIPE
 
 kart = Kart()
 
 
-class lunr_renderer:
+class lunr_renderer(renderers.Renderer):
+    name = "lunr_renderer"
+
     def render(self, map, site, build_location):
         index = {
             "config": {
@@ -39,12 +42,28 @@ class lunr_renderer:
             json.dump(index, f)
 
 
-class WebpackRenderer:
+class WebpackRenderer(renderers.Renderer):
     def __init__(self, name="webpack_renderer"):
         self.name = name
+        self.port = 15000
 
     def render(self, map, site, build_location="_site"):
         os.system("npx webpack --mode development")
+
+    def start_serving(self):
+        self.p = Popen(
+            f"npx webpack-dev-server --mode development --port {self.port}".split(" "),
+            stdout=PIPE,
+        )
+
+    def serve(self, http_handler, page, map, site):
+        http_handler.send_response(301)
+        new_location = f"http://localhost:{self.port}" + http_handler.path
+        http_handler.send_header("Location", new_location)
+        http_handler.end_headers()
+
+    def stop_serving(self):
+        self.p.stdout.close()
 
 
 kart.miners = [
@@ -79,6 +98,34 @@ kart.mappers = [
     ),
     mappers.DefaultCollectionMapper(
         collection_name="step_by_step", template="default.html", base_url="/tutorials"
+    ),
+    mappers.ManualMapper(
+        {
+            "lunr_data": {
+                "url": "/search/search_index.json",
+                "data": {},
+                "template": "",
+                "renderer": "lunr_renderer",
+            },
+            "sitemap": {
+                "url": "/sitemap.xml",
+                "data": {},
+                "template": "",
+                "renderer": "default_sitemap_renderer",
+            },
+            "static": {
+                "url": "/static/*",
+                "data": {},
+                "template": "",
+                "renderer": "webpack_renderer",
+            },
+            "root": {
+                "url": "/*",
+                "data": {},
+                "template": "",
+                "renderer": "default_root_dir_renderer",
+            },
+        }
     ),
 ]
 

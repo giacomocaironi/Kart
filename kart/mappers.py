@@ -9,8 +9,6 @@ class KartMap(UserDict):
 
     def url(self, *name):
         name = ".".join(name)
-        regex = re.compile(f"{name}[.].")
-        regex_list = list(filter(regex.match, self.data.keys()))
         if not name:
             return ""
         if name in self.data.keys():
@@ -19,10 +17,13 @@ class KartMap(UserDict):
             result = self.data[name + ".1"]["url"]
         elif "/" in name:
             result = name
-        elif regex_list:
-            result = self.data[regex_list[0]]["url"]
         else:
-            return ""
+            regex = re.compile(f"{name}[.].")
+            regex_list = list(filter(regex.match, self.data.keys()))
+            if regex_list:
+                result = self.data[regex_list[0]]["url"]
+            else:
+                return ""
         return self.base_url + result
 
 
@@ -59,7 +60,7 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
                 f"{slug}.{i}": {
                     "url": base_url + url,
                     "data": data,
-                    "default_template": template,
+                    "template": template,
                     "renderer": "default_site_renderer",
                 }
             }
@@ -78,10 +79,18 @@ class RuleMapper:
         return self.urls
 
 
+class ManualMapper:
+    def __init__(self, pages={}):
+        self.pages = pages
+
+    def map(self, site):
+        return self.pages
+
+
 class DefaultCollectionMapper:
     def __init__(self, collection_name, base_url="", template="collection_item.html"):
         self.urls = {}
-        self.default_template = template
+        self.template = template
         self.base_url = base_url
         self.collection_name = collection_name
 
@@ -95,7 +104,7 @@ class DefaultCollectionMapper:
                         "url": self.base_url
                         + f"/{self.collection_name}/{object['slug']}/",
                         "data": object,
-                        "default_template": self.default_template,
+                        "template": self.template,
                         "renderer": "default_site_renderer",
                     }
                 }
@@ -106,7 +115,7 @@ class DefaultCollectionMapper:
 class DefaultPageMapper:
     def __init__(self, template="page.html"):
         self.urls = {}
-        self.default_template = template
+        self.template = template
 
     def map(self, site):
         for slug in site["pages"]:
@@ -122,7 +131,7 @@ class DefaultPageMapper:
                     slug: {
                         "url": url,
                         "data": page,
-                        "default_template": self.default_template,
+                        "template": self.template,
                         "renderer": "default_site_renderer",
                     }
                 }
@@ -196,3 +205,19 @@ class DefaultBlogMapper:
                 )
             )
         return urls
+
+
+class DefaultFeedMapper:
+    def __init__(self, collections=[]):
+        self.urls = {}
+        self.collections = collections
+
+    def map(self, site):
+        return {
+            "feed": {
+                "url": "/atom.xml",
+                "data": {"collections": self.collections},
+                "template": "",
+                "renderer": "default_feed_renderer",
+            }
+        }
