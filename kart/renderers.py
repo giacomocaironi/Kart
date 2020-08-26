@@ -51,7 +51,7 @@ class DefaultSiteRenderer(Renderer):
     def render(self, map, site, build_location="_site"):
         for page in map.values():
             if page["renderer"] != self.name:
-                break
+                continue
             rendered_file = self.render_single(page, map, site)
             if rendered_file:
                 os.makedirs(build_location + page["url"], exist_ok=True)
@@ -100,9 +100,9 @@ class DefaultFeedRenderer(Renderer):
     def render(self, map, site, build_location="_site"):
         for page in map.values():
             if page["renderer"] != self.name:
-                break
+                continue
             with open(build_location + page["url"], "w") as f:
-                f.write(self.render_single(self, page, map, site))
+                f.write(self.render_single(page, map, site))
 
     def serve(self, http_handler, page, map, site):
         http_handler.send_response(200)
@@ -130,9 +130,9 @@ class DefaultSitemapRenderer(Renderer):
     def render(self, map, site, build_location="_site"):
         for page in map.values():
             if page["renderer"] != self.name:
-                break
+                continue
             with open(build_location + page["url"], "w") as f:
-                f.write(self.render_single(self, page, map, site))
+                f.write(self.render_single(page, map, site))
 
     def serve(self, http_handler, page, map, site):
         http_handler.send_response(200)

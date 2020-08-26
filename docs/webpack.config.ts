@@ -158,7 +158,7 @@ function config(args: Configuration): Configuration {
     ],
 
     /* Source maps */
-    devtool: args.mode === "production" ? "source-map" : "eval",
+    devtool: args.mode === "production" ? "source-map" : "inline-source-map",
 
     /* Filter false positives and omit verbosity */
     stats: {

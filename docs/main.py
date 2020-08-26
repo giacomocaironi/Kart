@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import json
 import os
 from subprocess import Popen, PIPE
+import requests
 
 kart = Kart()
 
@@ -12,7 +13,7 @@ kart = Kart()
 class lunr_renderer(renderers.Renderer):
     name = "lunr_renderer"
 
-    def render(self, map, site, build_location):
+    def render_single(self, page, map, site):
         index = {
             "config": {
                 "lang": ["en"],
@@ -23,6 +24,8 @@ class lunr_renderer(renderers.Renderer):
             "docs": [],
         }
         for page in map.values():
+            if page["renderer"] != "default_site_renderer":
+                continue
             index["docs"].append(
                 {
                     "location": page["url"][1:],
@@ -36,10 +39,24 @@ class lunr_renderer(renderers.Renderer):
                     "title": page["data"]["title"],
                 }
             )
-        os.makedirs(os.path.join(build_location, "search"), exist_ok=True)
-        filepath = os.path.join(build_location, "search", "search_index.json")
-        with open(filepath, "w") as f:
-            json.dump(index, f)
+        return json.dumps(index)
+
+    def render(self, map, site, build_location="_site"):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                continue
+            rendered_file = self.render_single(page, map, site)
+            if rendered_file:
+                os.makedirs(os.path.join(build_location, "search"), exist_ok=True)
+                with open(build_location + page["url"], "w") as f:
+                    f.write(rendered_file)
+
+    def serve(self, http_handler, page, map, site):
+        data = bytes(self.render_single(page, map, site), "utf-8")
+        http_handler.send_response(200)
+        http_handler.send_header("Content-type", "application/json")
+        http_handler.end_headers()
+        http_handler.wfile.write(data)
 
 
 class WebpackRenderer(renderers.Renderer):
@@ -57,10 +74,11 @@ class WebpackRenderer(renderers.Renderer):
         )
 
     def serve(self, http_handler, page, map, site):
-        http_handler.send_response(301)
         new_location = f"http://localhost:{self.port}" + http_handler.path
-        http_handler.send_header("Location", new_location)
+        data = requests.get(new_location).content
+        http_handler.send_response(200)
         http_handler.end_headers()
+        http_handler.wfile.write(data)
 
     def stop_serving(self):
         self.p.stdout.close()
