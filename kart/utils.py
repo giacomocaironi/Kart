@@ -4,7 +4,7 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 import re
-from collections import UserDict
+from collections import UserDict, UserString
 
 
 class StoppableThread(threading.Thread):
@@ -106,3 +106,12 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
             }
         )
     return urls
+
+
+class RawMarkup(UserString):
+    def to_html(self):
+        return markdown(self.data)
+
+    @property
+    def html(self):
+        return self.to_html()

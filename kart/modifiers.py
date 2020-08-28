@@ -50,7 +50,7 @@ class TocModifier(ContentModifier):
             items = site[self.collection_name]
         for item in items:
             toc = []
-            soup = BeautifulSoup(item["content"], features="lxml")
+            soup = BeautifulSoup(item["content"].html, features="lxml")
             current_list = toc
             previous_tag = None
             for header in soup.findAll(["h2", "h3"]):
