@@ -432,25 +432,25 @@
         <ul class="md-nav__list">
           
             <li class="md-nav__item">
-              <a href="#modify-the-configuration-file" class="md-nav__link">
+              <a href="#Modify-the-configuration-file" class="md-nav__link">
                 Modify the configuration file
               </a>
             </li>
           
             <li class="md-nav__item">
-              <a href="#the-root-folder" class="md-nav__link">
+              <a href="#The-root-folder" class="md-nav__link">
                 The root folder
               </a>
             </li>
           
             <li class="md-nav__item">
-              <a href="#build-the-site-for-production" class="md-nav__link">
+              <a href="#Build-the-site-for-production" class="md-nav__link">
                 Build the site for production
               </a>
             </li>
           
             <li class="md-nav__item">
-              <a href="#where-to-go" class="md-nav__link">
+              <a href="#Where-to-go" class="md-nav__link">
                 Where to go
               </a>
             </li>
@@ -467,26 +467,25 @@
       <div class="md-content">
         <article class="md-content__inner md-typeset" role="main">
           
-            <h1 id="publish-your-site">Publish your site</h1>
-<h2 id="modify-the-configuration-file">Modify the configuration file</h2>
+            <h1 id=Publish-your-site>Publish your site</h1>
+<h2 id=Modify-the-configuration-file>Modify the configuration file</h2>
 <p>Now that you know how to create a blog it is time to publish it. First of all you have to open the main.py file and look for this lines:</p>
-<pre class="codehilite"><code class="language-python">kart.config[&quot;name&quot;] = &quot;My blog&quot;
-kart.config[&quot;base_url&quot;] = &quot;&quot;</code></pre>
-
-
+<div class="highlight"><pre><span></span><code><span class="n">kart</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;My blog&quot;</span>
+<span class="n">kart</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;base_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</code></pre></div>
 <p>Modify this lines accordingly. The first one will modify the title of your site. The second line is the location where your site will be hosted. It is very important because if your site is not hosted in the root url the site may not be able to load its static files, like CSS. Your site will be ugly and you wont understand why.</p>
-<h2 id="the-root-folder">The root folder</h2>
+<h2 id=The-root-folder>The root folder</h2>
 <p>In this tutorial we haven't told about the "root" folder, which was created by the quickstart command. Every file you put in this folder will be copied in the _site directory. It is useful for files such as favicons or CNAMES(for custom domains). If you want to add this type of files now is the time to do it.</p>
-<h2 id="build-the-site-for-production">Build the site for production</h2>
+<h2 id=Build-the-site-for-production>Build the site for production</h2>
 <p>When you want to build your site for publishing it you must use a different command:</p>
-<pre class="codehilite"><code class="language-bash">$ python main.py build --production</code></pre>
-
-
+<div class="highlight"><pre><span></span><code>$ python main.py build --production
+</code></pre></div>
 <p>The --production flag tells Kart to add the 'base_url' which you have defined before to every link, so they will work in every configuration.</p>
 <p>Now you can push your _site folder to your favourite host. If you are just starting and you know github I suggest looking at their <a href="https://pages.github.com/">Github Pages</a>.</p>
-<h2 id="where-to-go">Where to go</h2>
+<h2 id=Where-to-go>Where to go</h2>
 <p>You have only scratched the surface of what Kart is capable to offer. If you want how to create custom templates and mappers, to personalize the look of the site, you can look at the step by step tutorial section. You will learn how to pass custom data to your templates and how to use the jinja2 template engine to modify the look of your site as you like.</p>
 <p>The examples section will cover some advanced cases, such as pagination.</p>
+
           
         </article>
       </div>

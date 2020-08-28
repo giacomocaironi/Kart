@@ -443,25 +443,22 @@
       <div class="md-content">
         <article class="md-content__inner md-typeset" role="main">
           
-            <h1 id="build-the-site">Build the site</h1>
+            <h1 id=Build-the-site>Build the site</h1>
 <p>It's finally the time to build the site. There are two ways to do it.</p>
 <p>The first one simply generate the site but it does not display it automatically in the browser. Move to the root directory and type in the shell:</p>
-<pre class="codehilite"><code class="language-bash">$ python main.py build</code></pre>
-
-
+<div class="highlight"><pre><span></span><code>$ python main.py build
+</code></pre></div>
 <p>This will build your site in the _site folder. If you want to view it in the browser you can use a simple web server. With python you can create it by simpy typing in the browser(you must first move to the _site directory):</p>
-<pre class="codehilite"><code class="language-bash">$ python -m http.server</code></pre>
-
-
+<div class="highlight"><pre><span></span><code>$ python -m http.server
+</code></pre></div>
 <p>This is useful when you want to push your static site to your production environment but it is not very useful for editing the site. For this there is another command</p>
-<pre class="codehilite"><code class="language-bash">$ python main.py serve</code></pre>
-
-
+<div class="highlight"><pre><span></span><code>$ python main.py serve
+</code></pre></div>
 <p>This will create a development server that will autoreload when you change any file. It is very useful when modifying the templates. You can also specify which port to bind to using the -p option</p>
-<pre class="codehilite"><code class="language-bash">$ python main.py serve -p 4000</code></pre>
-
-
+<div class="highlight"><pre><span></span><code>$ python main.py serve -p <span class="m">4000</span>
+</code></pre></div>
 <p>You can then search in the browser 'localhost:' and the port you have chosen to see the blog.</p>
+
           
         </article>
       </div>
