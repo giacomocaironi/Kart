@@ -1,4 +1,4 @@
-from kart.mappers import KartMap
+from kart.utils import KartMap
 from kart.utils import StoppableThread
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler

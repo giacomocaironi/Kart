@@ -8,16 +8,16 @@ from http.server import SimpleHTTPRequestHandler
 
 
 class Renderer:
-    def render(self, *args, **kwargs):
+    def render(self, map, site, build_location="_site"):
         pass
 
-    def start_serving(self, *args, **kwargs):
+    def start_serving(self):
         pass
 
-    def serve(self, *args, **kwargs):
+    def serve(self, http_handler, page, map, site):
         pass
 
-    def stop_serving(self, *args, **kwargs):
+    def stop_serving(self):
         pass
 
 

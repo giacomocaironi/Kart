@@ -1,10 +1,15 @@
 import os
 import frontmatter
 import yaml
-from markdown import markdown
+from kart.utils import markdown
 
 
-class DefaultCollectionMiner:
+class Miner:
+    def collect(self):
+        pass
+
+
+class DefaultCollectionMiner(Miner):
     def __init__(self, collection_name, model=None, location="collections"):
         self.model = model
         self.collection_name = collection_name
@@ -15,9 +20,7 @@ class DefaultCollectionMiner:
             metadata, content = frontmatter.parse(f.read())
             object = metadata
             object["slug"] = filename.split(".")[0]
-            object["content"] = markdown(
-                content, extensions=["fenced_code", "codehilite", "toc"]
-            )
+            object["content"] = markdown(content)
             if "draft" in object.keys():
                 if object["draft"]:
                     return False
@@ -34,7 +37,7 @@ class DefaultCollectionMiner:
         return {self.collection_name: self.data}
 
 
-class DefaultPageMiner:
+class DefaultPageMiner(Miner):
     def __init__(self, location="pages"):
         self.location = location
 
@@ -44,14 +47,12 @@ class DefaultPageMiner:
             with open(os.path.join(self.location, file), "r") as f:
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
-                object["content"] = markdown(
-                    content, extensions=["fenced_code", "codehilite", "toc"]
-                )
+                object["content"] = markdown(content)
                 self.data[file.split(".")[0]] = object
         return {"pages": self.data}
 
 
-class DefaultDataMiner:
+class DefaultDataMiner(Miner):
     def __init__(self, location="data"):
         self.location = location
 

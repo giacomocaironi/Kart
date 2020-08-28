@@ -1,7 +1,17 @@
 from bs4 import BeautifulSoup
 
 
-class RuleContentModifier:
+class ContentModifier:
+    def modify(self, site):
+        pass
+
+
+class MapModifier:
+    def modify(self, map, site):
+        pass
+
+
+class RuleContentModifier(ContentModifier):
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
 
@@ -10,7 +20,7 @@ class RuleContentModifier:
             rule(site)
 
 
-class TagModifier:
+class TagModifier(ContentModifier):
     def modify(self, site):
         site["tag_dict"] = {}
         for tag in site["tags"]:
@@ -29,7 +39,7 @@ class CollectionSorter:
             site[self.collection_name].reverse()
 
 
-class TocModifier:
+class TocModifier(ContentModifier):
     def __init__(self, collection_name):
         self.collection_name = collection_name
 
@@ -56,7 +66,7 @@ class TocModifier:
             item["toc"] = toc
 
 
-class RuleMapModifier:
+class RuleMapModifier(MapModifier):
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
 

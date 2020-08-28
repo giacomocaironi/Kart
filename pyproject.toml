@@ -9,13 +9,14 @@ include = ["kart_quickstart/**/*"]
 exclude = ['kart_quickstart/_site/**/*']
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.6"
 jinja2 = "^2.11"
 pyyaml = '^5.1'
 python-frontmatter = '^0.5'
 feedgen = '^0.9'
 beautifulsoup4 = '4.9.*'
-markdown = '3.2.*'
+mistune = "^0.8.4"
+pygments = "^2.6.1"
 
 [tool.poetry.dev-dependencies]
 
