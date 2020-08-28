@@ -32,7 +32,7 @@ class lunr_renderer(renderers.Renderer):
                     "text": (
                         "".join(
                             BeautifulSoup(
-                                page["data"]["content"], features="lxml"
+                                page["data"]["content"].html, features="lxml"
                             ).findAll(text=True)
                         ).replace("\n", " ")
                     ),
@@ -75,10 +75,14 @@ class WebpackRenderer(renderers.Renderer):
 
     def serve(self, http_handler, page, map, site):
         new_location = f"http://localhost:{self.port}" + http_handler.path
-        data = requests.get(new_location).content
-        http_handler.send_response(200)
-        http_handler.end_headers()
-        http_handler.wfile.write(data)
+        try:
+            data = requests.get(new_location).content
+            http_handler.send_response(200)
+            http_handler.end_headers()
+            http_handler.wfile.write(data)
+        except:
+            http_handler.send_response(404)
+            http_handler.end_headers()
 
     def stop_serving(self):
         self.p.stdout.close()

@@ -12,7 +12,7 @@ kart.miners = [
 
 kart.content_modifiers = [
     modifiers.TagModifier(),
-    modifiers.CollectionSorter("posts", "date"),
+    modifiers.CollectionSorter("posts", "date", True),
 ]
 
 kart.mappers = [

@@ -104,22 +104,24 @@ class DefaultBlogMapper(Mapper):
         return self.urls
 
     def blog_index(self, site):
-        urls = {}
         posts = site["posts"][1:]
         try:
             per_page = site["config"]["pagination"]["per_page"]
         except Exception:
             per_page = 5
-        urls.update(
-            paginate(
-                posts,
-                per_page,
-                self.templates["index_template"],
-                self.base_url + "/index",
-                "blog_index",
-            )
+        paginated_map = paginate(
+            posts,
+            per_page,
+            self.templates["index_template"],
+            self.base_url + "/index/page",
+            "blog_index",
         )
-        return urls
+        paginated_map["blog_index.1"]["url"] = self.base_url + "/"
+        if "blog_index.2" in paginated_map.keys():
+            paginated_map["blog_index.2"]["data"]["paginator"]["previous_page_url"] = (
+                self.base_url + "/"
+            )
+        return paginated_map
 
     def tags(self, site):
         urls = {}
