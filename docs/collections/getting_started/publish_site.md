@@ -23,10 +23,8 @@ In this tutorial we haven't told about the "root" folder, which was created by t
 When you want to build your site for publishing it you must use a different command:
 
 ```bash
-$ python main.py build --production
+$ python main.py build
 ```
-
-The --production flag tells Kart to add the 'base_url' which you have defined before to every link, so they will work in every configuration.
 
 Now you can push your _site folder to your favourite host. If you are just starting and you know github I suggest looking at their [Github Pages](https://pages.github.com/).
 

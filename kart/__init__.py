@@ -133,11 +133,9 @@ class Kart:
         parser.add_argument(
             "-p", "--port", help="port to bind to", default=9000, type=int
         )
-        parser.add_argument("--production", action="store_true")
         args = parser.parse_args()
-        if not args.production:
-            self.config["base_url"] = ""
         if args.command == "build":
             self.build()
         if args.command == "serve":
+            self.config["base_url"] = ""
             self.serve(args.port)

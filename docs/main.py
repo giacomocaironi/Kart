@@ -6,11 +6,12 @@ import json
 import os
 from subprocess import Popen, PIPE
 import requests
+from glob import glob
 
 kart = Kart()
 
 
-class lunr_renderer(renderers.Renderer):
+class LunrRenderer(renderers.Renderer):
     name = "lunr_renderer"
 
     def render_single(self, page, map, site):
@@ -26,16 +27,12 @@ class lunr_renderer(renderers.Renderer):
         for page in map.values():
             if page["renderer"] != "default_site_renderer":
                 continue
+            soup = BeautifulSoup(page["data"]["content"].html, features="lxml")
+            stripped_text = "".join(soup.findAll(text=True)).replace("\n", " ")
             index["docs"].append(
                 {
                     "location": page["url"][1:],
-                    "text": (
-                        "".join(
-                            BeautifulSoup(
-                                page["data"]["content"].html, features="lxml"
-                            ).findAll(text=True)
-                        ).replace("\n", " ")
-                    ),
+                    "text": stripped_text,
                     "title": page["data"]["title"],
                 }
             )
@@ -60,12 +57,23 @@ class lunr_renderer(renderers.Renderer):
 
 
 class WebpackRenderer(renderers.Renderer):
-    def __init__(self, name="webpack_renderer"):
+    def __init__(self, port=15000, name="webpack_renderer"):
         self.name = name
-        self.port = 15000
+        self.port = port
 
     def render(self, map, site, build_location="_site"):
-        os.system("npx webpack --mode development")
+        os.system("npx webpack --mode production")
+        with open("_site/static/manifest.json") as json_file:
+            data = json.load(json_file)
+            files = [
+                y for x in os.walk("_site") for y in glob(os.path.join(x[0], "*.html"))
+            ]
+            for file in files:
+                with open(file, "r+") as f:
+                    text = f.read()
+                    for previous, next in data.items():
+                        text = text.replace(previous, next)
+                    f.write(text)
 
     def start_serving(self):
         self.p = Popen(
@@ -158,7 +166,7 @@ kart.renderers = [
     renderers.DefaultSitemapRenderer(),
     WebpackRenderer(),
     renderers.DefaultRootDirRenderer(),
-    lunr_renderer(),
+    LunrRenderer(),
 ]
 
 kart.config["name"] = "Kart"
