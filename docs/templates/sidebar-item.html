@@ -36,11 +36,11 @@
         {% for article in nav_item[1:] %}
           {% if article.index == page.global_map_index %}
           <li class='md-nav__item md-nav__item--active'>
-            <a href="{{ article.url }}" class='md-nav__link md-nav__link--active'>{{article.title}}</a>
+            <a href="{{ url(article.url) }}" class='md-nav__link md-nav__link--active'>{{article.title}}</a>
           </li>
           {% else %}
           <li class='md-nav__item'>
-            <a href="{{ article.url }}" class='md-nav__link'>{{article.title}}</a>
+            <a href="{{ url(article.url) }}" class='md-nav__link'>{{article.title}}</a>
           </li>
           {% endif %}
         {% endfor %}
