@@ -1,8 +1,10 @@
-- name: Home
-  link: index
-- name: Tutorials
-  link: tutorial_index
-- name: Documentation
-  link: documentation_index
-- name: News
-  link: news_index
+- link: index
+- link: install
+- link: getting_started
+- link: step_by_step
+  name: Step by step tutorial
+- link: examples
+  name: Examples
+- link: documentation
+  name: Documentation
+- link: changelog

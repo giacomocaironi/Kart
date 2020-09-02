@@ -5,6 +5,7 @@ from datetime import timezone, time, datetime
 import xml.etree.ElementTree as xml
 import shutil
 from http.server import SimpleHTTPRequestHandler
+from multiprocessing import Process
 
 
 class Renderer:
@@ -49,8 +50,8 @@ class DefaultSiteRenderer(Renderer):
 
         return jinja_template.render(page=page["data"], site=site)
 
-    def render(self, map, site, build_location="_site"):
-        for page in map.values():
+    def _render(self, partial_map, map, site, build_location):
+        for page in partial_map.values():
             if page["renderer"] != self.name:
                 continue
             rendered_file = self.render_single(page, map, site)
@@ -58,6 +59,16 @@ class DefaultSiteRenderer(Renderer):
                 os.makedirs(build_location + page["url"], exist_ok=True)
                 with open(build_location + page["url"] + "index.html", "w") as f:
                     f.write(rendered_file)
+
+    def render(self, map, site, build_location="_site"):
+        map1 = dict(list(map.items())[len(map) // 2 :])
+        map2 = dict(list(map.items())[: len(map) // 2])
+        p1 = Process(target=self._render, args=(map1, map, site, build_location))
+        p2 = Process(target=self._render, args=(map2, map, site, build_location))
+        p1.start()
+        p2.start()
+        p1.join()
+        p2.join()
 
     def serve(self, http_handler, page, map, site):
         http_handler.send_response(200)

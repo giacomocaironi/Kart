@@ -21,6 +21,7 @@ class DefaultCollectionMiner(Miner):
             object = metadata
             object["slug"] = filename.split(".")[0]
             object["content"] = RawMarkup(content)
+            object["content_type"] = "markdown"
             if "draft" in object.keys():
                 if object["draft"]:
                     return False
@@ -48,6 +49,7 @@ class DefaultPageMiner(Miner):
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
                 object["content"] = RawMarkup(content)
+                object["content_type"] = "markdown"
                 self.data[file.split(".")[0]] = object
         return {"pages": self.data}
 

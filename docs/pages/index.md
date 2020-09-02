@@ -1,7 +1,7 @@
 ---
-title: Index
+title: Kart
 ---
-# Overview
+# Kart
 
 ## What is Kart?
 Kart is a static site generator written in python. By default it uses Jinja2 templates and Markdown to render the site. It is blog aware but it has also the ability to generate complex sites, such as this one.

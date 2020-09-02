@@ -1,12 +1,3 @@
-{% set nav_items = {
-  'Install':['install', False],
-  'Getting started':['getting_started', False],
-  'Step by step tutorial':['step_by_step', True],
-  'Examples':['examples', True],
-  'Documentation':['documentation', True],
-  'Changelog':['changelog', False],
-} %}
-
 <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" data-md-state="">
   <div class="md-sidebar__scrollwrap">
     <div class="md-sidebar__inner">
@@ -30,10 +21,27 @@
         </div>
         <ul class='md-nav__list'>
 
-          {% for nav_item in nav_items.items() %}
+          {% for nav_item in site.global_toc %}
             {% set path = "nav-" + loop.index | string %}
             {% set level = 1 %}
-            {% include "sidebar-item.html" %}
+            {% if nav_item is mapping %}
+
+                {% set li_class = "md-nav__item" %}
+                {% set a_class = "md-nav__link" %}
+                {% if nav_item.index == page.global_map_index %}
+                  {% set li_class = "md-nav__item md-nav__item--active" %}
+                  {% set a_class = "md-nav__link md-nav__link--active" %}
+                {% endif %}
+
+                <li class="{{ li_class }}">
+                  <a href="{{ nav_item.url }}" title="{{ nav_item.title | striptags }}" class="{{ a_class }}">
+                    {{nav_item.title}}
+                  </a>
+                </li>
+
+            {% else %}
+              {% include "sidebar-item.html" %}
+            {% endif %}
           {% endfor %}
 
         </ul>
