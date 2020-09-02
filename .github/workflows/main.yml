@@ -27,7 +27,7 @@ jobs:
           pip install dist/*
           cd docs
           npm install --save-dev
-          python main.py build --production
+          python main.py build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
