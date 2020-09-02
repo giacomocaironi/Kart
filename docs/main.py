@@ -8,22 +8,18 @@ from subprocess import Popen, PIPE
 import requests
 from glob import glob
 
-kart = Kart()
-
 
 class LunrRenderer(renderers.Renderer):
     name = "lunr_renderer"
 
     def render_single(self, page, map, site):
-        index = {
-            "config": {
-                "lang": ["en"],
-                "min_search_length": 3,
-                "prebuild_index": False,
-                "separator": "[\\s\\-]+",
-            },
-            "docs": [],
+        config = {
+            "lang": ["en"],
+            "min_search_length": 3,
+            "prebuild_index": False,
+            "separator": "[\\s\\-]+",
         }
+        index = {"config": config, "docs": []}
         for page in map.values():
             if page["renderer"] != "default_site_renderer":
                 continue
@@ -96,22 +92,18 @@ class WebpackRenderer(renderers.Renderer):
         self.p.stdout.close()
 
 
+kart = Kart()
+
 kart.miners = [
     miners.DefaultCollectionMiner("documentation"),
     miners.DefaultCollectionMiner("examples"),
-    miners.DefaultCollectionMiner("getting_started"),
     miners.DefaultCollectionMiner("step_by_step"),
     miners.DefaultCollectionMiner("versions"),
     miners.DefaultDataMiner(),
     miners.DefaultPageMiner(),
 ]
 
-kart.content_modifiers = [
-    modifiers.CollectionSorter("versions", "title", True),
-    modifiers.CollectionSorter("getting_started", "index"),
-    modifiers.TocModifier("getting_started"),
-    modifiers.TocModifier("pages"),
-]
+kart.content_modifiers = [modifiers.CollectionSorter("versions", "title", True)]
 
 kart.mappers = [
     mappers.DefaultPageMapper(template="default.html"),
@@ -120,11 +112,6 @@ kart.mappers = [
     ),
     mappers.DefaultCollectionMapper(
         collection_name="examples", template="default.html", base_url="/tutorials"
-    ),
-    mappers.DefaultCollectionMapper(
-        collection_name="getting_started",
-        template="default.html",
-        base_url="/tutorials",
     ),
     mappers.DefaultCollectionMapper(
         collection_name="step_by_step", template="default.html", base_url="/tutorials"

@@ -20,6 +20,15 @@ class RuleContentModifier(ContentModifier):
             rule(site)
 
 
+class RuleMapModifier(MapModifier):
+    def __init__(self, rules=[]):
+        self.rules = rules  # a rule is a function
+
+    def modify(self, map, site):
+        for rule in self.rules:
+            rule(map, site)
+
+
 class TagModifier(ContentModifier):
     def modify(self, site):
         site["tag_dict"] = {}
@@ -64,12 +73,3 @@ class TocModifier(ContentModifier):
             if current_list != toc:
                 toc.append(current_list)
             item["toc"] = toc
-
-
-class RuleMapModifier(MapModifier):
-    def __init__(self, rules=[]):
-        self.rules = rules  # a rule is a function
-
-    def modify(self, map, site):
-        for rule in self.rules:
-            rule(map, site)

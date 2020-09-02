@@ -1,6 +1,5 @@
 ---
-title: Installation
-index: 1
+title: Install
 ---
 # Installation
 

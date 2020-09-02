@@ -94,6 +94,7 @@ import {
   patchScripts
 } from "patches"
 import { isConfig } from "utilities"
+import 'toc'
 
 /* ------------------------------------------------------------------------- */
 
