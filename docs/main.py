@@ -69,7 +69,9 @@ class WebpackRenderer(renderers.Renderer):
                     text = f.read()
                     for previous, next in data.items():
                         text = text.replace(previous, next)
+                    f.seek(0)
                     f.write(text)
+                    f.truncate()
 
     def start_serving(self):
         self.p = Popen(
