@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Kart - Changelog</title>
+  <title>Kart - Install</title>
 
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
@@ -65,7 +65,7 @@
               Kart
             </span>
             <span class="md-header-nav__topic md-ellipsis">
-                Changelog
+                Install
             </span>
           </div>
         </div>
@@ -148,9 +148,12 @@
                 
                 
                 
+                  
+                  
+                
 
-                <li class="md-nav__item">
-                  <a href="/install/" title="Install" class="md-nav__link">
+                <li class="md-nav__item md-nav__item--active">
+                  <a href="/install/" title="Install" class="md-nav__link md-nav__link--active">
                     Install
                   </a>
                 </li>
@@ -312,12 +315,9 @@
                 
                 
                 
-                  
-                  
-                
 
-                <li class="md-nav__item md-nav__item--active">
-                  <a href="/changelog/" title="Changelog" class="md-nav__link md-nav__link--active">
+                <li class="md-nav__item">
+                  <a href="/changelog/" title="Changelog" class="md-nav__link">
                     Changelog
                   </a>
                 </li>
@@ -353,35 +353,21 @@
       <div class="md-content">
         <article class="md-content__inner md-typeset" role="main">
           
+            <h1 id=Installation>Installation</h1>
+<h2 id=Install-Python>Install Python</h2>
+<p>To build a site using Kart you will need python3. Probably it will come with your OS, but anyway it is useful to install the latest version. You can find the precompiled packages <a href="https://www.python.org/downloads/">here</a>. If you use linux you can the latest version of python with your packet manager.</p>
+<p>For linux based distribution I will suggest also checking out <a href="https://github.com/pyenv/pyenv">pyenv</a>, which will let you manage in a better way multiple versions of python at the same time.</p>
+<h2 id=Virtual-environments>Virtual environments</h2>
+<p>When creating a python project it is often useful to create a virtual environment. A complete explanation of virtual environments can be found <a href="https://docs.python.org/3/tutorial/venv.html">here</a>. In a nutshell it enables you to separate the project dependencies from code run outside of the project. If you use pyenv creating virtualenvs is a little different, but the instructions can be found in the pyenv repository.</p>
+<p>Even though creating a virtual environment is not required, it is recommended.</p>
+<h2 id=Kart>Kart</h2>
+<p>Enter a shell and install Kart using pip, the package manager for python. If you are using a virtual environment, you should first head over to your project directory and activate the virtualenv</p>
+<div class="highlight"><pre><span></span><code>$ pip install Kart
+</code></pre></div>
+<p>This command will install Kart and all its dependencies</p>
+<p>You have installad all the software required to create a site using Kart. Now you can go to the the next section to learn how to build a basic blog.</p>
 
-<h1 id=Changelog>Changelog</h1>
-
-
-
-  <h2>v0.7</h2>
-  <p>The 0.7 is the biggest so far. Fist of all, there is a major change in how pages are displayed during development: instead of building the site on every text change, Kart builds pages dinamically, making developing templates on big sites a lot easier. As a matter of fact I tried modifying the templates on a 7500 posts site! Other code changes include splitting the modifiers into content_modifiers, the old ones, and map_modifiers, which are applied after map generation. The code has been refactored: now at the beginning of each file there is a parent class which helps understand which methods are needed to implement your own custom classes. Part of the code not tied to a specific class has now been move to the new utils.py file.</p>
-
-
-  <h2>v0.6</h2>
-  <p>The 0.6 release introduces Modifiers, a new type of kart class. Modifier process and modify the site data, so it is available from every part of the site. It is very useful when trying to generate complex query in the templates, because it easier to do in python than in Jinja2 templates. Achieving the same with custom Mappers was and is still possible, but modifiers are now the recommended way because they are easier to use and if you want to implement a custom feature you no longer have to copy and paste the code from the default mappers.</p>
-
-
-  <h2>v0.5</h2>
-  <p>The 0.5 comes with an init command to easily start building a site. It has also changed a little bit how the default blog mapper handles tags. For this version the quickstart tutorial has been completed.</p>
-
-
-  <h2>v0.4</h2>
-  <p>The 0.4 version comes with an auto-reloading web-server, enabling you to prototype your site faster.</p>
-<p>It also support adding files in the top level directory, like favicon.ico and CNAME.</p>
-
-
-  <h2>v0.3</h2>
-  <p>The 0.3 version comes with default mappers and miners to create a simple blog without coding</p>
-<p>It is also the first version to have a proper documentation</p>
-
-
-
-
+          
         </article>
       </div>
     </div>
@@ -394,7 +380,7 @@
     <nav class="md-footer-nav__inner md-grid">
         
           
-          <a href="/documentation/work_in_progress/" title="Work in progress"
+          <a href="/" title="Kart"
              class="md-flex md-footer-nav__link md-footer-nav__link--prev"
              rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -403,11 +389,23 @@
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span
-                    class="md-footer-nav__direction"> Previous </span> Work in progress </span>
+                    class="md-footer-nav__direction"> Previous </span> Kart </span>
             </div>
           </a>
         
 
+        
+          
+          <a href="/getting_started/" title="Getting started"
+             class="md-flex md-footer-nav__link md-footer-nav__link--next"
+             rel="next">
+          <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+              class="md-flex__ellipsis"> <span
+              class="md-footer-nav__direction"> Next </span> Getting started </span>
+          </div>
+          <div class="md-flex__cell md-flex__cell--shrink"><i
+              class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+          </div>
         
       </a>
     </nav>
@@ -444,7 +442,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Kart - Changelog</title>
+  <title>Kart - Install</title>
 
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
@@ -505,7 +503,7 @@
               Kart
             </span>
             <span class="md-header-nav__topic md-ellipsis">
-                Changelog
+                Install
             </span>
           </div>
         </div>
@@ -588,9 +586,12 @@
                 
                 
                 
+                  
+                  
+                
 
-                <li class="md-nav__item">
-                  <a href="/install/" title="Install" class="md-nav__link">
+                <li class="md-nav__item md-nav__item--active">
+                  <a href="/install/" title="Install" class="md-nav__link md-nav__link--active">
                     Install
                   </a>
                 </li>
@@ -752,12 +753,9 @@
                 
                 
                 
-                  
-                  
-                
 
-                <li class="md-nav__item md-nav__item--active">
-                  <a href="/changelog/" title="Changelog" class="md-nav__link md-nav__link--active">
+                <li class="md-nav__item">
+                  <a href="/changelog/" title="Changelog" class="md-nav__link">
                     Changelog
                   </a>
                 </li>
@@ -793,35 +791,21 @@
       <div class="md-content">
         <article class="md-content__inner md-typeset" role="main">
           
+            <h1 id=Installation>Installation</h1>
+<h2 id=Install-Python>Install Python</h2>
+<p>To build a site using Kart you will need python3. Probably it will come with your OS, but anyway it is useful to install the latest version. You can find the precompiled packages <a href="https://www.python.org/downloads/">here</a>. If you use linux you can the latest version of python with your packet manager.</p>
+<p>For linux based distribution I will suggest also checking out <a href="https://github.com/pyenv/pyenv">pyenv</a>, which will let you manage in a better way multiple versions of python at the same time.</p>
+<h2 id=Virtual-environments>Virtual environments</h2>
+<p>When creating a python project it is often useful to create a virtual environment. A complete explanation of virtual environments can be found <a href="https://docs.python.org/3/tutorial/venv.html">here</a>. In a nutshell it enables you to separate the project dependencies from code run outside of the project. If you use pyenv creating virtualenvs is a little different, but the instructions can be found in the pyenv repository.</p>
+<p>Even though creating a virtual environment is not required, it is recommended.</p>
+<h2 id=Kart>Kart</h2>
+<p>Enter a shell and install Kart using pip, the package manager for python. If you are using a virtual environment, you should first head over to your project directory and activate the virtualenv</p>
+<div class="highlight"><pre><span></span><code>$ pip install Kart
+</code></pre></div>
+<p>This command will install Kart and all its dependencies</p>
+<p>You have installad all the software required to create a site using Kart. Now you can go to the the next section to learn how to build a basic blog.</p>
 
-<h1 id=Changelog>Changelog</h1>
-
-
-
-  <h2>v0.7</h2>
-  <p>The 0.7 is the biggest so far. Fist of all, there is a major change in how pages are displayed during development: instead of building the site on every text change, Kart builds pages dinamically, making developing templates on big sites a lot easier. As a matter of fact I tried modifying the templates on a 7500 posts site! Other code changes include splitting the modifiers into content_modifiers, the old ones, and map_modifiers, which are applied after map generation. The code has been refactored: now at the beginning of each file there is a parent class which helps understand which methods are needed to implement your own custom classes. Part of the code not tied to a specific class has now been move to the new utils.py file.</p>
-
-
-  <h2>v0.6</h2>
-  <p>The 0.6 release introduces Modifiers, a new type of kart class. Modifier process and modify the site data, so it is available from every part of the site. It is very useful when trying to generate complex query in the templates, because it easier to do in python than in Jinja2 templates. Achieving the same with custom Mappers was and is still possible, but modifiers are now the recommended way because they are easier to use and if you want to implement a custom feature you no longer have to copy and paste the code from the default mappers.</p>
-
-
-  <h2>v0.5</h2>
-  <p>The 0.5 comes with an init command to easily start building a site. It has also changed a little bit how the default blog mapper handles tags. For this version the quickstart tutorial has been completed.</p>
-
-
-  <h2>v0.4</h2>
-  <p>The 0.4 version comes with an auto-reloading web-server, enabling you to prototype your site faster.</p>
-<p>It also support adding files in the top level directory, like favicon.ico and CNAME.</p>
-
-
-  <h2>v0.3</h2>
-  <p>The 0.3 version comes with default mappers and miners to create a simple blog without coding</p>
-<p>It is also the first version to have a proper documentation</p>
-
-
-
-
+          
         </article>
       </div>
     </div>
@@ -834,7 +818,7 @@
     <nav class="md-footer-nav__inner md-grid">
         
           
-          <a href="/documentation/work_in_progress/" title="Work in progress"
+          <a href="/" title="Kart"
              class="md-flex md-footer-nav__link md-footer-nav__link--prev"
              rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -843,11 +827,23 @@
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span
-                    class="md-footer-nav__direction"> Previous </span> Work in progress </span>
+                    class="md-footer-nav__direction"> Previous </span> Kart </span>
             </div>
           </a>
         
 
+        
+          
+          <a href="/getting_started/" title="Getting started"
+             class="md-flex md-footer-nav__link md-footer-nav__link--next"
+             rel="next">
+          <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+              class="md-flex__ellipsis"> <span
+              class="md-footer-nav__direction"> Next </span> Getting started </span>
+          </div>
+          <div class="md-flex__cell md-flex__cell--shrink"><i
+              class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+          </div>
         
       </a>
     </nav>
