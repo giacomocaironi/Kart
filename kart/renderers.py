@@ -7,6 +7,8 @@ import shutil
 from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Process
 
+from kart.utils import split_dict
+
 
 class Renderer:
     def render(self, map, site, build_location="_site"):
@@ -23,9 +25,12 @@ class Renderer:
 
 
 class DefaultSiteRenderer(Renderer):
-    def __init__(self, name="default_site_renderer", template_folder="templates"):
+    def __init__(
+        self, name="default_site_renderer", template_folder="templates", process_count=1
+    ):
         self.name = name
         self.template_folder = template_folder
+        self.process_count = process_count
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
 
     def date_to_string(self, date):
@@ -61,14 +66,19 @@ class DefaultSiteRenderer(Renderer):
                     f.write(rendered_file)
 
     def render(self, map, site, build_location="_site"):
-        map1 = dict(list(map.items())[len(map) // 2 :])
-        map2 = dict(list(map.items())[: len(map) // 2])
-        p1 = Process(target=self._render, args=(map1, map, site, build_location))
-        p2 = Process(target=self._render, args=(map2, map, site, build_location))
-        p1.start()
-        p2.start()
-        p1.join()
-        p2.join()
+        if self.process_count <= 1:
+            return self._render(map, map, site, build_location)
+        else:
+            split_maps = split_dict(map, self.process_count)
+            processes = []
+            for partial_map in split_maps:
+                p = Process(
+                    target=self._render, args=(partial_map, map, site, build_location)
+                )
+                p.start()
+                processes.append(p)
+            for p in processes:
+                p.join()
 
     def serve(self, http_handler, page, map, site):
         http_handler.send_response(200)

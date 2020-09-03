@@ -5,6 +5,8 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 import re
 from collections import UserDict, UserString
+from itertools import islice
+from math import ceil
 
 
 class StoppableThread(threading.Thread):
@@ -115,3 +117,10 @@ class RawMarkup(UserString):
     @property
     def html(self):
         return self.to_html()
+
+
+def split_dict(data, chunks=2):
+    chunk_size = ceil(len(data) / chunks)
+    it = iter(data)
+    for i in range(0, len(data), chunk_size):
+        yield {k: data[k] for k in islice(it, chunk_size)}
