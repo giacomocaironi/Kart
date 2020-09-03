@@ -1,7 +1,6 @@
 import os
 import frontmatter
 import yaml
-from kart.utils import RawMarkup
 
 
 class Miner:
@@ -20,7 +19,7 @@ class DefaultCollectionMiner(Miner):
             metadata, content = frontmatter.parse(f.read())
             object = metadata
             object["slug"] = filename.split(".")[0]
-            object["content"] = RawMarkup(content)
+            object["content"] = content
             object["content_type"] = "markdown"
             if "draft" in object.keys():
                 if object["draft"]:
@@ -48,7 +47,7 @@ class DefaultPageMiner(Miner):
             with open(os.path.join(self.location, file), "r") as f:
                 metadata, content = frontmatter.parse(f.read())
                 object = metadata
-                object["content"] = RawMarkup(content)
+                object["content"] = content
                 object["content_type"] = "markdown"
                 self.data[file.split(".")[0]] = object
         return {"pages": self.data}

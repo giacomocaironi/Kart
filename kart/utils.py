@@ -110,15 +110,6 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     return urls
 
 
-class RawMarkup(UserString):
-    def to_html(self):
-        return markdown(self.data)
-
-    @property
-    def html(self):
-        return self.to_html()
-
-
 def split_dict(data, chunks=2):
     chunk_size = ceil(len(data) / chunks)
     it = iter(data)

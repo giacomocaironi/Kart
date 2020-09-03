@@ -1,5 +1,6 @@
 from kart import Kart
 from kart import miners, mappers, renderers, modifiers
+from kart.utils import markdown
 
 from bs4 import BeautifulSoup
 import json
@@ -23,7 +24,7 @@ class LunrRenderer(renderers.Renderer):
         for page in map.values():
             if page["renderer"] != "default_site_renderer":
                 continue
-            soup = BeautifulSoup(page["data"]["content"].html, features="lxml")
+            soup = BeautifulSoup(markdown(page["data"]["content"]), features="lxml")
             stripped_text = "".join(soup.findAll(text=True)).replace("\n", " ")
             index["docs"].append(
                 {

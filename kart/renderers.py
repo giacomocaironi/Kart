@@ -8,6 +8,7 @@ from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Process
 
 from kart.utils import split_dict
+from kart.utils import markdown
 
 
 class Renderer:
@@ -49,9 +50,10 @@ class DefaultSiteRenderer(Renderer):
 
         jinja_template.globals.update(url=map.url, date_to_string=self.date_to_string)
         if "content" in page["data"].keys():
-            page["data"]["content"].data = Template(
-                page["data"]["content"].data
-            ).render(site=site, url=map.url, date_to_string=self.date_to_string)
+            page["data"]["content"] = Template(page["data"]["content"]).render(
+                site=site, url=map.url, date_to_string=self.date_to_string
+            )
+            page["data"]["content"] = markdown(page["data"]["content"])
 
         return jinja_template.render(page=page["data"], site=site)
 

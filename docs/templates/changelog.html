@@ -1,11 +1,11 @@
 {% extends "default.html" %}
 {% block content %}
 
-{{page.content.html}}
+{{page.content}}
 
 {% for version in site.versions %}
   <h2>v{{version.title}}</h2>
-  {{version.content.html}}
+  {{version.content}}
 {% endfor %}
 
 {% endblock content %}
