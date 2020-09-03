@@ -6,14 +6,19 @@
           <a href="{{ url(prev.url) }}" title="{{ prev.title|striptags|e }}"
              class="md-flex md-footer-nav__link md-footer-nav__link--prev"
              rel="prev">
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
-            </div>
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span
-                    class="md-footer-nav__direction"> Previous </span> {{ prev.title }} </span>
-            </div>
+             <div class="md-footer-nav__button md-icon">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                 <path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path>
+               </svg>
+             </div>
+             <div class="md-footer-nav__title">
+               <span class="md-flex__ellipsis">
+                 <span class="md-footer-nav__direction">
+                   Previous
+                 </span>
+                 {{ prev.title }}
+               </span>
+             </div>
           </a>
         {% endif %}
 
@@ -22,15 +27,21 @@
           <a href="{{ url(next.url) }}" title="{{ next.title|striptags|e }}"
              class="md-flex md-footer-nav__link md-footer-nav__link--next"
              rel="next">
-          <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
-              class="md-flex__ellipsis"> <span
-              class="md-footer-nav__direction"> Next </span> {{ next.title }} </span>
-          </div>
-          <div class="md-flex__cell md-flex__cell--shrink"><i
-              class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-          </div>
+              <div class="md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span class="md-footer-nav__direction">
+                    Next
+                  </span>
+                  {{ next.title }}
+                </span>
+              </div>
+              <div class="md-footer-nav__button md-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path>
+                </svg>
+              </div>
+          </a>
         {% endif %}
-      </a>
     </nav>
   </div>
   <div class="md-footer-meta md-typeset">
