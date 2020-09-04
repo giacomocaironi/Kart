@@ -3,7 +3,7 @@ from kart.utils import paginate
 
 class Mapper:
     def map(self, site):
-        pass
+        raise NotImplementedError
 
 
 class RuleMapper(Mapper):
@@ -36,17 +36,15 @@ class DefaultCollectionMapper(Mapper):
         urls = {}
         collection = site[self.collection_name]
         for object in collection:
-            urls.update(
-                {
-                    f"{self.collection_name}.{object['slug']}": {
-                        "url": self.base_url
-                        + f"/{self.collection_name}/{object['slug']}/",
-                        "data": object,
-                        "template": self.template,
-                        "renderer": "default_site_renderer",
-                    }
-                }
-            )
+            slug = f"{self.collection_name}.{object['slug']}"
+            url = self.base_url + f"/{self.collection_name}/{object['slug']}/"
+            page = {
+                "url": url,
+                "data": object,
+                "template": self.template,
+                "renderer": "default_site_renderer",
+            }
+            urls[slug] = page
         return urls
 
 
@@ -64,16 +62,13 @@ class DefaultPageMapper(Mapper):
                 url = f"/{slug}/"
                 if slug == "index":
                     url = "/"
-            self.urls.update(
-                {
-                    slug: {
-                        "url": url,
-                        "data": page,
-                        "template": self.template,
-                        "renderer": "default_site_renderer",
-                    }
-                }
-            )
+            page = {
+                "url": url,
+                "data": page,
+                "template": self.template,
+                "renderer": "default_site_renderer",
+            }
+            self.urls[slug] = page
         return self.urls
 
 
@@ -92,13 +87,12 @@ class DefaultBlogMapper(Mapper):
         self.templates = templates
 
     def map(self, site):
-        self.urls.update(
-            DefaultCollectionMapper(
-                base_url=self.base_url,
-                collection_name="posts",
-                template=self.templates["post_template"],
-            ).map(site)
-        )
+        post_pages = DefaultCollectionMapper(
+            base_url=self.base_url,
+            collection_name="posts",
+            template=self.templates["post_template"],
+        ).map(site)
+        self.urls.update(post_pages)
         self.urls.update(self.blog_index(site))
         self.urls.update(self.tags(site))
         return self.urls
@@ -110,11 +104,12 @@ class DefaultBlogMapper(Mapper):
         except Exception:
             per_page = 5
         paginated_map = paginate(
-            posts,
-            per_page,
-            self.templates["index_template"],
-            self.base_url + "/index/page",
-            "blog_index",
+            objects=posts,
+            per_page=per_page,
+            template=self.templates["index_template"],
+            base_url=self.base_url + "/index/page",
+            slug="blog_index",
+            additional_data={},
         )
         paginated_map["blog_index.1"]["url"] = self.base_url + "/"
         if "blog_index.2" in paginated_map.keys():
@@ -136,11 +131,11 @@ class DefaultBlogMapper(Mapper):
                 per_page = 5
             urls.update(
                 paginate(
-                    posts,
-                    per_page,
-                    self.templates["tag_template"],
-                    self.base_url + f"/tags/{tag['slug']}",
-                    f"tags.{tag['slug']}",
+                    objects=posts,
+                    per_page=per_page,
+                    template=self.templates["tag_template"],
+                    base_url=self.base_url + f"/tags/{tag['slug']}",
+                    slug=f"tags.{tag['slug']}",
                     additional_data=tag,
                 )
             )

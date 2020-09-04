@@ -13,23 +13,42 @@ from kart.utils import markdown
 
 class Renderer:
     def render(self, map, site, build_location="_site"):
-        pass
+        raise NotImplementedError
 
     def start_serving(self):
         pass
 
     def serve(self, http_handler, page, map, site):
-        pass
+        raise NotImplementedError
 
     def stop_serving(self):
         pass
 
 
-class DefaultSiteRenderer(Renderer):
+class DefaultRenderer(Renderer):
+    def render_single(self, map, site):
+        raise NotImplementedError
+
+    def render(self, map, site, build_location="_site"):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                continue
+            with open(build_location + page["url"], "w") as f:
+                f.write(self.render_single(page, map, site))
+
+    def serve(self, http_handler, page, map, site):
+        http_handler.send_response(200)
+        http_handler.send_header("Content-type", self.content_type)
+        http_handler.end_headers()
+        http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
+
+
+class DefaultSiteRenderer(DefaultRenderer):
     def __init__(
         self, name="default_site_renderer", template_folder="templates", process_count=1
     ):
         self.name = name
+        self.content_type = "text/html"
         self.template_folder = template_folder
         self.process_count = process_count
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
@@ -74,24 +93,18 @@ class DefaultSiteRenderer(Renderer):
             split_maps = split_dict(map, self.process_count)
             processes = []
             for partial_map in split_maps:
-                p = Process(
-                    target=self._render, args=(partial_map, map, site, build_location)
-                )
+                args = (partial_map, map, site, build_location)
+                p = Process(target=self._render, args=args)
                 p.start()
                 processes.append(p)
             for p in processes:
                 p.join()
 
-    def serve(self, http_handler, page, map, site):
-        http_handler.send_response(200)
-        http_handler.send_header("Content-type", "text/html")
-        http_handler.end_headers()
-        http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
-
 
 class DefaultFeedRenderer(Renderer):
     def __init__(self, name="default_feed_renderer"):
         self.name = name
+        self.content_type = "application/xml"
 
     def render_single(self, page, map, site):
         base_url = site["config"]["base_url"]
@@ -121,23 +134,11 @@ class DefaultFeedRenderer(Renderer):
             fe.link({"href": map.url(collection, entry["slug"])})
         return fg.atom_str().decode()
 
-    def render(self, map, site, build_location="_site"):
-        for page in map.values():
-            if page["renderer"] != self.name:
-                continue
-            with open(build_location + page["url"], "w") as f:
-                f.write(self.render_single(page, map, site))
 
-    def serve(self, http_handler, page, map, site):
-        http_handler.send_response(200)
-        http_handler.send_header("Content-type", "application/xml")
-        http_handler.end_headers()
-        http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
-
-
-class DefaultSitemapRenderer(Renderer):
+class DefaultSitemapRenderer(DefaultRenderer):
     def __init__(self, name="default_sitemap_renderer"):
         self.name = name
+        self.content_type = "application/xml"
 
     def render_single(self, page, map, site):
         base_url = site["config"]["base_url"]
@@ -150,19 +151,6 @@ class DefaultSitemapRenderer(Renderer):
             loc = xml.SubElement(url, "loc")
             loc.text = base_url + x
         return '<?xml version="1.0" encoding="UTF-8"?>' + xml.tostring(root).decode()
-
-    def render(self, map, site, build_location="_site"):
-        for page in map.values():
-            if page["renderer"] != self.name:
-                continue
-            with open(build_location + page["url"], "w") as f:
-                f.write(self.render_single(page, map, site))
-
-    def serve(self, http_handler, page, map, site):
-        http_handler.send_response(200)
-        http_handler.send_header("Content-type", "application/xml")
-        http_handler.end_headers()
-        http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
 
 
 class DefaultStaticFilesRenderer(Renderer):

@@ -5,7 +5,7 @@ import yaml
 
 class Miner:
     def collect(self):
-        pass
+        raise NotImplementedError
 
 
 class DefaultCollectionMiner(Miner):

@@ -1,14 +1,16 @@
 from bs4 import BeautifulSoup
 
+from kart.utils import markdown
+
 
 class ContentModifier:
     def modify(self, site):
-        pass
+        raise NotImplementedError
 
 
 class MapModifier:
     def modify(self, map, site):
-        pass
+        raise NotImplementedError
 
 
 class RuleContentModifier(ContentModifier):
@@ -59,7 +61,7 @@ class TocModifier(ContentModifier):
             items = site[self.collection_name]
         for item in items:
             toc = []
-            soup = BeautifulSoup(item["content"].html, features="lxml")
+            soup = BeautifulSoup(markdown(item["content"]), features="lxml")
             current_list = toc
             previous_tag = None
             for header in soup.findAll(["h2", "h3"]):
