@@ -1,12 +1,12 @@
 {
   "name": "kart-docs",
-  "version": "5.5.7",
+  "version": "0.7.1",
   "description": "Kart documentation",
   "homepage": "https://giacomocaironi.github.io/Kart/",
   "license": "MIT",
   "private": true,
   "author": {
-    "name": "Martin Donath",
+    "name": "Giacomo Caironi",
     "email": "giacomo.caironi@gmail.com"
   },
   "contributors": [],

@@ -86,3 +86,23 @@
 .github-icon{
   width: 37px;
 }
+
+#toc {
+  position: sticky;
+  top: 2rem;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+#toc-title {
+  font-size: 1.75rem;
+}
+
+#toc ul {
+  list-style-type: none;
+  padding-left: 1.5rem;
+}
+
+#toc a {
+  font-size: 1rem;
+}
