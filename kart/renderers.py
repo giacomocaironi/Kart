@@ -101,7 +101,7 @@ class DefaultSiteRenderer(DefaultRenderer):
                 p.join()
 
 
-class DefaultFeedRenderer(Renderer):
+class DefaultFeedRenderer(DefaultRenderer):
     def __init__(self, name="default_feed_renderer"):
         self.name = name
         self.content_type = "application/xml"
