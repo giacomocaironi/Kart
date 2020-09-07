@@ -2,6 +2,7 @@ from kart.utils import KartMap
 from kart.utils import StoppableThread
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+from copy import deepcopy
 import os
 import shutil
 import argparse
@@ -40,13 +41,15 @@ class Kart:
     def create_map(self):
         self.map = KartMap(self.config["base_url"])
         for mapper in self.mappers:
-            self.map.update(mapper.map(self.site))
+            self.map.update(mapper.map(deepcopy(self.site)))
         for modifier in self.map_modifiers:
             modifier.modify(self.map, self.site)
 
     def write(self):
         for renderer in self.renderers:
-            renderer.render(self.map, self.site, self.build_location)
+            renderer.render(
+                deepcopy(self.map), deepcopy(self.site), self.build_location
+            )
 
     def build(self):
         self.prepare()
@@ -60,20 +63,27 @@ class Kart:
     # therefore it is not possible to access only partial data,
     # preventing errors when serving the site during development
 
+    def update_data(self):
+        self._site = self.site
+        self._map = self.map
+        self._urls = {}
+        for slug, page in self.map.items():
+            self._urls[page["url"]] = slug
+
     def get_url_data(self, url):
         with self.lock:
-            if url not in [x["url"] for x in self._map.values()]:
+            if url not in self._urls.keys():
                 # TODO: generalize using regex
                 if url.split("/")[1] == "static":
                     url = "/static/*"
                 else:
                     url = "/*"
-            page = [x for x in self._map.values() if x["url"] == url][0]
+            page = self._map[self._urls[url]]
             return page
 
     def get_global_data(self):
         with self.lock:
-            return self._map, self._site
+            return deepcopy(self._map), deepcopy(self._site)
 
     def serve(self, port=9000):
         get_url_data = self.get_url_data
@@ -104,8 +114,7 @@ class Kart:
         server_thread = StoppableThread(target=httpd.handle_request)
         self.prepare()
         self.create_map()
-        self._site = self.site
-        self._map = self.map
+        self.update_data()
         server_thread.start()
 
         while True:
@@ -122,8 +131,7 @@ class Kart:
             except Exception:
                 pass
             with self.lock:
-                self._site = self.site
-                self._map = self.map
+                self.update_data()
 
     def run(self):
         parser = argparse.ArgumentParser()
