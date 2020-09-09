@@ -64,8 +64,8 @@ class Kart:
     # preventing errors when serving the site during development
 
     def update_data(self):
-        self._site = self.site
-        self._map = self.map
+        self._site = deepcopy(self.site)
+        self._map = deepcopy(self.map)
         self._urls = {}
         for slug, page in self.map.items():
             self._urls[page["url"]] = slug
@@ -83,7 +83,7 @@ class Kart:
 
     def get_global_data(self):
         with self.lock:
-            return deepcopy(self._map), deepcopy(self._site)
+            return self._map, self._site
 
     def serve(self, port=9000):
         get_url_data = self.get_url_data
