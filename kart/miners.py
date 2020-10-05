@@ -1,6 +1,10 @@
 import os
-import frontmatter
 import yaml
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
 
 
 class Miner:
@@ -16,7 +20,9 @@ class DefaultCollectionMiner(Miner):
 
     def collect_single_file(self, filename, file_location):
         with open(file_location, "r") as f:
-            metadata, content = frontmatter.parse(f.read())
+            data = f.read().split("---")
+            metadata = yaml.load(data[1], Loader=Loader)
+            content = "".join(data[2:])
             object = metadata
             object["slug"] = filename.split(".")[0]
             object["content"] = content
@@ -45,11 +51,14 @@ class DefaultPageMiner(Miner):
         self.data = {}
         for file in os.listdir(self.location):
             with open(os.path.join(self.location, file), "r") as f:
-                metadata, content = frontmatter.parse(f.read())
+                data = f.read().split("---")
+                metadata = yaml.load(data[1], Loader=Loader)
+                content = "".join(data[2:])
                 object = metadata
                 object["content"] = content
                 object["content_type"] = "markdown"
-                self.data[file.split(".")[0]] = object
+                slug = file.split(".")[0]
+                self.data[slug] = object
         return {"pages": self.data}
 
 
@@ -61,5 +70,6 @@ class DefaultDataMiner(Miner):
         self.data = {}
         for file in os.listdir(self.location):
             with open(os.path.join(self.location, file), "r") as f:
-                self.data[file.split(".")[0]] = yaml.full_load(f.read())
+                slug = file.split(".")[0]
+                self.data[slug] = yaml.load(f.read(), Loader=Loader)
         return {"data": self.data}
