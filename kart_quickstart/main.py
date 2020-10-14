@@ -1,5 +1,4 @@
-from kart import Kart
-from kart import miners, mappers, renderers, modifiers
+from kart import Kart, mappers, miners, modifiers, renderers
 
 kart = Kart()
 

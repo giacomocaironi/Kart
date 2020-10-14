@@ -1,12 +1,13 @@
-import threading
-import mistune
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
 import re
+import threading
 from collections import UserDict, UserString
 from itertools import islice
 from math import ceil
+
+import mistune
+from pygments import highlight
+from pygments.formatters import HtmlFormatter
+from pygments.lexers import get_lexer_by_name
 
 
 class StoppableThread(threading.Thread):
