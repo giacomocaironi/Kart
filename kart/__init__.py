@@ -1,13 +1,12 @@
-from kart.utils import KartMap
-from kart.utils import StoppableThread
-
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-from copy import deepcopy
+import argparse
 import os
 import shutil
-import argparse
-import threading
 import sys
+import threading
+from copy import deepcopy
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+from kart.utils import KartMap, StoppableThread
 
 
 class Kart:

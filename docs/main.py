@@ -1,13 +1,13 @@
-from kart import Kart
-from kart import miners, mappers, renderers, modifiers
-from kart.utils import markdown
-
-from bs4 import BeautifulSoup
 import json
 import os
-from subprocess import Popen, PIPE
-import requests
 from glob import glob
+from subprocess import PIPE, Popen
+
+import requests
+from bs4 import BeautifulSoup
+
+from kart import Kart, mappers, miners, modifiers, renderers
+from kart.utils import markdown
 
 
 class LunrRenderer(renderers.Renderer):
