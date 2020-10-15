@@ -3,6 +3,7 @@ import os
 import shutil
 import sys
 import threading
+import time
 from copy import deepcopy
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
@@ -30,10 +31,10 @@ class Kart:
         self.lock = threading.Lock()
 
     def prepare(self):
-        self.site = {}
+        self.site = {"config": self.config}
         for miner in self.miners:
+            miner.read_data()
             self.site.update(miner.collect())
-        self.site["config"] = self.config
         for modifier in self.content_modifiers:
             modifier.modify(self.site)
 
@@ -45,10 +46,10 @@ class Kart:
             modifier.modify(self.map, self.site)
 
     def write(self):
+        map = deepcopy(self.map)
+        site = deepcopy(self.site)
         for renderer in self.renderers:
-            renderer.render(
-                deepcopy(self.map), deepcopy(self.site), self.build_location
-            )
+            renderer.render(map, site, self.build_location)
 
     def build(self):
         self.prepare()
@@ -63,11 +64,18 @@ class Kart:
     # preventing errors when serving the site during development
 
     def update_data(self):
-        self._site = deepcopy(self.site)
-        self._map = deepcopy(self.map)
-        self._urls = {}
-        for slug, page in self.map.items():
-            self._urls[page["url"]] = slug
+        self.site = {"config": self.config}
+        for miner in self.miners:
+            self.site.update(miner.collect())
+        for modifier in self.content_modifiers:
+            modifier.modify(self.site)
+        self.create_map()
+        with self.lock:
+            self._site = deepcopy(self.site)
+            self._map = deepcopy(self.map)
+            self._urls = {}
+            for slug, page in self.map.items():
+                self._urls[page["url"]] = slug
 
     def get_url_data(self, url):
         with self.lock:
@@ -88,20 +96,17 @@ class Kart:
         get_url_data = self.get_url_data
         get_global_data = self.get_global_data
         renderer_dict = {}
+        for miner in self.miners:
+            miner.start_watching()
         for renderer in self.renderers:
             renderer_dict[renderer.name] = renderer
             renderer.start_serving()
 
         class RequestHandler(SimpleHTTPRequestHandler):
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-
             def do_GET(self):
                 page = get_url_data(self.path)
                 map, site = get_global_data()
-                if not page:
-                    return
-                else:
+                if page:
                     try:
                         renderer_dict[page["renderer"]].serve(self, page, map, site)
                     except Exception as e:
@@ -111,26 +116,24 @@ class Kart:
         httpd = HTTPServer(("", port), handler)
         httpd.timeout = 0.1
         server_thread = StoppableThread(target=httpd.handle_request)
-        self.prepare()
-        self.create_map()
         self.update_data()
         server_thread.start()
 
         while True:
             try:
+                time.sleep(0.25)
                 shutil.rmtree(self.build_location, ignore_errors=True)
-                self.prepare()
-                self.create_map()
+                self.update_data()
             except KeyboardInterrupt:
                 print("\rexiting")
                 server_thread.stop()
+                for miner in self.miners:
+                    miner.stop_watching()
                 for renderer in self.renderers:
                     renderer.stop_serving()
                 sys.exit()
             except Exception:
                 pass
-            with self.lock:
-                self.update_data()
 
     def run(self):
         parser = argparse.ArgumentParser()

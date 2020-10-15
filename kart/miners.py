@@ -1,6 +1,8 @@
 import os
 
 import yaml
+from watchdog.events import RegexMatchingEventHandler
+from watchdog.observers import Observer
 
 try:
     from yaml import CLoader as Loader
@@ -9,15 +11,69 @@ except ImportError:
 
 
 class Miner:
+    def read_data(self):
+        raise NotImplementedError
+
     def collect(self):
         raise NotImplementedError
 
+    def start_watching(self):
+        raise NotImplementedError
 
-class DefaultCollectionMiner(Miner):
+    def stop_watching(self):
+        raise NotImplementedError
+
+
+class DefaultMiner(Miner):
+    def read_data(self):
+        pass
+
+    def collect(self):
+        pass
+
+    def collect_single_file(self, filename, file_location):
+        raise NotImplementedError
+
+    def start_watching(self):
+        def create(filename, file_location):
+            self.data.update(self.collect_single_file(filename, file_location))
+
+        def delete(filename, file_location):
+            self.data.pop(filename)
+
+        class Handler(RegexMatchingEventHandler):
+            def on_moved(self, event):
+                filename = event.src_path.split(".")[0].split("/")[-1]
+                delete(filename, event.src_path)
+                create(filename, event.dest_path)
+
+            def on_modified(self, event):
+                filename = event.src_path.split(".")[0].split("/")[-1]
+                create(filename, event.src_path)
+
+            def on_deleted(self, event):
+                filename = event.src_path.split(".")[0].split("/")[-1]
+                delete(filename, event.src_path)
+
+            def on_created(self, event):
+                filename = event.src_path.split(".")[0].split("/")[-1]
+                create(filename, event.src_path)
+
+        self.read_data()
+        self.watcher = Observer()
+        self.watcher.schedule(Handler(), self.working_dir, recursive=False)
+        self.watcher.start()
+
+    def stop_watching(self):
+        self.watcher.stop()
+        self.watcher.join()
+
+
+class DefaultCollectionMiner(DefaultMiner):
     def __init__(self, collection_name, model=None, location="collections"):
         self.model = model
         self.collection_name = collection_name
-        self.location = location
+        self.working_dir = os.path.join(location, collection_name)
 
     def collect_single_file(self, filename, file_location):
         with open(file_location, "r") as f:
@@ -25,52 +81,71 @@ class DefaultCollectionMiner(Miner):
             metadata = yaml.load(data[1], Loader=Loader)
             content = "".join(data[2:])
             object = metadata
-            object["slug"] = filename.split(".")[0]
+            slug = filename.split(".")[0]
+            object["slug"] = slug
             object["content"] = content
             object["content_type"] = "markdown"
             if "draft" in object.keys():
                 if object["draft"]:
                     return False
-            return object
+            return {slug: object}
 
-    def collect(self):
-        self.data = []
-        working_dir = os.path.join(self.location, self.collection_name)
-        for filename in os.listdir(working_dir):
-            file_location = os.path.join(working_dir, filename)
+    def read_data(self):
+        self.data = {}
+        for filename in os.listdir(self.working_dir):
+            file_location = os.path.join(self.working_dir, filename)
             object = self.collect_single_file(filename, file_location)
             if object:
-                self.data.append(object)
-        return {self.collection_name: self.data}
-
-
-class DefaultPageMiner(Miner):
-    def __init__(self, location="pages"):
-        self.location = location
+                self.data.update(object)
 
     def collect(self):
+        return {self.collection_name: list(self.data.values())}
+
+
+class DefaultPageMiner(DefaultMiner):
+    def __init__(self, location="pages"):
+        self.working_dir = location
+
+    def collect_single_file(self, filename, file_location):
+        with open(file_location, "r") as f:
+            data = f.read().split("---")
+            metadata = yaml.load(data[1], Loader=Loader)
+            content = "".join(data[2:])
+            object = metadata
+            slug = filename.split(".")[0]
+            object["content"] = content
+            object["content_type"] = "markdown"
+            object["slug"] = slug
+            return {slug: object}
+
+    def read_data(self):
         self.data = {}
-        for file in os.listdir(self.location):
-            with open(os.path.join(self.location, file), "r") as f:
-                data = f.read().split("---")
-                metadata = yaml.load(data[1], Loader=Loader)
-                content = "".join(data[2:])
-                object = metadata
-                object["content"] = content
-                object["content_type"] = "markdown"
-                slug = file.split(".")[0]
-                self.data[slug] = object
+        for filename in os.listdir(self.working_dir):
+            file_location = os.path.join(self.working_dir, filename)
+            object = self.collect_single_file(filename, file_location)
+            if object:
+                self.data.update(object)
+
+    def collect(self):
         return {"pages": self.data}
 
 
-class DefaultDataMiner(Miner):
+class DefaultDataMiner(DefaultMiner):
     def __init__(self, location="data"):
-        self.location = location
+        self.working_dir = location
+
+    def collect_single_file(self, filename, file_location):
+        with open(file_location, "r") as f:
+            filename = filename.split(".")[0]
+            return {filename: yaml.load(f.read(), Loader=Loader)}
+
+    def read_data(self):
+        self.data = {}
+        for filename in os.listdir(self.working_dir):
+            file_location = os.path.join(self.working_dir, filename)
+            object = self.collect_single_file(filename, file_location)
+            if object:
+                self.data.update(object)
 
     def collect(self):
-        self.data = {}
-        for file in os.listdir(self.location):
-            with open(os.path.join(self.location, file), "r") as f:
-                slug = file.split(".")[0]
-                self.data[slug] = yaml.load(f.read(), Loader=Loader)
         return {"data": self.data}
