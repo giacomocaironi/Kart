@@ -1,6 +1,6 @@
 import re
 import threading
-from collections import UserDict, UserString
+from collections import UserDict
 from itertools import islice
 from math import ceil
 
@@ -24,7 +24,7 @@ class StoppableThread(threading.Thread):
             self.target()
 
 
-class KartMistuneRenderer(mistune.Renderer):
+class KartMistuneRenderer(mistune.HTMLRenderer):
     def block_code(self, text, lang):
         if not lang:
             text = text.strip()
@@ -34,8 +34,9 @@ class KartMistuneRenderer(mistune.Renderer):
             formatter = HtmlFormatter(wrapcode=True)
             code = highlight(text, lexer, formatter)
             return code
-        except:
-            return f'<pre class="{lang}"><code>{mistune.escape(text)}</code></pre>\n'
+        except Exception:
+            code = mistune.escape(text)
+            return f'<pre class="{lang}"><code>{code}</code></pre>\n'
 
     def header(self, text, level, raw=None):
         slug = re.sub(r"[\W_]+", "-", text)

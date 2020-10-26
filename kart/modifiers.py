@@ -1,8 +1,3 @@
-from bs4 import BeautifulSoup
-
-from kart.utils import markdown
-
-
 class ContentModifier:
     def modify(self, site):
         raise NotImplementedError
