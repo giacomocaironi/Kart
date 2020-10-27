@@ -43,7 +43,7 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
         return f"<h{level} id={slug}>{text}</h{level}>\n"
 
 
-markdown = mistune.Markdown(renderer=KartMistuneRenderer())
+markdown = mistune.Markdown(renderer=KartMistuneRenderer(escape=False))
 
 
 class KartMap(UserDict):

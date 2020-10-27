@@ -46,9 +46,9 @@ class Kart:
             modifier.modify(self.map, self.site)
 
     def write(self):
-        map = deepcopy(self.map)
-        site = deepcopy(self.site)
         for renderer in self.renderers:
+            map = deepcopy(self.map)
+            site = deepcopy(self.site)
             renderer.render(map, site, self.build_location)
 
     def build(self):

@@ -28,31 +28,31 @@ class TextExtractor(HTMLRenderer):
         escape(text)
 
     def linebreak(self):
-        return "\n"
+        return ""
 
     def inline_html(self, html):
         return escape(html)
 
     def paragraph(self, text):
-        return text + "\n"
+        return text + ". "
 
     def heading(self, text, level):
-        return text
+        return text + ". "
 
     def newline(self):
         return ""
 
     def thematic_break(self):
-        return "\n"
+        return ""
 
     def block_text(self, text):
         return text
 
     def block_code(self, code, info=None):
-        return escape(code) + "\n"
+        return escape(code) + " "
 
     def block_quote(self, text):
-        return text + "\n"
+        return text + " "
 
     def block_html(self, html):
         return escape(html)
