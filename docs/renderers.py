@@ -20,17 +20,21 @@ class LunrRenderer(renderers.Renderer):
             "separator": "[\\s\\-]+",
         }
         index = {"config": config, "docs": []}
-        for page in map.values():
-            if page["renderer"] != "default_site_renderer":
-                continue
-            text = markdown(page["data"]["content"])
-            index["docs"].append(
-                {
-                    "location": page["url"][1:],
-                    "text": text,
-                    "title": page["data"]["title"],
-                }
-            )
+        for slug, page in map.items():
+            if page["renderer"] == "default_site_renderer":
+                if slug == "changelog":
+                    text = ""
+                    for x in site["versions"]:
+                        text += markdown(x["content"]) + "\n"
+                else:
+                    text = markdown(page["data"]["content"])
+                index["docs"].append(
+                    {
+                        "location": page["url"][1:],
+                        "text": text,
+                        "title": page["data"]["title"],
+                    }
+                )
         return json.dumps(index)
 
     def render(self, map, site, build_location="_site"):
