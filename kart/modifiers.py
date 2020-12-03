@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 class ContentModifier:
     def modify(self, site):
         raise NotImplementedError
@@ -33,6 +36,8 @@ class CollectionSorter:
         self.reverse = reverse
 
     def modify(self, site):
-        site[self.collection_name].sort(key=lambda x: x[self.key])
+        data = site[self.collection_name]
+        sorted_data = sorted(data.items(), key=lambda x: x[1][self.key])
         if self.reverse:
-            site[self.collection_name].reverse()
+            sorted_data.reverse()
+        site[self.collection_name] = OrderedDict(sorted_data)

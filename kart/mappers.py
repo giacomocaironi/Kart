@@ -35,7 +35,7 @@ class DefaultCollectionMapper(Mapper):
     def map(self, site):
         urls = {}
         collection = site[self.collection_name]
-        for object in collection:
+        for object in collection.values():
             slug = f"{self.collection_name}.{object['slug']}"
             url = self.base_url + f"/{self.collection_name}/{object['slug']}/"
             page = {
@@ -98,7 +98,7 @@ class DefaultBlogMapper(Mapper):
         return self.urls
 
     def blog_index(self, site):
-        posts = site["posts"][1:]
+        posts = list(site["posts"].values())[1:]
         try:
             per_page = site["config"]["pagination"]["per_page"]
         except Exception:
@@ -122,8 +122,8 @@ class DefaultBlogMapper(Mapper):
         urls = {}
         if "tags" not in site.keys():
             return urls
-        for tag in site["tags"]:
-            posts = site["posts"]
+        for tag in site["tags"].values():
+            posts = site["posts"].values()
             posts = [post for post in posts if tag["slug"] in post["tags"]]
             try:
                 per_page = site["config"]["pagination"]["per_page"]

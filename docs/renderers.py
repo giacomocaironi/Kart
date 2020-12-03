@@ -4,9 +4,9 @@ from glob import glob
 from subprocess import PIPE, Popen
 
 import requests
-from kart import renderers
-
 from utils import markdown
+
+from kart import renderers
 
 
 class LunrRenderer(renderers.Renderer):
@@ -24,7 +24,7 @@ class LunrRenderer(renderers.Renderer):
             if page["renderer"] == "default_site_renderer":
                 if slug == "changelog":
                     text = ""
-                    for x in site["versions"]:
+                    for x in site["versions"].values():
                         text += markdown(x["content"]) + "\n"
                 else:
                     text = markdown(page["data"]["content"])

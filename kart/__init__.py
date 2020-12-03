@@ -4,6 +4,7 @@ import shutil
 import sys
 import threading
 import time
+import traceback
 from copy import deepcopy
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
@@ -70,23 +71,28 @@ class Kart:
         for modifier in self.content_modifiers:
             modifier.modify(self.site)
         self.create_map()
+        _site = deepcopy(self.site)
+        _map = deepcopy(self.map)
+        _urls = {}
+        for slug, page in self.map.items():
+            _urls[page["url"]] = slug
         with self.lock:
-            self._site = deepcopy(self.site)
-            self._map = deepcopy(self.map)
-            self._urls = {}
-            for slug, page in self.map.items():
-                self._urls[page["url"]] = slug
+            self._site = _site
+            self._map = _map
+            self._urls = _urls
 
     def get_url_data(self, url):
         with self.lock:
-            if url not in self._urls.keys():
-                # TODO: generalize using regex
-                if url.split("/")[1] == "static":
-                    url = "/static/*"
-                else:
-                    url = "/*"
-            page = self._map[self._urls[url]]
-            return page
+            _map = self._map
+            _urls = self._urls
+        if url not in _urls.keys():
+            # TODO: generalize using regex
+            if url.split("/")[1] == "static":
+                url = "/static/*"
+            else:
+                url = "/*"
+        page = _map[_urls[url]]
+        return page
 
     def get_global_data(self):
         with self.lock:
@@ -109,8 +115,8 @@ class Kart:
                 if page:
                     try:
                         renderer_dict[page["renderer"]].serve(self, page, map, site)
-                    except Exception as e:
-                        print(e)
+                    except Exception:
+                        print(traceback.format_exc())
 
         handler = RequestHandler
         httpd = HTTPServer(("", port), handler)

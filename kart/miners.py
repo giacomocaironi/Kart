@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 import yaml
 from watchdog.events import RegexMatchingEventHandler
@@ -25,14 +26,19 @@ class Miner:
 
 
 class DefaultMiner(Miner):
-    def read_data(self):
-        pass
-
     def collect(self):
         pass
 
     def collect_single_file(self, filename, file_location):
         raise NotImplementedError
+
+    def read_data(self):
+        self.data = OrderedDict()
+        for filename in os.listdir(self.working_dir):
+            file_location = os.path.join(self.working_dir, filename)
+            object = self.collect_single_file(filename, file_location)
+            if object:
+                self.data.update(object)
 
     def start_watching(self):
         def create(filename, file_location):
@@ -90,16 +96,8 @@ class DefaultCollectionMiner(DefaultMiner):
                     return False
             return {slug: object}
 
-    def read_data(self):
-        self.data = {}
-        for filename in os.listdir(self.working_dir):
-            file_location = os.path.join(self.working_dir, filename)
-            object = self.collect_single_file(filename, file_location)
-            if object:
-                self.data.update(object)
-
     def collect(self):
-        return {self.collection_name: list(self.data.values())}
+        return {self.collection_name: self.data}
 
 
 class DefaultPageMiner(DefaultMiner):
@@ -118,14 +116,6 @@ class DefaultPageMiner(DefaultMiner):
             object["slug"] = slug
             return {slug: object}
 
-    def read_data(self):
-        self.data = {}
-        for filename in os.listdir(self.working_dir):
-            file_location = os.path.join(self.working_dir, filename)
-            object = self.collect_single_file(filename, file_location)
-            if object:
-                self.data.update(object)
-
     def collect(self):
         return {"pages": self.data}
 
@@ -138,14 +128,6 @@ class DefaultDataMiner(DefaultMiner):
         with open(file_location, "r") as f:
             filename = filename.split(".")[0]
             return {filename: yaml.load(f.read(), Loader=Loader)}
-
-    def read_data(self):
-        self.data = {}
-        for filename in os.listdir(self.working_dir):
-            file_location = os.path.join(self.working_dir, filename)
-            object = self.collect_single_file(filename, file_location)
-            if object:
-                self.data.update(object)
 
     def collect(self):
         return {"data": self.data}

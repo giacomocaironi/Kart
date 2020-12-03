@@ -17,7 +17,7 @@ class GlobalMapModifier(modifiers.MapModifier):
                 i += 1
             elif data["link"] in site.keys():
                 partial_toc = []
-                for x in site[data["link"]]:
+                for x in site[data["link"]].values():
                     page = map[data["link"] + "." + x["slug"]]
                     title = x["title"]
                     url = page["url"]
