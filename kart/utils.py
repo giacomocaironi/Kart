@@ -1,5 +1,5 @@
+import queue
 import re
-import threading
 from collections import UserDict
 from itertools import islice
 from math import ceil
@@ -8,20 +8,18 @@ import mistune
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
+from watchdog.observers import Observer
 
 
-class StoppableThread(threading.Thread):
-    def __init__(self, target):
-        super().__init__()
-        self._stop_event = threading.Event()
-        self.target = target
-
-    def stop(self):
-        self._stop_event.set()
-
+class KartObserver(Observer):
     def run(self):
-        while not self._stop_event.is_set():
-            self.target()
+        while self.should_keep_running():
+            try:
+                self.dispatch_events(self.event_queue, self.timeout)
+                if self.event_queue.empty():
+                    self.action()
+            except queue.Empty:
+                continue
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):

@@ -3,7 +3,7 @@
 
 {{page.content}}
 
-{% for version in site.versions %}
+{% for version in site.versions.values() %}
   <h2>v{{version.title}}</h2>
   {{version.content}}
 {% endfor %}

@@ -1,3 +1,2 @@
 - add DefaultTaxonomyMapper
-- unify miners watchers into only one watcher for better performance
 - subclass SortedDict to eliminate cumbersome templates

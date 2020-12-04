@@ -3,7 +3,6 @@ from collections import OrderedDict
 
 import yaml
 from watchdog.events import RegexMatchingEventHandler
-from watchdog.observers import Observer
 
 try:
     from yaml import CLoader as Loader
@@ -40,7 +39,7 @@ class DefaultMiner(Miner):
             if object:
                 self.data.update(object)
 
-    def start_watching(self):
+    def start_watching(self, observer):
         def create(filename, file_location):
             self.data.update(self.collect_single_file(filename, file_location))
 
@@ -66,13 +65,10 @@ class DefaultMiner(Miner):
                 create(filename, event.src_path)
 
         self.read_data()
-        self.watcher = Observer()
-        self.watcher.schedule(Handler(), self.working_dir, recursive=False)
-        self.watcher.start()
+        observer.schedule(Handler(), self.working_dir, recursive=False)
 
     def stop_watching(self):
-        self.watcher.stop()
-        self.watcher.join()
+        pass
 
 
 class DefaultCollectionMiner(DefaultMiner):

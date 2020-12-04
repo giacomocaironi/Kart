@@ -3,12 +3,11 @@ import os
 import shutil
 import sys
 import threading
-import time
 import traceback
 from copy import deepcopy
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-from kart.utils import KartMap, StoppableThread
+from kart.utils import KartMap, KartObserver
 
 
 class Kart:
@@ -102,8 +101,11 @@ class Kart:
         get_url_data = self.get_url_data
         get_global_data = self.get_global_data
         renderer_dict = {}
+        observer = KartObserver()
+        observer.action = self.update_data
         for miner in self.miners:
-            miner.start_watching()
+            miner.start_watching(observer)
+        observer.start()
         for renderer in self.renderers:
             renderer_dict[renderer.name] = renderer
             renderer.start_serving()
@@ -118,25 +120,22 @@ class Kart:
                     except Exception:
                         print(traceback.format_exc())
 
-        handler = RequestHandler
-        httpd = HTTPServer(("", port), handler)
+        httpd = HTTPServer(("", port), RequestHandler)
         httpd.timeout = 0.1
-        server_thread = StoppableThread(target=httpd.handle_request)
         self.update_data()
-        server_thread.start()
+        shutil.rmtree(self.build_location, ignore_errors=True)
 
         while True:
             try:
-                time.sleep(0.25)
-                shutil.rmtree(self.build_location, ignore_errors=True)
-                self.update_data()
+                httpd.handle_request()
             except KeyboardInterrupt:
                 print("\rexiting")
-                server_thread.stop()
                 for miner in self.miners:
                     miner.stop_watching()
                 for renderer in self.renderers:
                     renderer.stop_serving()
+                observer.stop()
+                observer.join()
                 sys.exit()
             except Exception:
                 pass
