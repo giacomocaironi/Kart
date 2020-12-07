@@ -1,4 +1,3 @@
-import queue
 import re
 from collections import UserDict
 from itertools import islice
@@ -18,7 +17,7 @@ class KartObserver(Observer):
                 self.dispatch_events(self.event_queue, self.timeout)
                 if self.event_queue.empty():
                     self.action()
-            except queue.Empty:
+            except Exception:
                 continue
 
 

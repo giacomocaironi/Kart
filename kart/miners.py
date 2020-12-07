@@ -35,6 +35,7 @@ class DefaultMiner(Miner):
         self.data = OrderedDict()
         for filename in os.listdir(self.working_dir):
             file_location = os.path.join(self.working_dir, filename)
+            filename = filename.split(".")[0]
             object = self.collect_single_file(filename, file_location)
             if object:
                 self.data.update(object)
