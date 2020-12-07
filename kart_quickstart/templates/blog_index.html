@@ -9,8 +9,9 @@
   {% if site.posts|length > 0 %}
   <div class="col-md-6">
     <h5>Latest post</h5>
-    <h1><a href="{{ url("posts." + site.posts[0].slug) }}">{{ site.posts[0].title }}</a></h1>
-    <p>{{ site.posts[0].description }}</p>
+    {% set first_post = site.posts.values()|list|first %}
+    <h1><a href="{{ url("posts." + first_post.slug) }}">{{ first_post.title }}</a></h1>
+    <p>{{ first_post["description"] }}</p>
   </div>
   {% endif %}
 </div>
