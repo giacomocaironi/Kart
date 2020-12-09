@@ -26,7 +26,7 @@ class ManualMapper(Mapper):
 
 
 class DefaultCollectionMapper(Mapper):
-    def __init__(self, collection_name, base_url="", template="collection_item.html"):
+    def __init__(self, collection_name, template="item.html", base_url=""):
         self.urls = {}
         self.template = template
         self.base_url = base_url
@@ -72,71 +72,70 @@ class DefaultPageMapper(Mapper):
         return self.urls
 
 
-class DefaultBlogMapper(Mapper):
-    def __init__(
-        self,
-        base_url="",
-        templates={
-            "post_template": "post.html",
-            "index_template": "blog_index.html",
-            "tag_template": "tag.html",
-        },
-    ):
+class DefaultIndexMapper(Mapper):
+    def __init__(self, collection_name, template="index.html", base_url=""):
         self.urls = {}
+        self.template = template
         self.base_url = base_url
-        self.templates = templates
+        self.collection_name = collection_name
 
     def map(self, site):
-        post_pages = DefaultCollectionMapper(
-            base_url=self.base_url,
-            collection_name="posts",
-            template=self.templates["post_template"],
-        ).map(site)
-        self.urls.update(post_pages)
-        self.urls.update(self.blog_index(site))
-        self.urls.update(self.tags(site))
-        return self.urls
-
-    def blog_index(self, site):
-        posts = list(site["posts"].values())[1:]
+        items = list(site[self.collection_name].values())[1:]
         try:
             per_page = site["config"]["pagination"]["per_page"]
         except Exception:
             per_page = 5
         paginated_map = paginate(
-            objects=posts,
+            objects=items,
             per_page=per_page,
-            template=self.templates["index_template"],
+            template=self.template,
             base_url=self.base_url + "/index/page",
-            slug="blog_index",
+            slug=f"{self.collection_name}_index",
             additional_data={},
         )
-        paginated_map["blog_index.1"]["url"] = self.base_url + "/"
-        if "blog_index.2" in paginated_map.keys():
-            paginated_map["blog_index.2"]["data"]["paginator"]["previous_page_url"] = (
-                self.base_url + "/"
-            )
+        paginated_map[f"{self.collection_name}_index.1"]["url"] = self.base_url + "/"
+        if f"{self.collection_name}_index.2" in paginated_map.keys():
+            paginated_map[f"{self.collection_name}_index.2"]["data"]["paginator"][
+                "previous_page_url"
+            ] = (self.base_url + "/")
         return paginated_map
 
-    def tags(self, site):
+
+class DefaultTaxonomyMapper(Mapper):
+    def __init__(
+        self, collection_name, taxonomy_name, template="tag.html", base_url=""
+    ):
+        self.urls = {}
+        self.template = template
+        self.base_url = base_url
+        self.collection_name = collection_name
+        self.taxonomy_name = taxonomy_name
+
+    def map(self, site):
         urls = {}
-        if "tags" not in site.keys():
-            return urls
-        for tag in site["tags"].values():
-            posts = site["posts"].values()
-            posts = [post for post in posts if tag["slug"] in post["tags"]]
+        for taxonomy in site[self.taxonomy_name].values():
+            items = site[self.collection_name].values()
+            filtered_items = []
+            for item in items:
+                if type(item[self.taxonomy_name]) == str:
+                    if item[self.taxonomy_name] == taxonomy["slug"]:
+                        filtered_items.append(item)
+                elif type(item[self.taxonomy_name]) == list:
+                    if taxonomy["slug"] in item[self.taxonomy_name]:
+                        filtered_items.append(item)
             try:
                 per_page = site["config"]["pagination"]["per_page"]
             except Exception:
                 per_page = 5
             urls.update(
                 paginate(
-                    objects=posts,
+                    objects=filtered_items,
                     per_page=per_page,
-                    template=self.templates["tag_template"],
-                    base_url=self.base_url + f"/tags/{tag['slug']}",
-                    slug=f"tags.{tag['slug']}",
-                    additional_data=tag,
+                    template=self.template,
+                    base_url=self.base_url
+                    + f"/{self.taxonomy_name}/{taxonomy['slug']}",
+                    slug=f"{self.taxonomy_name}.{taxonomy['slug']}",
+                    additional_data=taxonomy,
                 )
             )
         return urls

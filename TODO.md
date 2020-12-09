@@ -1,2 +1,1 @@
-- add DefaultTaxonomyMapper
 - subclass SortedDict to eliminate cumbersome templates

@@ -12,7 +12,16 @@ kart.miners = [
 kart.content_modifiers = [modifiers.CollectionSorter("posts", "date", True)]
 
 kart.mappers = [
-    mappers.DefaultBlogMapper(),
+    mappers.DefaultIndexMapper(
+        collection_name="posts", template="blog_index.html", base_url="/blog"
+    ),
+    mappers.DefaultTaxonomyMapper(
+        collection_name="posts",
+        taxonomy_name="tags",
+        template="tag.html",
+        base_url="/blog",
+    ),
+    mappers.DefaultCollectionMapper(collection_name="posts", template="post.html"),
     mappers.DefaultPageMapper(),
     mappers.DefaultFeedMapper(collections=["posts"]),
     mappers.ManualMapper(
