@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Kart - Getting started</title>
+  <title>Kart - Mappers</title>
 
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
@@ -65,7 +65,7 @@
               Kart
             </span>
             <span class="md-header-nav__topic md-ellipsis">
-                Getting started
+                Mappers
             </span>
           </div>
         </div>
@@ -164,12 +164,9 @@
                 
                 
                 
-                  
-                  
-                
 
-                <li class="md-nav__item md-nav__item--active">
-                  <a href="https://giacomocaironi.github.io/Kart/getting_started/" title="Getting started" class="md-nav__link md-nav__link--active">
+                <li class="md-nav__item">
+                  <a href="https://giacomocaironi.github.io/Kart/getting_started/" title="Getting started" class="md-nav__link">
                     Getting started
                   </a>
                 </li>
@@ -289,19 +286,23 @@
   
 
   
-
+    
   
 
   
 
+  
 
 
 
-
-<li class="md-nav__item md-nav__item--nested">
 
   
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7"/>
+
+
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+
+  
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked/>
   
 
   <label class="md-nav__link" for="nav-7">
@@ -326,8 +327,8 @@
           
         
           
-          <li class='md-nav__item'>
-            <a href="https://giacomocaironi.github.io/Kart/api_reference/mappers/" class='md-nav__link'>Mappers</a>
+          <li class='md-nav__item md-nav__item--active'>
+            <a href="https://giacomocaironi.github.io/Kart/api_reference/mappers/" class='md-nav__link md-nav__link--active'>Mappers</a>
           </li>
           
         
@@ -393,100 +394,8 @@
       <div class="md-content">
         <article class="md-content__inner md-typeset" role="main">
           
-            <h1>Getting started</h1>
-<h2>Generate the basic structure</h2>
-<p>Before you can generate your blog using Kart, you first need to write the templates and the static files. Fortunately there is a simple command with which you can generate this files automatically. Head over to your root repository and type in the shell this command.</p>
-<div class="highlight"><pre><span></span><code>$ python -m kart init
-</code></pre></div>
-<p>This has generated some folders. The one that interests one is the collections folder.</p>
-<h2>Write your first post</h2>
-<p>Look at the collections folder. There are two subfolders: posts and tags. Create a markdown file in the posts folder. You can name it whatever you like(the file name will be used by Kart to generate the slug for the post).</p>
-<p>The first thing you want to do when you write a post is choosing the title. It is also useful to add other type of information about the post, such as the date, the description or whether it is a draft or not. This type of information is called metadata. You can add metadata by using front matters. Front matter is a snippet of YAML which sits between two triple-dashed lines at the top of a file.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">My first post</span>
-<span class="nt">date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">YYYY/MM/DD</span>
-<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This is my first post</span>
-<span class="nt">draft</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
-</code></pre></div>
-<p>The title and date fields are mandatory, while the others are completely optional. If you set the draft flag to true the blog will not be processed.</p>
-<p>Everything you write under the front matter is just markdown. It will be converted to html by kart and displayed in the finished site. Try writing some posts before moving to the next section.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">My first post</span>
-<span class="nt">date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">YYYY/MM/DD</span>
-<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This is my first post</span>
-<span class="nt">draft</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
-
-<span class="l l-Scalar l-Scalar-Plain">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
-</code></pre></div>
-<h2>Build the site</h2>
-<p>It's finally the time to build the site. There are two ways to do it.</p>
-<p>The first one simply generate the site but it does not display it automatically in the browser. Move to the root directory and type in the shell:</p>
-<div class="highlight"><pre><span></span><code>$ python main.py build
-</code></pre></div>
-<p>This will build your site in the _site folder. If you want to view it in the browser you can use a simple web server. With python you can create it by simpy typing in the browser(you must first move to the _site directory):</p>
-<div class="highlight"><pre><span></span><code>$ python -m http.server
-</code></pre></div>
-<p>This is useful when you want to push your static site to your production environment but it is not very useful for editing the site. For this there is another command</p>
-<div class="highlight"><pre><span></span><code>$ python main.py serve
-</code></pre></div>
-<p>This will create a development server that will autoreload when you change any file. It is very useful when modifying the templates. You can also specify which port to bind to using the -p option</p>
-<div class="highlight"><pre><span></span><code>$ python main.py serve -p <span class="m">4000</span>
-</code></pre></div>
-<p>You can then search in the browser 'localhost:' and the port you have chosen to see the blog.</p>
-<h2>Adding tags</h2>
-<p>Sometimes you want to group your posts in a way that posts talking about the same subject can be found togheter. So we use tags.
-Grouping posts is a very difficult job for static site generators, especially when you want to paginate them. Kart does all of this automatically. Morehover the templates generated by the quickstart command automatically adapt to tags. So the only thing we have to do is create some tags and tell the posts which tag do they have.</p>
-<p>So first of all we have to crate a tag. Go to the collections/tags folder and create a markdown file. This name the filename is very important, but we will return to this in a moment.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">First Tag</span>
-</code></pre></div>
-<p>The only metadata required is the name of the tag. It can be different from the name of the files. We could also write the description of the tag under the front matter. This data could be used by custom templates, for example in the page where all the posts tagged in the same way are listed. This fact is not irrelevant. Achieving this with other static site generators is not always straightforward.</p>
-<p>Create some tags before moving to the next section.</p>
-<h2>Tag a post</h2>
-<p>Now that we have created a tag we need to assign it to some posts. Go to the posts folder and open a file.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">My first post</span>
-<span class="nt">date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">YYYY/MM/DD</span>
-<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This is my first post</span>
-<span class="nt">draft</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
-
-<span class="l l-Scalar l-Scalar-Plain">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
-</code></pre></div>
-<p>Now we can add some tags with the following syntax</p>
-<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">My first post</span>
-<span class="nt">date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">YYYY/MM/DD</span>
-<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This is my first post</span>
-<span class="nt">draft</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
-<span class="nt">tags</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">first_tag</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">second_tag</span>
-
-<span class="l l-Scalar l-Scalar-Plain">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
-</code></pre></div>
-<p>It is very important that the name of the tag in the tags list is NOT the name of the tag, but instead its filename. This way we can have tag names with spaces, while having filenames with spaces is not recommended.</p>
-<p>Look at the site in your browser. For each tag there is a page that will list every posts with the tag.</p>
-<h2>Create pages</h2>
-<p>In Kart, a page is a kind of content which desn't belong to a group(or it doesn't fit in a collection). An example of a page in a normal site is the contct or about page.</p>
-<p>The process of writing pages is very similar to the one about posts. You have to create a markdown file in the pages folder</p>
-<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">About</span>
-
-<span class="l l-Scalar l-Scalar-Plain">This is the about page</span>
-</code></pre></div>
-<p>The only data which is required in the front matter is the title</p>
-<p>Because of the  templates created automatically in the navbar there will be a link for every page you write</p>
-<h2>Modify the configuration file</h2>
-<p>Now that you know how to create a blog it is time to publish it. First of all you have to open the main.py file and look for this lines:</p>
-<div class="highlight"><pre><span></span><code><span class="n">kart</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;My blog&quot;</span>
-<span class="n">kart</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;base_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</code></pre></div>
-<p>Modify this lines accordingly. The first one will modify the title of your site. The second line is the location where your site will be hosted. It is very important because if your site is not hosted in the root url the site may not be able to load its static files, like CSS. Your site will be ugly and you wont understand why.</p>
-<h2>The root folder</h2>
-<p>In this tutorial we haven't told about the &quot;root&quot; folder, which was created by the quickstart command. Every file you put in this folder will be copied in the _site directory. It is useful for files such as favicons or CNAMES(for custom domains). If you want to add this type of files now is the time to do it.</p>
-<h2>Publish your site</h2>
-<p>When you want to build your site for publishing it you must use a different command:</p>
-<div class="highlight"><pre><span></span><code>$ python main.py build
-</code></pre></div>
-<p>Now you can push your _site folder to your favourite host. If you are just starting and you know github I suggest looking at their <a href="https://pages.github.com/">Github Pages</a>.</p>
-<h2>Where to go</h2>
-<p>You have only scratched the surface of what Kart is capable to offer. If you want how to create custom templates and mappers, to personalize the look of the site, you can look at the step by step tutorial section. You will learn how to pass custom data to your templates and how to use the jinja2 template engine to modify the look of your site as you like.</p>
-<p>The examples section will cover some advanced cases, such as pagination.</p>
-
+            <h1>Mappers</h1>
+<dl><dt>class Mapper()</dt><dd>Base class</dd><dd></dd></dl><dl><dt>class RuleMapper(rules)</dt><dd>Updates map with user defined functions</dd><dd></dd></dl><dl><dt>class ManualMapper(pages)</dt><dd>Updates map with user defined pages</dd><dd></dd></dl><dl><dt>class DefaultCollectionMapper(collection_name, template, base_url)</dt><dd>Updates maps with every item in a collection</dd><dd></dd></dl><dl><dt>class DefaultPageMapper(template)</dt><dd>Updates maps with site pages</dd><dd></dd></dl><dl><dt>class DefaultIndexMapper(collection_name, template, base_url)</dt><dd>Updates map with a collection index</dd><dd></dd></dl><dl><dt>class DefaultTaxonomyMapper(collection_name, taxonomy_name, template, base_url)</dt><dd>Updates map with a collection index grouped in the same taxonomy</dd><dd></dd></dl><dl><dt>class DefaultFeedMapper(collections)</dt><dd>Updates map with atom feeds page</dd><dd></dd></dl>
           
         </article>
       </div>
@@ -500,7 +409,7 @@ Grouping posts is a very difficult job for static site generators, especially wh
     <nav class="md-footer-nav__inner md-grid">
         
           
-          <a href="https://giacomocaironi.github.io/Kart/install/" title="Install"
+          <a href="https://giacomocaironi.github.io/Kart/api_reference/miners/" title="Miners"
              class="md-flex md-footer-nav__link md-footer-nav__link--prev"
              rel="prev">
              <div class="md-footer-nav__button md-icon">
@@ -513,7 +422,7 @@ Grouping posts is a very difficult job for static site generators, especially wh
                  <span class="md-footer-nav__direction">
                    Previous
                  </span>
-                 Install
+                 Miners
                </span>
              </div>
           </a>
@@ -521,7 +430,7 @@ Grouping posts is a very difficult job for static site generators, especially wh
 
         
           
-          <a href="https://giacomocaironi.github.io/Kart/tutorials/step_by_step/work_in_progress/" title="Work in progress"
+          <a href="https://giacomocaironi.github.io/Kart/api_reference/renderers/" title="Renderers"
              class="md-flex md-footer-nav__link md-footer-nav__link--next"
              rel="next">
               <div class="md-footer-nav__title">
@@ -529,7 +438,7 @@ Grouping posts is a very difficult job for static site generators, especially wh
                   <span class="md-footer-nav__direction">
                     Next
                   </span>
-                  Work in progress
+                  Renderers
                 </span>
               </div>
               <div class="md-footer-nav__button md-icon">
