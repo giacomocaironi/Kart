@@ -115,7 +115,7 @@ It is very important that the name of the tag in the tags list is NOT the name o
 
 Look at the site in your browser. For each tag there is a page that will list every posts with the tag.
 
-# Adding Pages
+## Create pages
 
 In Kart, a page is a kind of content which desn't belong to a group(or it doesn't fit in a collection). An example of a page in a normal site is the contct or about page.
 
@@ -131,8 +131,6 @@ The only data which is required in the front matter is the title
 
 Because of the  templates created automatically in the navbar there will be a link for every page you write
 
-## Publish your site
-
 ## Modify the configuration file
 
 Now that you know how to create a blog it is time to publish it. First of all you have to open the main.py file and look for this lines:
@@ -147,7 +145,7 @@ Modify this lines accordingly. The first one will modify the title of your site.
 
 In this tutorial we haven't told about the "root" folder, which was created by the quickstart command. Every file you put in this folder will be copied in the \_site directory. It is useful for files such as favicons or CNAMES(for custom domains). If you want to add this type of files now is the time to do it.
 
-## Build the site for production
+## Publish your site
 
 When you want to build your site for publishing it you must use a different command:
 

@@ -3,8 +3,9 @@
 - link: getting_started
 - link: step_by_step
   name: Step by step tutorial
-- link: examples
-  name: Examples
-- link: documentation
-  name: Documentation
+- link: recommendations
+- link: advanced
+  name: Advanced guide
+- link: api_reference
+  name: API reference
 - link: changelog

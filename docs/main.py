@@ -1,28 +1,33 @@
+from kart import Kart, mappers, miners, modifiers, renderers
+
 from modifiers import GlobalMapModifier
 from renderers import LunrRenderer, WebpackRenderer
-
-from kart import Kart, mappers, miners, modifiers, renderers
 
 kart = Kart()
 
 kart.miners = [
-    miners.DefaultCollectionMiner("documentation"),
-    miners.DefaultCollectionMiner("examples"),
+    miners.DefaultCollectionMiner("api_reference"),
+    miners.DefaultCollectionMiner("advanced"),
     miners.DefaultCollectionMiner("step_by_step"),
     miners.DefaultCollectionMiner("versions"),
     miners.DefaultDataMiner(),
     miners.DefaultPageMiner(),
 ]
 
-kart.content_modifiers = [modifiers.CollectionSorter("versions", "title", True)]
+kart.content_modifiers = [
+    modifiers.CollectionSorter("api_reference", "index"),
+    modifiers.CollectionSorter("advanced", "index"),
+    modifiers.CollectionSorter("step_by_step", "index"),
+    modifiers.CollectionSorter("versions", "title", True),
+]
 
 kart.mappers = [
     mappers.DefaultPageMapper(template="default.html"),
     mappers.DefaultCollectionMapper(
-        collection_name="documentation", template="default.html"
+        collection_name="api_reference", template="default.html"
     ),
     mappers.DefaultCollectionMapper(
-        collection_name="examples", template="default.html", base_url="/tutorials"
+        collection_name="advanced", template="default.html", base_url="/tutorials"
     ),
     mappers.DefaultCollectionMapper(
         collection_name="step_by_step", template="default.html", base_url="/tutorials"

@@ -1,5 +1,6 @@
 ---
 title: Work in progress
+index: 1
 ---
 # Work in progress
 
