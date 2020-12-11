@@ -1,1 +1,2 @@
 - subclass SortedDict to eliminate cumbersome templates
+- handle markdown in a better way (maybe explicit markdown conversion in templates)

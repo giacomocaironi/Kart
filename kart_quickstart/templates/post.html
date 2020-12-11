@@ -12,7 +12,7 @@
       <span style='float:right'>
         Tags:
           {% for tag in page.tags %}
-          {% set tag = site.tags.values()|list|selectattr('slug', 'equalto', tag_slug)|first %}
+            {% set tag = site.tags[tag_slug] %}
             <a href="{{ url("tags." + tag_slug + ".1") }}">{{tag.name}}</a>
           {% endfor %}
       </span>

@@ -3,10 +3,6 @@ from collections import UserDict
 from itertools import islice
 from math import ceil
 
-import mistune
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name
 from watchdog.observers import Observer
 
 
@@ -19,28 +15,6 @@ class KartObserver(Observer):
                     self.action()
             except Exception:
                 continue
-
-
-class KartMistuneRenderer(mistune.HTMLRenderer):
-    def block_code(self, text, lang):
-        if not lang:
-            text = text.strip()
-            return f"<pre><code>{mistune.escape(text)}</code></pre>\n"
-        try:
-            lexer = get_lexer_by_name(lang, stripall=True)
-            formatter = HtmlFormatter(wrapcode=True)
-            code = highlight(text, lexer, formatter)
-            return code
-        except Exception:
-            code = mistune.escape(text)
-            return f'<pre class="{lang}"><code>{code}</code></pre>\n'
-
-    def header(self, text, level, raw=None):
-        slug = re.sub(r"[\W_]+", "-", text)
-        return f"<h{level} id={slug}>{text}</h{level}>\n"
-
-
-markdown = mistune.Markdown(renderer=KartMistuneRenderer(escape=False))
 
 
 class KartMap(UserDict):

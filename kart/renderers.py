@@ -8,7 +8,8 @@ from multiprocessing import Process
 from feedgen.feed import FeedGenerator
 from jinja2 import Environment, FileSystemLoader, Template
 
-from kart.utils import markdown, split_dict
+from kart.utils import split_dict
+from kart.markdown import markdown
 
 
 class Renderer:
@@ -69,10 +70,9 @@ class DefaultSiteRenderer(DefaultRenderer):
 
         jinja_template.globals.update(url=map.url, date_to_string=self.date_to_string)
         if "content" in page["data"].keys():
-            page["data"]["content"] = Template(page["data"]["content"]).render(
-                site=site, url=map.url, date_to_string=self.date_to_string
-            )
-            page["data"]["content"] = markdown(page["data"]["content"])
+            template = Template(page["data"]["content"])
+            template.globals.update(url=map.url, date_to_string=self.date_to_string)
+            page["data"]["content"] = markdown(template.render(site=site))
 
         return jinja_template.render(page=page["data"], site=site)
 
