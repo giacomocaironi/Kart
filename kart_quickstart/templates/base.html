@@ -33,7 +33,7 @@
 <body>
 
   {% block main %}
-    {{page.content}}
+    {{page.content|markdown}}
   {% endblock main %}
 
   <!-- Optional JavaScript -->

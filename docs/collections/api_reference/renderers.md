@@ -10,7 +10,7 @@ class renderers.Renderer()
 class renderers.DefaultRenderer()
 : Base class
 
-class renderers.DefaultSiteRenderer(name, template_folder, process_count)
+class renderers.DefaultSiteRenderer(name, template_folder, markdown, process_count)
 : Default jinja2 renderer
 
 class renderers.DefaultFeedRenderer(name)

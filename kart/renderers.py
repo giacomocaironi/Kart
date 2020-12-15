@@ -46,13 +46,19 @@ class DefaultRenderer(Renderer):
 
 class DefaultSiteRenderer(DefaultRenderer):
     def __init__(
-        self, name="default_site_renderer", template_folder="templates", process_count=1
+        self,
+        name="default_site_renderer",
+        template_folder="templates",
+        markdown=markdown,
+        process_count=1,
     ):
         self.name = name
         self.content_type = "text/html"
         self.template_folder = template_folder
         self.process_count = process_count
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
+        self.env.filters.update(date_to_string=self.date_to_string)
+        self.env.filters.update(markdown=markdown)
 
     def date_to_string(self, date):
         return date.strftime("%b %d, %Y")
@@ -68,11 +74,11 @@ class DefaultSiteRenderer(DefaultRenderer):
         jinja_template = self.env.get_template(template)
         page["data"]["url"] = page["url"]
 
-        jinja_template.globals.update(url=map.url, date_to_string=self.date_to_string)
+        jinja_template.globals.update(url=map.url)
         if "content" in page["data"].keys():
             template = Template(page["data"]["content"])
-            template.globals.update(url=map.url, date_to_string=self.date_to_string)
-            page["data"]["content"] = markdown(template.render(site=site))
+            template.globals.update(url=map.url)
+            # page["data"]["content"] = markdown(template.render(site=site))
 
         return jinja_template.render(page=page["data"], site=site)
 
