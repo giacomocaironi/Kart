@@ -1,4 +1,5 @@
 import mistune
+from mistune.directives.base import Directive
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
@@ -24,28 +25,91 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
         return f"<h{level} id={slug}>{text}</h{level}>\n"
 
 
-DEFINITION_LIST_PATTERN = re.compile(r"[^\n]+\n(:[ \t][^\n]+\n)+")
+class Admonition(Directive):
+    SUPPORTED_NAMES = {
+        "attention",
+        "caution",
+        "danger",
+        "error",
+        "hint",
+        "important",
+        "note",
+        "tip",
+        "warning",
+        "info",
+    }
+
+    def parse(self, block, m, state):
+        options = self.parse_options(m)
+        if options:
+            return {"type": "block_error", "raw": "Admonition has no options"}
+        name = m.group("name")
+        title = m.group("value")
+        text = self.parse_text(m)
+
+        rules = list(block.rules)
+        rules.remove("directive")
+        children = block.parse(text, state, rules)
+        return {"type": "admonition", "children": children, "params": (name, title)}
+
+    def __call__(self, md):
+        for name in self.SUPPORTED_NAMES:
+            self.register_directive(md, name)
+
+        if md.renderer.NAME == "html":
+            md.renderer.register("admonition", render_html_admonition)
+        elif md.renderer.NAME == "ast":
+            md.renderer.register("admonition", render_ast_admonition)
+
+
+def render_html_admonition(text, name, title=None):
+    html = '<section class="admonition ' + name + '">\n'
+    if title:
+        html += "<p class='admonition-title'>" + title + "</p>\n"
+    if text:
+        html += '<div class="admonition-text">\n' + text + "</div>\n"
+    return html + "</section>\n"
+
+
+def render_ast_admonition(children, name, title=None):
+    return {
+        "type": "admonition",
+        "children": children,
+        "name": name,
+        "title": title,
+    }
+
+
+DEFINITION_LIST_PATTERN = re.compile(r"([^\n]+\n(:[ \t][^\n]+\n)+\n?)+")
 
 
 def parse_def_list(block, m, state):
     lines = m.group(0).split("\n")
-    header = {"type": "def_list_header", "text": lines[0]}
-    items = []
-    for line in lines[1:]:
-        items.append({"type": "def_list_item", "text": line[1:].strip()})
-    return {"type": "def_list", "children": [header, *items]}
+    definition_list_items = []
+    for line in lines:
+        if not line:
+            continue
+        if line.strip()[0] == ":":
+            definition_list_items.append(
+                {"type": "def_list_item", "text": line[1:].strip()}
+            )
+        else:
+            definition_list_items.append(
+                {"type": "def_list_header", "text": line.strip()}
+            )
+    return {"type": "def_list", "children": definition_list_items}
 
 
 def render_html_def_list(text):
-    return f"<dl>{text}</dl>"
+    return "<dl>\n" + text + "</dl>\n"
 
 
 def render_html_def_list_header(text):
-    return f"<dt>{text}</dt>"
+    return "<dt>" + text + "</dt>\n"
 
 
 def render_html_def_list_item(text):
-    return f"<dd>{text}</dd>"
+    return "<dd>" + text + "</dd>\n"
 
 
 def plugin_def_list(md):
@@ -63,6 +127,8 @@ markdown = mistune.Markdown(
         mistune.plugins.plugin_strikethrough,
         mistune.plugins.plugin_footnotes,
         mistune.plugins.plugin_table,
+        mistune.plugins.plugin_task_lists,
+        Admonition(),
         plugin_def_list,
     ],
 )
