@@ -124,7 +124,7 @@ class DefaultFeedRenderer(DefaultRenderer):
         fg.link({"href": base_url + "/atom.xml", "rel": "self"})
         feed_entries = []
         for collection in page["data"]["collections"]:
-            for object in site[collection]:
+            for object in site[collection].values():
                 feed_entries.append([collection, object])
         feed_entries.sort(key=lambda x: x[1]["date"])
         for collection, entry in feed_entries:
