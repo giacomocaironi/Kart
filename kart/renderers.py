@@ -58,7 +58,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         self.process_count = process_count
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
         self.env.filters.update(date_to_string=self.date_to_string)
-        self.env.filters.update(markdown=markdown)
+        self.markdown = markdown
 
     def date_to_string(self, date):
         return date.strftime("%b %d, %Y")
@@ -71,16 +71,21 @@ class DefaultSiteRenderer(DefaultRenderer):
             template = page["data"]["template"]
         if not template:
             template = page["template"]
-        jinja_template = self.env.get_template(template)
-        page["data"]["url"] = page["url"]
 
-        jinja_template.globals.update(url=map.url)
-        if "content" in page["data"].keys():
-            template = Template(page["data"]["content"])
+        def markup(string):
+            env = Environment()
+            env.filters.update(date_to_string=self.date_to_string)
+            template = env.from_string(string)
             template.globals.update(url=map.url)
-            # page["data"]["content"] = markdown(template.render(site=site))
+            return self.markdown(template.render(site=site))
 
-        return jinja_template.render(page=page["data"], site=site)
+        self.env.filters.update(markdown=markup)
+        jinja_template = self.env.get_template(template)
+        jinja_template.globals.update(url=map.url)
+
+        return jinja_template.render(
+            page={**page["data"], "url": page["url"]}, site=site
+        )
 
     def _render(self, partial_map, map, site, build_location):
         for page in partial_map.values():

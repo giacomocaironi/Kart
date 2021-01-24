@@ -41,15 +41,13 @@ class Kart:
     def create_map(self):
         self.map = KartMap(self.config["base_url"])
         for mapper in self.mappers:
-            self.map.update(mapper.map(deepcopy(self.site)))
+            self.map.update(mapper.map(self.site))
         for modifier in self.map_modifiers:
             modifier.modify(self.map, self.site)
 
     def write(self):
         for renderer in self.renderers:
-            map = deepcopy(self.map)
-            site = deepcopy(self.site)
-            renderer.render(map, site, self.build_location)
+            renderer.render(self.map, self.site, self.build_location)
 
     def build(self):
         self.prepare()
