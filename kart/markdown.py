@@ -1,9 +1,10 @@
+import re
+
 import mistune
 from mistune.directives.base import Directive
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
-import re
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):

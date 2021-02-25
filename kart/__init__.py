@@ -1,4 +1,5 @@
 import argparse
+import fnmatch
 import os
 import shutil
 import sys
@@ -71,33 +72,34 @@ class Kart:
         _site = deepcopy(self.site)
         _map = deepcopy(self.map)
         _urls = {}
+        _regexes = {}
         for slug, page in self.map.items():
             _urls[page["url"]] = slug
+            if "*" in page["url"] or "?" in page["url"]:
+                _regexes[page["url"]] = slug
         with self.lock:
             self._site = _site
             self._map = _map
             self._urls = _urls
+            self._regexes = _regexes
 
-    def get_url_data(self, url):
+    def get_data(self, url):
         with self.lock:
-            _map = self._map
-            _urls = self._urls
-        if url not in _urls.keys():
-            # TODO: generalize using regex
-            if url.split("/")[1] == "static":
-                url = "/static/*"
-            else:
-                url = "/*"
-        page = _map[_urls[url]]
-        return page
-
-    def get_global_data(self):
-        with self.lock:
-            return self._map, self._site
+            site_map = self._map
+            urls = self._urls
+            site_data = self._site
+            regexes = self._regexes
+        if url in urls:
+            page = site_map[urls[url]]
+        else:
+            for pattern in regexes:
+                if fnmatch.fnmatch(url, pattern):
+                    page = site_map[regexes[pattern]]
+                    break
+        return page, site_map, site_data
 
     def serve(self, port=9000):
-        get_url_data = self.get_url_data
-        get_global_data = self.get_global_data
+        get_data = self.get_data
         renderer_dict = {}
         observer = KartObserver()
         observer.action = self.update_data
@@ -110,8 +112,7 @@ class Kart:
 
         class RequestHandler(SimpleHTTPRequestHandler):
             def do_GET(self):
-                page = get_url_data(self.path)
-                map, site = get_global_data()
+                page, map, site = get_data(self.path)
                 if page:
                     try:
                         renderer_dict[page["renderer"]].serve(self, page, map, site)

@@ -6,10 +6,10 @@ from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Process
 
 from feedgen.feed import FeedGenerator
-from jinja2 import Environment, FileSystemLoader, Template
+from jinja2 import Environment, FileSystemLoader
 
-from kart.utils import split_dict
 from kart.markdown import markdown
+from kart.utils import split_dict
 
 
 class Renderer:

@@ -1,7 +1,7 @@
-from kart import Kart, mappers, miners, modifiers, renderers
-
 from modifiers import GlobalMapModifier
 from renderers import LunrRenderer, WebpackRenderer
+
+from kart import Kart, mappers, miners, modifiers, renderers
 
 kart = Kart()
 

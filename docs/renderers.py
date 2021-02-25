@@ -4,9 +4,9 @@ from glob import glob
 from subprocess import PIPE, Popen
 
 import requests
-from kart import renderers
-
 from utils import markdown
+
+from kart import renderers
 
 
 class LunrRenderer(renderers.Renderer):
