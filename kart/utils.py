@@ -1,7 +1,5 @@
 import re
 from collections import UserDict
-from itertools import islice
-from math import ceil
 
 from watchdog.observers import Observer
 
@@ -83,8 +81,5 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     return urls
 
 
-def split_dict(data, chunks=2):
-    chunk_size = ceil(len(data) / chunks)
-    it = iter(data)
-    for i in range(0, len(data), chunk_size):
-        yield {k: data[k] for k in islice(it, chunk_size)}
+def date_to_string(date):
+    return date.strftime("%b %d, %Y")

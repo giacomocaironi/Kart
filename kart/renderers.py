@@ -1,19 +1,20 @@
-import os
 import shutil
 import xml.etree.ElementTree as xml
 from datetime import datetime, time, timezone
+from distutils.dir_util import copy_tree
 from http.server import SimpleHTTPRequestHandler
-from multiprocessing import Process
+from multiprocessing import Pool
+from pathlib import Path
 
 from feedgen.feed import FeedGenerator
 from jinja2 import Environment, FileSystemLoader
 
-from kart.markdown import markdown
-from kart.utils import split_dict
+from kart.markdown import markdown_generator
+from kart.utils import date_to_string
 
 
 class Renderer:
-    def render(self, map, site, build_location="_site"):
+    def render(self, map, site, build_location):
         raise NotImplementedError
 
     def start_serving(self):
@@ -30,11 +31,11 @@ class DefaultRenderer(Renderer):
     def render_single(self, map, site):
         raise NotImplementedError
 
-    def render(self, map, site, build_location="_site"):
+    def render(self, map, site, build_location):
         for page in map.values():
             if page["renderer"] != self.name:
                 continue
-            with open(build_location + page["url"], "w") as f:
+            with Path(build_location).joinpath(page["url"]).open("w") as f:
                 f.write(self.render_single(page, map, site))
 
     def serve(self, http_handler, page, map, site):
@@ -49,7 +50,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         self,
         name="default_site_renderer",
         template_folder="templates",
-        markdown=markdown,
+        markdown=markdown_generator,
         process_count=1,
     ):
         self.name = name
@@ -57,11 +58,8 @@ class DefaultSiteRenderer(DefaultRenderer):
         self.template_folder = template_folder
         self.process_count = process_count
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
-        self.env.filters.update(date_to_string=self.date_to_string)
+        self.env.filters.update(date_to_string=date_to_string)
         self.markdown = markdown
-
-    def date_to_string(self, date):
-        return date.strftime("%b %d, %Y")
 
     def render_single(self, page, map, site):
         if self.name != page["renderer"]:
@@ -72,14 +70,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         if not template:
             template = page["template"]
 
-        def markup(string):
-            env = Environment()
-            env.filters.update(date_to_string=self.date_to_string)
-            template = env.from_string(string)
-            template.globals.update(url=map.url)
-            return self.markdown(template.render(site=site))
-
-        self.env.filters.update(markdown=markup)
+        self.env.filters.update(markdown=self.markdown(site, map))
         jinja_template = self.env.get_template(template)
         jinja_template.globals.update(url=map.url)
 
@@ -87,29 +78,20 @@ class DefaultSiteRenderer(DefaultRenderer):
             page={**page["data"], "url": page["url"]}, site=site
         )
 
-    def _render(self, partial_map, map, site, build_location):
-        for page in partial_map.values():
-            if page["renderer"] != self.name:
-                continue
-            rendered_file = self.render_single(page, map, site)
-            if rendered_file:
-                os.makedirs(build_location + page["url"], exist_ok=True)
-                with open(build_location + page["url"] + "index.html", "w") as f:
-                    f.write(rendered_file)
+    def _render(self, key, map, site, build_location):
+        page = map[key]
+        if page["renderer"] != self.name:
+            return
+        rendered_file = self.render_single(page, map, site)
+        if rendered_file:
+            path = Path(build_location) / page["url"] / "index.html"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("w") as f:
+                f.write(rendered_file)
 
     def render(self, map, site, build_location="_site"):
-        if self.process_count <= 1:
-            return self._render(map, map, site, build_location)
-        else:
-            split_maps = split_dict(map, self.process_count)
-            processes = []
-            for partial_map in split_maps:
-                args = (partial_map, map, site, build_location)
-                p = Process(target=self._render, args=args)
-                p.start()
-                processes.append(p)
-            for p in processes:
-                p.join()
+        with Pool(self.process_count) as p:
+            p.starmap(self._render, ((key, map, site, build_location) for key in map))
 
 
 class DefaultFeedRenderer(DefaultRenderer):
@@ -165,28 +147,30 @@ class DefaultSitemapRenderer(DefaultRenderer):
 
 
 class DefaultStaticFilesRenderer(Renderer):
-    def __init__(self, name="default_static_files_renderer"):
+    def __init__(self, name="default_static_files_renderer", directory="static"):
         self.name = name
+        self.dir = directory
 
-    def render(self, map, site, build_location="_site"):
-        shutil.copytree("static", os.path.join(build_location, "static"))
+    def render(self, map, site, build_location):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                continue
+            shutil.copytree(self.dir, Path(build_location).joinpath(page["url"]).parent)
 
     def serve(self, http_handler, page, map, site):
         return SimpleHTTPRequestHandler.do_GET(http_handler)
 
 
 class DefaultRootDirRenderer(Renderer):
-    def __init__(self, name="default_root_dir_renderer"):
+    def __init__(self, name="default_root_dir_renderer", directory="root"):
         self.name = name
+        self.dir = directory
 
-    def render(self, map, site, build_location="_site"):
-        for item in os.listdir("root"):
-            s = os.path.join("root", item)
-            d = os.path.join(build_location, item)
-            if os.path.isdir(s):
-                shutil.copytree(s, d)
-            else:
-                shutil.copy2(s, d)
+    def render(self, map, site, build_location):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                continue
+            copy_tree(self.dir, Path(build_location).joinpath(page["url"]).parent)
 
     def serve(self, http_handler, page, map, site):
         http_handler.path = "/root" + http_handler.path

@@ -13,7 +13,7 @@ python = "^3.6"
 jinja2 = "^2.11"
 pyyaml = '^5.1'
 feedgen = "^0.9"
-mistune = "2.0.0a6"
+mistune = "2.0.0rc1"
 pygments = "^2.6.1"
 watchdog = "^0.10.3"
 

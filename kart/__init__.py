@@ -1,12 +1,12 @@
 import argparse
 import fnmatch
-import os
 import shutil
 import sys
 import threading
 import traceback
 from copy import deepcopy
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+from pathlib import Path
 
 from kart.utils import KartMap, KartObserver
 
@@ -28,7 +28,7 @@ class Kart:
         self.map_modifiers = map_modifiers
         self.renderers = renderers
         self.config = config
-        self.build_location = build_location
+        self.build_location = Path(build_location)
         self.lock = threading.Lock()
 
     def prepare(self):
@@ -54,7 +54,7 @@ class Kart:
         self.prepare()
         self.create_map()
         shutil.rmtree(self.build_location, ignore_errors=True)
-        os.makedirs(self.build_location, exist_ok=True)
+        self.build_location.mkdir(parents=True, exist_ok=True)
         self.write()
 
     # _site and _map are set and retrieved with a threading lock to prevent data races

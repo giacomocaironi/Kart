@@ -1,22 +1,21 @@
-import os
 import shutil
 import sys
+from pathlib import Path
 
 import kart_quickstart
 
 
 def build_quickstart():
-    base = os.path.join("/".join(kart_quickstart.__file__.split("/")[:-1]))
-    for i in os.listdir(base):
-        if i[:2] != "__":
-            if os.path.isdir(os.path.join(base, i)):
-                shutil.copytree(os.path.join(base, i), i)
-            else:
-                shutil.copyfile(os.path.join(base, i), i)
-    os.makedirs("collections/posts", exist_ok=True)
-    os.makedirs("collections/tags", exist_ok=True)
-    os.makedirs("data", exist_ok=True)
-    os.makedirs("pages", exist_ok=True)
+    base = Path(kart_quickstart.__file__).parent
+    for path in filter(lambda name: name[:2] != "__", base.glob("**/*")):
+        if path.is_dir():
+            shutil.copytree(path, path.name)
+        elif path.is_file():
+            shutil.copyfile(path, path.name)
+    Path("collections/posts").mkdir(parents=True, exist_ok=True)
+    Path("collections/tags").mkdir(parents=True, exist_ok=True)
+    Path("data").mkdir(parents=True, exist_ok=True)
+    Path("pages").mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":

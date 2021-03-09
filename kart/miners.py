@@ -1,5 +1,5 @@
-import os
 from collections import OrderedDict
+from pathlib import Path
 
 import yaml
 from watchdog.events import RegexMatchingEventHandler
@@ -28,63 +28,60 @@ class DefaultMiner(Miner):
     def collect(self):
         pass
 
-    def collect_single_file(self, filename, file_location):
+    def collect_single_file(self, file):
         raise NotImplementedError
 
     def read_data(self):
         self.data = OrderedDict()
-        for filename in os.listdir(self.working_dir):
-            file_location = os.path.join(self.working_dir, filename)
-            filename = filename.split(".")[0]
-            object = self.collect_single_file(filename, file_location)
+        for file in filter(Path.is_file, self.dir.glob("**/*")):
+            object = self.collect_single_file(file)
             if object:
                 self.data.update(object)
 
     def start_watching(self, observer):
-        def create(filename, file_location):
-            self.data.update(self.collect_single_file(filename, file_location))
+        def create(file):
+            self.data.update(self.collect_single_file(file))
 
-        def delete(filename, file_location):
-            self.data.pop(filename)
+        def delete(file):
+            self.data.pop(file.stem)
 
         class Handler(RegexMatchingEventHandler):
             def on_moved(self, event):
-                filename = event.src_path.split(".")[0].split("/")[-1]
-                delete(filename, event.src_path)
-                create(filename, event.dest_path)
+                file = Path(event.src_path)
+                delete(file)
+                create(file)
 
             def on_modified(self, event):
-                filename = event.src_path.split(".")[0].split("/")[-1]
-                create(filename, event.src_path)
+                file = Path(event.src_path)
+                create(file)
 
             def on_deleted(self, event):
-                filename = event.src_path.split(".")[0].split("/")[-1]
-                delete(filename, event.src_path)
+                file = Path(event.src_path)
+                delete(file)
 
             def on_created(self, event):
-                filename = event.src_path.split(".")[0].split("/")[-1]
-                create(filename, event.src_path)
+                file = Path(event.src_path)
+                create(file)
 
         self.read_data()
-        observer.schedule(Handler(), self.working_dir, recursive=False)
+        observer.schedule(Handler(), self.dir, recursive=False)
 
     def stop_watching(self):
         pass
 
 
 class DefaultCollectionMiner(DefaultMiner):
-    def __init__(self, collection_name, model=None, location="collections"):
-        self.model = model
+    def __init__(self, collection_name, directory="collections"):
         self.collection_name = collection_name
-        self.working_dir = os.path.join(location, collection_name)
+        self.dir = Path() / directory / collection_name
 
-    def collect_single_file(self, filename, file_location):
-        with open(file_location, "r") as f:
+    def collect_single_file(self, file):
+        with file.open("r") as f:
             data = f.read().split("---")
             metadata = yaml.load(data[1], Loader=Loader)
             content = "".join(data[2:])
             object = metadata
-            slug = filename.split(".")[0]
+            slug = file.stem
             object["slug"] = slug
             object["content"] = content
             object["content_type"] = "markdown"
@@ -98,16 +95,16 @@ class DefaultCollectionMiner(DefaultMiner):
 
 
 class DefaultPageMiner(DefaultMiner):
-    def __init__(self, location="pages"):
-        self.working_dir = location
+    def __init__(self, directory="pages"):
+        self.dir = Path(directory)
 
-    def collect_single_file(self, filename, file_location):
-        with open(file_location, "r") as f:
+    def collect_single_file(self, file):
+        with file.open("r") as f:
             data = f.read().split("---")
             metadata = yaml.load(data[1], Loader=Loader)
             content = "".join(data[2:])
             object = metadata
-            slug = filename.split(".")[0]
+            slug = file.stem
             object["content"] = content
             object["content_type"] = "markdown"
             object["slug"] = slug
@@ -118,13 +115,12 @@ class DefaultPageMiner(DefaultMiner):
 
 
 class DefaultDataMiner(DefaultMiner):
-    def __init__(self, location="data"):
-        self.working_dir = location
+    def __init__(self, directory="data"):
+        self.dir = Path(directory)
 
-    def collect_single_file(self, filename, file_location):
-        with open(file_location, "r") as f:
-            filename = filename.split(".")[0]
-            return {filename: yaml.load(f.read(), Loader=Loader)}
+    def collect_single_file(self, file):
+        with file.open("r") as f:
+            return {file.stem: yaml.load(f.read(), Loader=Loader)}
 
     def collect(self):
         return {"data": self.data}
