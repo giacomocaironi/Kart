@@ -7,7 +7,7 @@ import kart_quickstart
 
 def build_quickstart():
     base = Path(kart_quickstart.__file__).parent
-    for path in filter(lambda name: name[:2] != "__", base.glob("**/*")):
+    for path in filter(lambda name: name[:2] != "__", base.iterdir()):
         if path.is_dir():
             shutil.copytree(path, path.name)
         elif path.is_file():

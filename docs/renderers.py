@@ -1,7 +1,6 @@
 import json
-import os
-from glob import glob
-from subprocess import PIPE, Popen
+import subprocess
+from pathlib import Path
 
 import requests
 from utils import markdown
@@ -37,14 +36,17 @@ class LunrRenderer(renderers.Renderer):
                 )
         return json.dumps(index)
 
-    def render(self, map, site, build_location="_site"):
+    def render(self, map, site, build_location):
         for page in map.values():
             if page["renderer"] != self.name:
                 continue
             rendered_file = self.render_single(page, map, site)
             if rendered_file:
-                os.makedirs(os.path.join(build_location, "search"), exist_ok=True)
-                with open(build_location + page["url"], "w") as f:
+                path = Path(build_location) / Path(page["url"]).relative_to(
+                    "/"
+                )  # TODO: should not use relative_to, must remove all trailing slashes from urls
+                path.parent.mkdir(parents=True, exist_ok=True)
+                with path.open("w") as f:
                     f.write(rendered_file)
 
     def serve(self, http_handler, page, map, site):
@@ -60,26 +62,28 @@ class WebpackRenderer(renderers.Renderer):
         self.name = name
         self.port = port
 
-    def render(self, map, site, build_location="_site"):
-        os.system("npx webpack --mode production")
-        with open("_site/static/manifest.json") as json_file:
-            data = json.load(json_file)
-            files = [
-                y for x in os.walk("_site") for y in glob(os.path.join(x[0], "*.html"))
-            ]
-            for file in files:
-                with open(file, "r+") as f:
-                    text = f.read()
-                    for previous, next in data.items():
-                        text = text.replace(previous, next)
-                    f.seek(0)
-                    f.write(text)
-                    f.truncate()
+    def render(self, map, site, build_location):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                continue
+            subprocess.run("npx webpack --mode production".split())
+            manifest = Path(build_location).joinpath("static/manifest.json")
+            with manifest.open() as json_file:
+                data = json.load(json_file)
+                files = Path(build_location).rglob("*.html")
+                for file in files:
+                    with file.open("r+") as f:
+                        text = f.read()
+                        for previous, next in data.items():
+                            text = text.replace(previous, next)
+                        f.seek(0)
+                        f.write(text)
+                        f.truncate()
 
     def start_serving(self):
-        self.p = Popen(
+        self.p = subprocess.Popen(
             f"npx webpack-dev-server --mode development --port {self.port}".split(" "),
-            stdout=PIPE,
+            stdout=subprocess.PIPE,
         )
 
     def serve(self, http_handler, page, map, site):

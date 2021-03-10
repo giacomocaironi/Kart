@@ -33,7 +33,7 @@ class DefaultMiner(Miner):
 
     def read_data(self):
         self.data = OrderedDict()
-        for file in filter(Path.is_file, self.dir.glob("**/*")):
+        for file in filter(Path.is_file, self.dir.iterdir()):
             object = self.collect_single_file(file)
             if object:
                 self.data.update(object)

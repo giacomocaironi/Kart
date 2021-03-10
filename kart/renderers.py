@@ -5,6 +5,7 @@ from distutils.dir_util import copy_tree
 from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Pool
 from pathlib import Path
+from posixpath import splitext
 
 from feedgen.feed import FeedGenerator
 from jinja2 import Environment, FileSystemLoader
@@ -35,7 +36,8 @@ class DefaultRenderer(Renderer):
         for page in map.values():
             if page["renderer"] != self.name:
                 continue
-            with Path(build_location).joinpath(page["url"]).open("w") as f:
+            path = Path(build_location) / Path(*Path(page["url"]).parts[1:])
+            with path.open("w") as f:
                 f.write(self.render_single(page, map, site))
 
     def serve(self, http_handler, page, map, site):
@@ -59,7 +61,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         self.process_count = process_count
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
         self.env.filters.update(date_to_string=date_to_string)
-        self.markdown = markdown
+        self.markdown_generator = markdown
 
     def render_single(self, page, map, site):
         if self.name != page["renderer"]:
@@ -70,7 +72,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         if not template:
             template = page["template"]
 
-        self.env.filters.update(markdown=self.markdown(site, map))
+        self.env.filters.update(markdown=self.markdown_generator(site, map))
         jinja_template = self.env.get_template(template)
         jinja_template.globals.update(url=map.url)
 
@@ -84,7 +86,8 @@ class DefaultSiteRenderer(DefaultRenderer):
             return
         rendered_file = self.render_single(page, map, site)
         if rendered_file:
-            path = Path(build_location) / page["url"] / "index.html"
+            path = Path(build_location) / Path(*Path(page["url"]).parts[1:])
+            path = path / "index.html"
             path.parent.mkdir(parents=True, exist_ok=True)
             with path.open("w") as f:
                 f.write(rendered_file)
@@ -155,7 +158,8 @@ class DefaultStaticFilesRenderer(Renderer):
         for page in map.values():
             if page["renderer"] != self.name:
                 continue
-            shutil.copytree(self.dir, Path(build_location).joinpath(page["url"]).parent)
+            destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
+            shutil.copytree(self.dir, destination)
 
     def serve(self, http_handler, page, map, site):
         return SimpleHTTPRequestHandler.do_GET(http_handler)
@@ -170,7 +174,8 @@ class DefaultRootDirRenderer(Renderer):
         for page in map.values():
             if page["renderer"] != self.name:
                 continue
-            copy_tree(self.dir, Path(build_location).joinpath(page["url"]).parent)
+            destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
+            copy_tree(self.dir, str(destination))
 
     def serve(self, http_handler, page, map, site):
         http_handler.path = "/root" + http_handler.path
