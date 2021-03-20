@@ -1,54 +1,58 @@
-<input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
-<input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-<label class="md-overlay" for="__drawer"></label>
-<div data-md-component="skip">
-  <a href="#{{ pagename }}" class="md-skip"> Skip to content </a>
-</div>
-<div data-md-component="announce"></div>
-
-<header class="md-header" data-md-component="header" data-md-state='shadow'>
-  <nav class="md-header-nav md-grid">
-
-      <a href="{{ url('index') }}"
-         class="md-header-nav__button md-logo">
-            <img src="{{ url(site.config.icon) }}" height="26" alt="logo">
-      </a>
-
-      <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
-      </label>
-
-      <div class="md-header-nav__title" data-md-component="header-title" data-md-state="">
-          <div class="md-header-nav__ellipsis">
-            <span class="md-header-nav__topic md-ellipsis">
-              {{ site.config.name }}
-            </span>
-            <span class="md-header-nav__topic md-ellipsis">
-                {{ page.title }}
-            </span>
-          </div>
-        </div>
-
-      <label class="md-header-nav__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-      </label>
-
-      <div class="md-search" data-md-component="search" role="dialog"> <label class="md-search__overlay" for="__search"></label> <div class="md-search__inner" role="search"> <form class="md-search__form" name="search"> <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active"> <label class="md-search__icon md-icon" for="__search"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg> </label> <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg> </button> </form> <div class="md-search__output"> <div class="md-search__scrollwrap"> <div class="md-search-result" data-md-component="search-result"> <div class="md-search-result__meta">Type to start searching</div> <ol class="md-search-result__list"></ol> </div> </div> </div> </div> </div>
-
-
-    <div class="md-header-nav__source">
-        <a href="{{ site.config.theme_repo_url }}" title="Go to repository" class="md-source">
-          <div class="md-source__icon md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
-          </div>
-          <div class="md-source__repository">
-            {{ site.config.theme_repo_name }}
-          </div>
-        </a>
+<nav class="navbar">
+    <div class="navbar-content">
+        <button id="toggle-sidebar-btn" class="btn btn-action" type="button" onclick="halfmoon.toggleSidebar()">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
     </div>
+    <a href="/" class="navbar-brand ml-10 ml-sm-15">
+        <img src="{{ url(site.config.icon) }}" class="hidden-dm mr-5 mr-sm-10" alt="kart-logo">
+        <img src="{{ url(site.config.icon) }}" class="hidden-lm mr-5 mr-sm-10" alt="kart-logo-white">
+        <span class="badge font-size-12 text-monospace px-5 px-sm-10">
+            v{{site.config.version}}
+        </span>
+    </a>
 
+    <ul class="navbar-nav hidden-sm-and-down">
+        <li class="nav-item">
+            <a href="{{ url('index') }}" class="nav-link">Home</a>
+        </li>
+    </ul>
+    <div class="navbar-content ml-auto">
 
+      <div class="pt-5 mr-5 d-none d-lg-inline-block" id="gh-star-btn-container-1">
+          <div class="hidden-dm">
+            <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="light" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+          </div>
+          <div class="hidden-lm">
+            <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="dark" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+          </div>
+      </div>
 
+        <button class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()" aria-label="Toggle dark mode">
+            <i class="fa fa-moon-o" aria-hidden="true"></i>
+        </button>
 
-  </nav>
-</header>
+        <div class="dropdown with-arrow hidden-md-and-up">
+            <button class="btn navbar-menu-btn" data-toggle="dropdown" type="button" id="navbar-dropdown-toggle-btn" aria-haspopup="true" aria-expanded="false">
+                <span class="text">Menu</span>
+                <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-dropdown-toggle-btn">
+                <a href="{{ url('index') }}" class="dropdown-item">Home</a>
+                <div class="dropdown-divider"></div>
+
+                <!-- Github button container 2 start -->
+                <div class="pt-5" id="gh-star-btn-container-2">
+                  <div class="dropdown-content py-5 hidden-dm">
+                    <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="light" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+                  </div>
+                  <div class="dropdown-content py-5 hidden-lm">
+                    <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="dark" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+                  </div>
+                </div>
+                <!-- Github button container 2 end -->
+
+            </div>
+        </div>
+    </div>
+</nav>

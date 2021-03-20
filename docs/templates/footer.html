@@ -1,4 +1,43 @@
-<footer class="md-footer">
+<div class="container-fluid">
+  <div class="row row-eq-spacing-lg">
+
+    <div class="col-md-4">
+      <div class="content">
+        <h4 class="content-title font-size-16 mb-10">Learn more</h4>
+        <div class="">
+          <a href="{{ url('install') }}" class='footer-link'>Install</a>
+        </div>
+        <div class="">
+          <a href="{{ url('getting_started') }}" class='footer-link'>Getting started</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="content">
+        <h4 class="content-title font-size-16 mb-10">Get involved</h4>
+        <div class="">
+          <a href="{{site.config.repo_url}}" class='footer-link'>Contribute to {{site.config.name}}</a>
+        </div>
+        <div class="">
+          <a href="{{site.config.repo_url}}/issues" class='footer-link'>Report an issue</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="content">
+        <br>
+        <div class="text-muted">
+          © Copyright 2021, Giacomo Caironi
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- <footer class="md-footer">
   <div class="md-footer-nav">
     <nav class="md-footer-nav__inner md-grid">
         {% if page.global_map_index > 0 and site.global_map_size > 0 %}
@@ -50,4 +89,4 @@
       </div>
     </div>
   </div>
-</footer>
+</footer> -->

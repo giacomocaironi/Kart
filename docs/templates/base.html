@@ -2,31 +2,13 @@
 <html lang="{{ DEFAULT_LANG }}">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width">
 
-  <title>{{site.config.name}} - {{ page.title }}</title>
+  <title>{{ page.title }}</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href={{ url("/static/stylesheets/main.css") }}>
-  <link rel="stylesheet" href={{ url("/static/stylesheets/palette.css") }}>
-
-  <style>
-    body,
-    input {
-      font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
-    }
-
-    code,
-    kbd,
-    pre {
-      font-family: "Roboto Mono", "Courier New", Courier, monospace
-    }
-    .md-source {
-      display: inline
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+  <link rel="stylesheet" href={{ url('/static/css/documentation.css') }}>
 
   <link rel="apple-touch-icon" sizes="180x180" href={{ url("/apple-touch-icon.png") }}>
   <link rel="icon" type="image/png" sizes="32x32" href={{ url("/favicon-32x32.png") }}>
@@ -35,26 +17,14 @@
 
 </head>
 
-<body data-md-color-primary='orange' data-md-color-accent='orange'>
+<body class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars">
 
   {% block main %}
-    {{page.content|markdown}}
   {% endblock main %}
 
-  <script src="{{ url("/static/javascripts/vendor.js") }}"></script>
-  <script src="{{ url("/static/javascripts/bundle.js") }}"></script>
-  <script id="__lang" type="application/json">
-    {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}
-  </script>
-  <script>
-      app = initialize({
-            base: "{{ url("/") }}",
-            features: [],
-            search: Object.assign({
-              worker : "{{ url("/static/javascripts/worker/search.js") }}"
-            }, typeof search !== "undefined" && search)
-          })
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+  <script async defer src={{ url('/static/js/github.js') }}></script>
 
 </body>
 </html>

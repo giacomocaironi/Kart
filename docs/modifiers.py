@@ -19,7 +19,7 @@ class GlobalMapModifier(modifiers.MapModifier):
                 partial_toc = []
                 for x in site[data["link"]].values():
                     page = map[data["link"] + "." + x["slug"]]
-                    title = x["title"]
+                    title = page["data"]["title"]
                     url = page["url"]
                     global_map.append({"url": url, "title": title})
                     partial_toc.append({"url": url, "title": title, "index": i})

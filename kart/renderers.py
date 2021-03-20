@@ -5,7 +5,6 @@ from distutils.dir_util import copy_tree
 from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Pool
 from pathlib import Path
-from posixpath import splitext
 
 from feedgen.feed import FeedGenerator
 from jinja2 import Environment, FileSystemLoader

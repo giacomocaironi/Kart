@@ -1,7 +1,7 @@
 from modifiers import GlobalMapModifier
-from renderers import LunrRenderer, WebpackRenderer
 
 from kart import Kart, mappers, miners, modifiers, renderers
+import pkg_resources
 
 kart = Kart()
 
@@ -50,7 +50,7 @@ kart.mappers = [
                 "url": "/static/*",
                 "data": {},
                 "template": "",
-                "renderer": "webpack_renderer",
+                "renderer": "default_static_files_renderer",
             },
             "root": {
                 "url": "/*",
@@ -67,16 +67,17 @@ kart.map_modifiers = [GlobalMapModifier()]
 kart.renderers = [
     renderers.DefaultSiteRenderer(),
     renderers.DefaultSitemapRenderer(),
-    WebpackRenderer(),
+    renderers.DefaultStaticFilesRenderer(),
     renderers.DefaultRootDirRenderer(),
-    LunrRenderer(),
+    # LunrRenderer(),
 ]
 
 kart.config["name"] = "Kart"
 kart.config["icon"] = "/favicon-32x32.png"
-kart.config["theme_repo_type"] = "github"
-kart.config["theme_repo_url"] = "https://github.com/giacomocaironi/Kart"
-kart.config["theme_repo_name"] = "giacomocaironi/Kart"
+kart.config["version"] = pkg_resources.get_distribution(kart.config["name"]).version
+kart.config["repo_type"] = "github"
+kart.config["repo_url"] = "https://github.com/giacomocaironi/Kart"
+kart.config["repo_name"] = "giacomocaironi/Kart"
 kart.config["base_url"] = "https://giacomocaironi.github.io/Kart"
 
 kart.run()
