@@ -16,6 +16,7 @@ feedgen = "^0.9"
 mistune = "2.0.0rc1"
 pygments = "^2.6.1"
 watchdog = "^0.10.3"
+python-slugify = "^4.0.1"
 
 [tool.poetry.dev-dependencies]
 

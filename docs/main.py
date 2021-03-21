@@ -1,7 +1,10 @@
-from modifiers import GlobalMapModifier
-
-from kart import Kart, mappers, miners, modifiers, renderers
 import pkg_resources
+from kart import Kart, mappers, miners, modifiers, renderers
+from kart.markdown import markdown_to_html
+from kart.utils import date_to_string
+
+from modifiers import GlobalMapModifier
+from utils import markdown_to_toc
 
 kart = Kart()
 
@@ -65,7 +68,13 @@ kart.mappers = [
 kart.map_modifiers = [GlobalMapModifier()]
 
 kart.renderers = [
-    renderers.DefaultSiteRenderer(),
+    renderers.DefaultSiteRenderer(
+        filters={
+            "markdown": markdown_to_html,
+            "date_to_string": date_to_string,
+            "toc": markdown_to_toc,
+        }
+    ),
     renderers.DefaultSitemapRenderer(),
     renderers.DefaultStaticFilesRenderer(),
     renderers.DefaultRootDirRenderer(),

@@ -13,11 +13,6 @@ body.with-extra-letter-spacing-on-side-navs .on-this-page-nav * {
     letter-spacing: 0.3px;
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
 /* Loading section */
 
 #loading-section {
@@ -153,7 +148,6 @@ body.loading #loading-section {
 /* Custom footer */
 
 .footer {
-    margin-top: auto;
     background-color: rgba(0, 0, 0, 0.025);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-left-color: transparent;

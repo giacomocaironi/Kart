@@ -3,9 +3,9 @@ import subprocess
 from pathlib import Path
 
 import requests
-from utils import markdown
-
 from kart import renderers
+
+from utils import markdown_to_text
 
 
 class LunrRenderer(renderers.Renderer):
@@ -24,9 +24,9 @@ class LunrRenderer(renderers.Renderer):
                 if slug == "changelog":
                     text = ""
                     for x in site["versions"].values():
-                        text += markdown(x["content"]) + "\n"
+                        text += markdown_to_text(x["content"]) + "\n"
                 else:
-                    text = markdown(page["data"]["content"])
+                    text = markdown_to_text(page["data"]["content"])
                 index["docs"].append(
                     {
                         "location": page["url"][1:],
