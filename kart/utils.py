@@ -1,6 +1,6 @@
 import re
 from collections import UserDict
-
+from jinja2 import contextfilter
 from watchdog.observers import Observer
 
 
@@ -83,3 +83,11 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
 
 def date_to_string(date):
     return date.strftime("%b %d, %Y")
+
+
+@contextfilter
+def parse(context, string):
+    template = context.environment.from_string(string)
+    return template.render(
+        page=context["page"], site=context["site"], url=context["url"]
+    )

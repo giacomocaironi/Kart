@@ -80,7 +80,8 @@ class TextExtractor(HTMLRenderer):
         return text + "\n"
 
 
-markdown_to_text = mistune.Markdown(renderer=TextExtractor())
+def markdown_to_text(string):
+    return mistune.Markdown(renderer=TextExtractor())(string)
 
 
 class TocMarkdown(mistune.Markdown):
@@ -131,7 +132,8 @@ class TocPlugin(DirectiveToc):
             md.renderer.register("theading", render_ast_theading)
 
 
-markdown_to_toc = TocMarkdown(
-    renderer=mistune.HTMLRenderer(),
-    plugins=[TocPlugin()],
-)
+def markdown_to_toc(string):
+    return TocMarkdown(
+        renderer=mistune.HTMLRenderer(),
+        plugins=[TocPlugin()],
+    )(string)

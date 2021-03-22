@@ -10,7 +10,7 @@ from feedgen.feed import FeedGenerator
 from jinja2 import Environment, FileSystemLoader
 
 from kart.markdown import markdown_to_html
-from kart.utils import date_to_string
+from kart.utils import date_to_string, parse
 
 
 class Renderer:
@@ -54,6 +54,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         filters={
             "markdown": markdown_to_html,
             "date_to_string": date_to_string,
+            "parse": parse,
         },
         process_count=1,
     ):
@@ -64,15 +65,6 @@ class DefaultSiteRenderer(DefaultRenderer):
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
         self.env.filters.update(filters)
 
-    def parse(self, page, map, site):
-        def func(string):
-            template = self.env.from_string(string)
-            return template.render(
-                page={**page["data"], "url": page["url"]}, site=site, url=map.url
-            )
-
-        return func
-
     def render_single(self, page, map, site):
         if self.name != page["renderer"]:
             return
@@ -82,7 +74,6 @@ class DefaultSiteRenderer(DefaultRenderer):
         if not template:
             template = page["template"]
 
-        self.env.filters.update(parse=self.parse(page, map, site))
         template = self.env.get_template(template)
         page = {**page["data"], "url": page["url"]}
 
@@ -101,8 +92,15 @@ class DefaultSiteRenderer(DefaultRenderer):
                 f.write(rendered_file)
 
     def render(self, map, site, build_location="_site"):
-        with Pool(self.process_count) as p:
-            p.starmap(self._render, ((key, map, site, build_location) for key in map))
+        if self.process_count == 1:
+            for key in map:
+                self._render(key, map, site, build_location)
+        else:
+            with Pool(self.process_count) as p:
+                p.starmap(
+                    self._render,
+                    ((key, map, site, build_location) for key in map),
+                )
 
 
 class DefaultFeedRenderer(DefaultRenderer):

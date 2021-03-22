@@ -56,14 +56,15 @@ class Admonition(Admonition):
             md.renderer.register("admonition", render_ast_admonition)
 
 
-markdown_to_html = mistune.Markdown(
-    renderer=KartMistuneRenderer(escape=False),
-    plugins=[
-        mistune.plugins.plugin_strikethrough,
-        mistune.plugins.plugin_footnotes,
-        mistune.plugins.plugin_table,
-        mistune.plugins.plugin_task_lists,
-        mistune.plugins.plugin_def_list,
-        Admonition(),
-    ],
-)
+def markdown_to_html(string):
+    return mistune.Markdown(
+        renderer=KartMistuneRenderer(escape=False),
+        plugins=[
+            mistune.plugins.plugin_strikethrough,
+            mistune.plugins.plugin_footnotes,
+            mistune.plugins.plugin_table,
+            mistune.plugins.plugin_task_lists,
+            mistune.plugins.plugin_def_list,
+            Admonition(),
+        ],
+    )(string)
