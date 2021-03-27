@@ -28,7 +28,9 @@ before_script:
 
 pages:
   script:
+    - cd docs
     - python main.py build
+    - mv public ../public
   artifacts:
     paths:
       - public
