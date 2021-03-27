@@ -7,3 +7,19 @@
 .footer {
     margin-top: auto;
 }
+
+body {
+  --dm-button-border-color: #404040!important;
+  --dm-button-group-button-border-color: #404040!important;
+}
+
+
+.btn svg {
+  fill: #999;
+}
+
+svg.s16 {
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+}

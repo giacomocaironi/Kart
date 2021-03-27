@@ -19,7 +19,8 @@ You can then build and serve your site with this command
 ```bash
 $ python3 main.py serve
 ```
-# Disclaimer
-Kart is not yet ready to use in a real-world scenario because it is in its early stage of its life and its api can change abruptly each minor verision.
 
-I am currently writing the [documentation](https://giacomocaironi.github.io/Kart) of kart but it is by no mean complete. If you want to look at some examples you can look the docs folder, where the documentation is held, and the source code of [my personal site](https://giacomocaironi.github.io) which is generated using kart
+# Disclaimer
+Kart is not yet ready to use in a real-world scenario. It is still in development its api can change abruptly each minor version.
+
+I am currently writing the [documentation](https://giacomocaironi.gitlab.io/Kart) of kart but it is by no mean complete. If you want to look at some examples you can look the docs folder, where the documentation is held, and the source code of the [example site](https://gitlab.com/giacomocaironi/Kart/-/tree/master/kart_quickstart)

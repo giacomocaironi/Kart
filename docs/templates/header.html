@@ -19,13 +19,13 @@
     </ul>
     <div class="navbar-content ml-auto">
 
-      <div class="pt-5 mr-5 d-none d-lg-inline-block" id="gh-star-btn-container-1">
-          <div class="hidden-dm">
-            <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="light" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-          </div>
-          <div class="hidden-lm">
-            <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="dark" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-          </div>
+      <div class="mr-5 d-none d-lg-inline-block">
+        <div class="hidden-dm">
+          {% include "star_button.html" %}
+        </div>
+        <div class="hidden-lm">
+          {% include "star_button.html" %}
+        </div>
       </div>
 
         <button class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()" aria-label="Toggle dark mode">
@@ -41,16 +41,14 @@
                 <a href="{{ url('index') }}" class="dropdown-item">Home</a>
                 <div class="dropdown-divider"></div>
 
-                <!-- Github button container 2 start -->
-                <div class="pt-5" id="gh-star-btn-container-2">
+                <div class="pt-5">
                   <div class="dropdown-content py-5 hidden-dm">
-                    <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="light" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+                    {% include "star_button.html" %}
                   </div>
                   <div class="dropdown-content py-5 hidden-lm">
-                    <a class="github-button" href="{{ site.config.repo_url}}" data-color-scheme="dark" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+                    {% include "star_button.html" %}
                   </div>
                 </div>
-                <!-- Github button container 2 end -->
 
             </div>
         </div>

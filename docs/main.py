@@ -6,7 +6,7 @@ from kart.utils import date_to_string, parse
 from modifiers import GlobalMapModifier
 from utils import markdown_to_toc
 
-kart = Kart()
+kart = Kart(build_location="public")
 
 kart.miners = [
     miners.DefaultCollectionMiner("api_reference"),
@@ -85,9 +85,8 @@ kart.renderers = [
 kart.config["name"] = "Kart"
 kart.config["icon"] = "/favicon-32x32.png"
 kart.config["version"] = pkg_resources.get_distribution(kart.config["name"]).version
-kart.config["repo_type"] = "github"
-kart.config["repo_url"] = "https://github.com/giacomocaironi/Kart"
+kart.config["repo_url"] = "https://gitlab.com/giacomocaironi/Kart"
 kart.config["repo_name"] = "giacomocaironi/Kart"
-kart.config["base_url"] = "https://giacomocaironi.github.io/Kart"
+kart.config["base_url"] = "https://giacomocaironi.gitlab.io/Kart"
 
 kart.run()
