@@ -21,12 +21,7 @@ class LunrRenderer(renderers.Renderer):
         index = {"config": config, "docs": []}
         for slug, page in map.items():
             if page["renderer"] == "default_site_renderer":
-                if slug == "changelog":
-                    text = ""
-                    for x in site["versions"].values():
-                        text += markdown_to_text(x["content"]) + "\n"
-                else:
-                    text = markdown_to_text(page["data"]["content"])
+                text = markdown_to_text(page["data"]["content"])
                 index["docs"].append(
                     {
                         "location": page["url"][1:],

@@ -12,7 +12,6 @@ kart.miners = [
     miners.DefaultCollectionMiner("api_reference"),
     miners.DefaultCollectionMiner("advanced"),
     miners.DefaultCollectionMiner("step_by_step"),
-    miners.DefaultCollectionMiner("versions"),
     miners.DefaultDataMiner(),
     miners.DefaultPageMiner(),
 ]
@@ -21,7 +20,6 @@ kart.content_modifiers = [
     modifiers.CollectionSorter("api_reference", "index"),
     modifiers.CollectionSorter("advanced", "index"),
     modifiers.CollectionSorter("step_by_step", "index"),
-    modifiers.CollectionSorter("versions", "title", True),
 ]
 
 kart.mappers = [
