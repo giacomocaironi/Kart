@@ -2,6 +2,7 @@ import re
 from collections import UserDict
 from jinja2 import contextfilter
 from watchdog.observers import Observer
+from slugify import slugify
 
 
 class KartObserver(Observer):
@@ -91,3 +92,10 @@ def parse(context, string):
     return template.render(
         page=context["page"], site=context["site"], url=context["url"]
     )
+
+
+def slug_from_path(base_dir, path):
+    path = path.relative_to(base_dir)
+    path = str(path)[: -len(path.suffix)]
+    result = slugify(path)
+    return path  # result

@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from pathlib import Path
-
+from kart.utils import slug_from_path
 import yaml
 from watchdog.events import RegexMatchingEventHandler
 
@@ -26,7 +26,7 @@ class Miner:
 
 class DefaultMiner(Miner):
     def collect(self):
-        pass
+        raise NotImplementedError
 
     def collect_single_file(self, file):
         raise NotImplementedError
@@ -39,11 +39,14 @@ class DefaultMiner(Miner):
                 self.data.update(object)
 
     def start_watching(self, observer):
+        base_dir = self.dir
+
         def create(file):
             self.data.update(self.collect_single_file(file))
 
         def delete(file):
-            self.data.pop(file.stem)
+            slug = slug_from_path(base_dir, file)
+            self.data.pop(slug)
 
         class Handler(RegexMatchingEventHandler):
             def on_moved(self, event):
@@ -70,18 +73,14 @@ class DefaultMiner(Miner):
         pass
 
 
-class DefaultCollectionMiner(DefaultMiner):
-    def __init__(self, collection_name, directory="collections"):
-        self.collection_name = collection_name
-        self.dir = Path() / directory / collection_name
-
+class DefaultMarkdownMiner(DefaultMiner):
     def collect_single_file(self, file):
         with file.open("r") as f:
             data = f.read().split("---")
             metadata = yaml.load(data[1], Loader=Loader)
             content = "".join(data[2:])
             object = metadata
-            slug = file.stem
+            slug = slug_from_path(self.dir, file)
             object["slug"] = slug
             object["content"] = content
             object["content_type"] = "markdown"
@@ -90,25 +89,19 @@ class DefaultCollectionMiner(DefaultMiner):
                     return False
             return {slug: object}
 
+
+class DefaultCollectionMiner(DefaultMarkdownMiner):
+    def __init__(self, collection_name, directory="collections"):
+        self.collection_name = collection_name
+        self.dir = Path() / directory / collection_name
+
     def collect(self):
         return {self.collection_name: self.data}
 
 
-class DefaultPageMiner(DefaultMiner):
+class DefaultPageMiner(DefaultMarkdownMiner):
     def __init__(self, directory="pages"):
         self.dir = Path(directory)
-
-    def collect_single_file(self, file):
-        with file.open("r") as f:
-            data = f.read().split("---")
-            metadata = yaml.load(data[1], Loader=Loader)
-            content = "".join(data[2:])
-            object = metadata
-            slug = file.stem
-            object["content"] = content
-            object["content_type"] = "markdown"
-            object["slug"] = slug
-            return {slug: object}
 
     def collect(self):
         return {"pages": self.data}
@@ -120,7 +113,8 @@ class DefaultDataMiner(DefaultMiner):
 
     def collect_single_file(self, file):
         with file.open("r") as f:
-            return {file.stem: yaml.load(f.read(), Loader=Loader)}
+            slug = slug_from_path(self.dir, file)
+            return {slug: yaml.load(f.read(), Loader=Loader)}
 
     def collect(self):
         return {"data": self.data}
