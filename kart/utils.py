@@ -1,8 +1,9 @@
 import re
 from collections import UserDict
+
 from jinja2 import contextfilter
-from watchdog.observers import Observer
 from slugify import slugify
+from watchdog.observers import Observer
 
 
 class KartObserver(Observer):

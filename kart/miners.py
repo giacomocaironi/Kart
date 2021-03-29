@@ -1,8 +1,10 @@
 from collections import OrderedDict
 from pathlib import Path
-from kart.utils import slug_from_path
+
 import yaml
 from watchdog.events import RegexMatchingEventHandler
+
+from kart.utils import slug_from_path
 
 try:
     from yaml import CLoader as Loader

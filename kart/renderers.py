@@ -68,13 +68,8 @@ class DefaultSiteRenderer(DefaultRenderer):
     def render_single(self, page, map, site):
         if self.name != page["renderer"]:
             return
-        template = ""
-        if "template" in page["data"].keys():
-            template = page["data"]["template"]
-        if not template:
-            template = page["template"]
 
-        template = self.env.get_template(template)
+        template = self.env.get_template(page["template"])
         page = {**page["data"], "url": page["url"]}
 
         return template.render(page=page, site=site, url=map.url)

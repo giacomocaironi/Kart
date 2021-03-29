@@ -38,10 +38,14 @@ class DefaultCollectionMapper(Mapper):
         for object in collection.values():
             slug = f"{self.collection_name}.{object['slug']}"
             url = self.base_url + f"/{self.collection_name}/{object['slug']}/"
+            if "template" in object:
+                template = object["template"]
+            else:
+                template = self.template
             page = {
                 "url": url,
                 "data": object,
-                "template": self.template,
+                "template": template,
                 "renderer": "default_site_renderer",
             }
             urls[slug] = page
@@ -56,16 +60,20 @@ class DefaultPageMapper(Mapper):
     def map(self, site):
         for slug in site["pages"]:
             page = site["pages"][slug]
-            try:
+            if "url" in page:
                 url = page["url"]
-            except Exception:
+            elif slug == "index":
+                url = "/"
+            else:
                 url = f"/{slug}/"
-                if slug == "index":
-                    url = "/"
+            if "template" in page:
+                template = page["template"]
+            else:
+                template = self.template
             page = {
                 "url": url,
                 "data": page,
-                "template": self.template,
+                "template": template,
                 "renderer": "default_site_renderer",
             }
             self.urls[slug] = page
