@@ -1,5 +1,5 @@
 ---
-title: Kart
+title: About
 ---
 # Kart
 

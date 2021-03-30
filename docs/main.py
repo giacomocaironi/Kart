@@ -1,38 +1,22 @@
 import pkg_resources
-from kart import Kart, mappers, miners, modifiers, renderers
+from custom import DocumentationMapper, DocumentationMiner
+from utils import markdown_to_toc
+
+from kart import Kart, mappers, miners, renderers
 from kart.markdown import markdown_to_html
 from kart.utils import date_to_string, parse
-
-from modifiers import GlobalMapModifier
-from utils import markdown_to_toc
 
 kart = Kart(build_location="public")
 
 kart.miners = [
-    miners.DefaultCollectionMiner("api_reference"),
-    miners.DefaultCollectionMiner("advanced"),
-    miners.DefaultCollectionMiner("step_by_step"),
     miners.DefaultDataMiner(),
-    miners.DefaultPageMiner(),
+    DocumentationMiner(),
 ]
 
-kart.content_modifiers = [
-    modifiers.CollectionSorter("api_reference", "index"),
-    modifiers.CollectionSorter("advanced", "index"),
-    modifiers.CollectionSorter("step_by_step", "index"),
-]
+kart.content_modifiers = []
 
 kart.mappers = [
-    mappers.DefaultPageMapper(template="default.html"),
-    mappers.DefaultCollectionMapper(
-        collection_name="api_reference", template="default.html"
-    ),
-    mappers.DefaultCollectionMapper(
-        collection_name="advanced", template="default.html", base_url="/tutorials"
-    ),
-    mappers.DefaultCollectionMapper(
-        collection_name="step_by_step", template="default.html", base_url="/tutorials"
-    ),
+    DocumentationMapper(template="default.html"),
     mappers.ManualMapper(
         {
             "lunr_data": {
@@ -63,7 +47,7 @@ kart.mappers = [
     ),
 ]
 
-kart.map_modifiers = [GlobalMapModifier()]
+kart.map_modifiers = []
 
 kart.renderers = [
     renderers.DefaultSiteRenderer(
@@ -77,7 +61,6 @@ kart.renderers = [
     renderers.DefaultSitemapRenderer(),
     renderers.DefaultStaticFilesRenderer(),
     renderers.DefaultRootDirRenderer(),
-    # LunrRenderer(),
 ]
 
 kart.config["name"] = "Kart"

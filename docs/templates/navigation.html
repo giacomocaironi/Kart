@@ -1,0 +1,34 @@
+<hr class='mb-10'>
+<div class="container-fluid">
+  <div class="row">
+
+    <div class=" col-6">
+      {% if 'previous_page' in page %}
+      <div class="text-left font-size-16 ml-5">
+        Previous
+      </div>
+      <div class="text-left font-size-16">
+        <a href="{{ page.previous_page.url }}" class="hyperlink">
+          <i class="icon icon-angle-left" aria-hidden="true"></i>
+          {{ page.previous_page.title }}
+        </a>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-6">
+      {% if 'next_page' in page %}
+      <div class="text-right font-size-16 mr-5">
+        Next
+      </div>
+      <div class="text-right font-size-16">
+        <a href="{{ page.next_page.url }}" class="hyperlink">
+          {{ page.next_page.title }}
+          <i class="icon icon-angle-right" aria-hidden="true"></i>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>

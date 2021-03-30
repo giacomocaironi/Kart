@@ -1,0 +1,11 @@
+- location: index.md
+- location: install.md
+- location: getting_started.md
+- name: Step by step tutorial
+  location: step_by_step
+- location: recommendations.md
+- name: Advanced
+  location: advanced
+- name: Api reference
+  location: api
+- location: changelog.md

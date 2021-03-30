@@ -4,8 +4,8 @@
   flex-grow: 1;
 }
 
-.footer {
-    margin-top: auto;
+.bottom{
+  margin-top: auto;
 }
 
 body {
@@ -22,4 +22,20 @@ svg.s16 {
   width: 16px;
   height: 16px;
   vertical-align: -3px;
+}
+
+.navigation{
+  margin-bottom: 1rem;
+}
+
+.icon:before{
+  margin: 0rem;
+}
+
+.sidebar-menu{
+  padding-left: 2rem;
+}
+
+.sidebar-title{
+  margin-left: 0rem;
 }

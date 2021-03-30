@@ -1,30 +1,27 @@
 <div class="sidebar-menu list">
-  {{ site.config.theme_repo_name }}
+
+  <h4 class='mb-10'>{{site.config.name}}</h4>
 
   {% for nav_item in site.global_toc %}
 
-    {% if nav_item is mapping %}
+    {% set level = nav_item.level * 15 %}
 
-        <a href="{{ url(nav_item.url) }}" title="{{ nav_item.title | striptags }}" class="sidebar-title sidebar-link">
-          {{nav_item.title}}
-        </a>
+    {% if nav_item.url %}
+
+      {% set active = '' %}
+      {% if nav_item.url == page.url %}
+        {% set active = 'active' %}
+      {% endif %}
+      <a href="{{ url(nav_item.url) }}" class='sidebar-link {{active}} pl-{{level}}'>
+        {{nav_item.title}}
+      </a>
 
     {% else %}
 
-      <h5 class='sidebar-title'> {{nav_item[0]}} </h5>
-      <hr>
-
-      {% for article in nav_item[1:] %}
-        {% if article.index == page.global_map_index %}
-        <a href="{{ url(article.url) }}" class='sidebar-link active'>{{article.title}}</a>
-        {% else %}
-        <a href="{{ url(article.url) }}" class='sidebar-link'>{{article.title}}</a>
-        {% endif %}
-      {% endfor %}
+      <h5 class='sidebar-title'>{{nav_item.title}}</h5>
 
     {% endif %}
 
-    <br>
-
   {% endfor %}
+
 </div>
