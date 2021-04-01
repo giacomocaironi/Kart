@@ -3,12 +3,11 @@ import fnmatch
 import shutil
 import sys
 import threading
-import traceback
 from copy import deepcopy
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import HTTPServer
 from pathlib import Path
 
-from kart.utils import KartMap, KartObserver
+from kart.utils import KartMap, KartObserver, KartRequesHandler
 
 
 class Kart:
@@ -31,10 +30,11 @@ class Kart:
         self.build_location = Path(build_location)
         self.lock = threading.Lock()
 
-    def prepare(self):
+    def prepare(self, start=True):
         self.site = {"config": self.config}
         for miner in self.miners:
-            miner.read_data()
+            if start:
+                miner.read_data()
             self.site.update(miner.collect())
         for modifier in self.content_modifiers:
             modifier.modify(self.site)
@@ -63,11 +63,7 @@ class Kart:
     # preventing errors when serving the site during development
 
     def update_data(self):
-        self.site = {"config": self.config}
-        for miner in self.miners:
-            self.site.update(miner.collect())
-        for modifier in self.content_modifiers:
-            modifier.modify(self.site)
+        self.prepare(False)
         self.create_map()
         _site = deepcopy(self.site)
         _map = deepcopy(self.map)
@@ -83,43 +79,33 @@ class Kart:
             self._urls = _urls
             self._regexes = _regexes
 
-    def get_data(self, url):
+    def serve_page(self, handler, url):
         with self.lock:
             site_map = self._map
             urls = self._urls
-            site_data = self._site
+            site = self._site
             regexes = self._regexes
         if url in urls:
             page = site_map[urls[url]]
         else:
-            for pattern in regexes:
-                if fnmatch.fnmatch(url, pattern):
-                    page = site_map[regexes[pattern]]
-                    break
-        return page, site_map, site_data
+            pattern = next((x for x in regexes if fnmatch.fnmatch(url, x)))
+            page = site_map[regexes[pattern]]
+        if page:
+            self.renderer_dict[page["renderer"]].serve(handler, page, site_map, site)
 
     def serve(self, port=9000):
-        get_data = self.get_data
-        renderer_dict = {}
+        self.renderer_dict = {}
         observer = KartObserver()
         observer.action = self.update_data
         for miner in self.miners:
             miner.start_watching(observer)
         observer.start()
         for renderer in self.renderers:
-            renderer_dict[renderer.name] = renderer
+            self.renderer_dict[renderer.name] = renderer
             renderer.start_serving()
-
-        class RequestHandler(SimpleHTTPRequestHandler):
-            def do_GET(self):
-                page, map, site = get_data(self.path)
-                if page:
-                    try:
-                        renderer_dict[page["renderer"]].serve(self, page, map, site)
-                    except Exception:
-                        print(traceback.format_exc())
-
-        httpd = HTTPServer(("", port), RequestHandler)
+        handler_class = KartRequesHandler
+        handler_class.action = self.serve_page
+        httpd = HTTPServer(("", port), handler_class)
         httpd.timeout = 0.1
         self.update_data()
         shutil.rmtree(self.build_location, ignore_errors=True)

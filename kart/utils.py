@@ -1,5 +1,6 @@
-import re
+import traceback
 from collections import UserDict
+from http.server import SimpleHTTPRequestHandler
 
 from jinja2 import contextfilter
 from slugify import slugify
@@ -15,6 +16,14 @@ class KartObserver(Observer):
                     self.action()
             except Exception:
                 continue
+
+
+class KartRequesHandler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        try:
+            self.action(self, self.path)
+        except Exception:
+            print(traceback.format_exc())
 
 
 class KartMap(UserDict):
@@ -33,12 +42,7 @@ class KartMap(UserDict):
         elif "/" in name:
             result = name
         else:
-            regex = re.compile(f"{name}[.].")
-            regex_list = list(filter(regex.match, self.data.keys()))
-            if regex_list:
-                result = self.data[regex_list[0]]["url"]
-            else:
-                return ""
+            return ""
         return self.base_url + result
 
 
@@ -51,35 +55,29 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     for i, objects in enumerate(paginated_objects, 1):
         url = f"/{i}/" if i > 1 else "/"
         if i > 2:
-            previous_page_url = f"/{i-1}/"
+            previous_page_url = base_url + f"/{i-1}/"
         elif i == 2:
-            previous_page_url = "/"
+            previous_page_url = base_url + "/"
         else:
             previous_page_url = ""
         if i < len(paginated_objects):
-            next_page_url = f"/{i+1}/"
+            next_page_url = base_url + f"/{i+1}/"
         else:
             next_page_url = ""
         paginator = {
             "objects": objects,
             "index": i,
-            "next_page_url": base_url + next_page_url if next_page_url else "",
-            "previous_page_url": base_url + previous_page_url
-            if previous_page_url
-            else "",
+            "next_page_url": next_page_url,
+            "previous_page_url": previous_page_url,
         }
         data = {"paginator": paginator}
         data.update(additional_data)
-        urls.update(
-            {
-                f"{slug}.{i}": {
-                    "url": base_url + url,
-                    "data": data,
-                    "template": template,
-                    "renderer": "default_site_renderer",
-                }
-            }
-        )
+        urls[f"{slug}.{i}"] = {
+            "url": base_url + url,
+            "data": data,
+            "template": template,
+            "renderer": "default_site_renderer",
+        }
     return urls
 
 
