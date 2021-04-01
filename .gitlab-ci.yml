@@ -20,8 +20,9 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
-  - pip install virtualenv
-  - virtualenv venv
+  - apt-get update -y
+  - apt-get install gzip brotli -y
+  - python -m venv venv
   - source venv/bin/activate
   - pip install poetry
   - poetry install
@@ -30,6 +31,8 @@ pages:
   script:
     - cd docs
     - python main.py build
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\|xml\|png\)$' -exec gzip -f -k {} \;
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\|xml\)$' -exec brotli -f -k {} \;
     - mv public ../public
   artifacts:
     paths:
