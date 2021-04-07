@@ -80,7 +80,7 @@ class DefaultMarkdownMiner(DefaultMiner):
         with file.open("r") as f:
             data = f.read().split("---")
             metadata = yaml.load(data[1], Loader=Loader)
-            content = "".join(data[2:])
+            content = "---".join(data[2:])
             object = metadata
             slug = slug_from_path(self.dir, file)
             object["slug"] = slug

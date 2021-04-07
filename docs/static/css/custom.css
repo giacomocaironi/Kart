@@ -4,15 +4,14 @@
   flex-grow: 1;
 }
 
-.bottom{
+.bottom {
   margin-top: auto;
 }
 
 body {
-  --dm-button-border-color: #404040!important;
-  --dm-button-group-button-border-color: #404040!important;
+  --dm-button-border-color: #404040 !important;
+  --dm-button-group-button-border-color: #404040 !important;
 }
-
 
 .btn svg {
   fill: #999;
@@ -24,18 +23,28 @@ svg.s16 {
   vertical-align: -3px;
 }
 
-.navigation{
+.navigation {
   margin-bottom: 1rem;
 }
 
-.icon:before{
+.icon:before {
   margin: 0rem;
 }
 
-.sidebar-menu{
+.sidebar-menu {
   padding-left: 2rem;
 }
 
-.sidebar-title{
+.sidebar-title {
   margin-left: 0rem;
+}
+
+.highlight pre {
+  margin: 0rem;
+}
+
+code {
+  overflow-x: auto;
+  display: block;
+  padding: 1rem;
 }

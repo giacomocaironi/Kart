@@ -8,7 +8,7 @@ title: Getting started
 
 Before you can generate your blog using Kart, you first need to write the templates and the static files. Fortunately there is a simple command with which you can generate this files automatically. Head over to your root repository and type in the shell this command.
 
-```bash
+```shell-session
 $ python -m kart init
 ```
 
@@ -48,25 +48,25 @@ It's finally the time to build the site. There are two ways to do it.
 
 The first one simply generate the site but it does not display it automatically in the browser. Move to the root directory and type in the shell:
 
-```bash
+```shell-session
 $ python main.py build
 ```
 
 This will build your site in the \_site folder. If you want to view it in the browser you can use a simple web server. With python you can create it by simpy typing in the browser(you must first move to the \_site directory):
 
-```bash
+```shell-session
 $ python -m http.server
 ```
 
 This is useful when you want to push your static site to your production environment but it is not very useful for editing the site. For this there is another command
 
-```bash
+```shell-session
 $ python main.py serve
 ```
 
 This will create a development server that will autoreload when you change any file. It is very useful when modifying the templates. You can also specify which port to bind to using the -p option
 
-```bash
+```shell-session
 $ python main.py serve -p 4000
 ```
 You can then search in the browser 'localhost:' and the port you have chosen to see the blog.
@@ -149,7 +149,7 @@ In this tutorial we haven't told about the "root" folder, which was created by t
 
 When you want to build your site for publishing it you must use a different command:
 
-```bash
+```shell-session
 $ python main.py build
 ```
 

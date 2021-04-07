@@ -7,7 +7,7 @@ Install Kart with pip
 $ pip install Kart
 ```
 
-Build the basic strcucture
+Build the basic structure
 ```bash
 $ python -m kart init
 ```
