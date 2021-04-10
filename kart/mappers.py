@@ -128,7 +128,7 @@ class DefaultTaxonomyMapper(Mapper):
                 if isinstance(item[self.taxonomy_name], str):
                     if item[self.taxonomy_name] == taxonomy["slug"]:
                         filtered_items.append(item)
-                elif isinstance(item[self.taxonomy_name], str):
+                elif isinstance(item[self.taxonomy_name], list):
                     if taxonomy["slug"] in item[self.taxonomy_name]:
                         filtered_items.append(item)
             try:
