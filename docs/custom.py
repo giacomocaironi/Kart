@@ -2,10 +2,9 @@ from collections import OrderedDict
 from pathlib import Path
 
 import yaml
-from watchdog.events import RegexMatchingEventHandler
-
 from kart.mappers import Mapper
 from kart.miners import DefaultMarkdownMiner
+from watchdog.events import RegexMatchingEventHandler
 
 try:
     from yaml import CLoader as Loader

@@ -20,7 +20,7 @@ Look at the collections folder. There are two subfolders: posts and tags. Create
 
 The first thing you want to do when you write a post is choosing the title. It is also useful to add other type of information about the post, such as the date, the description or whether it is a draft or not. This type of information is called metadata. You can add metadata by using front matters. Front matter is a snippet of YAML which sits between two triple-dashed lines at the top of a file.
 
-```yaml
+```markdown
 ---
 title: My first post
 date: YYYY/MM/DD
@@ -32,7 +32,7 @@ The title and date fields are mandatory, while the others are completely optiona
 
 Everything you write under the front matter is just markdown. It will be converted to html by kart and displayed in the finished site. Try writing some posts before moving to the next section.
 
-```yaml
+```markdown
 ---
 title: My first post
 date: YYYY/MM/DD
@@ -78,7 +78,7 @@ Grouping posts is a very difficult job for static site generators, especially wh
 
 So first of all we have to crate a tag. Go to the collections/tags folder and create a markdown file. This name the filename is very important, but we will return to this in a moment.
 
-```yaml
+```markdown
 ---
 name: First Tag
 ---
@@ -89,7 +89,7 @@ Create some tags before moving to the next section.
 
 ## Tag a post
 Now that we have created a tag we need to assign it to some posts. Go to the posts folder and open a file.
-```yaml
+```markdown
 ---
 title: My first post
 date: YYYY/MM/DD
@@ -99,7 +99,7 @@ draft: False
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ```
 Now we can add some tags with the following syntax
-```yaml
+```markdown
 ---
 title: My first post
 date: YYYY/MM/DD
@@ -121,7 +121,7 @@ In Kart, a page is a kind of content which desn't belong to a group(or it doesn'
 
 The process of writing pages is very similar to the one about posts. You have to create a markdown file in the pages folder
 
-```yaml
+```markdown
 ---
 title: About
 ---

@@ -3,9 +3,8 @@ import subprocess
 from pathlib import Path
 
 import requests
-from utils import markdown_to_text
-
 from kart import modifiers, renderers
+from utils import markdown_to_text
 
 
 class LunrRenderer(renderers.Renderer):
