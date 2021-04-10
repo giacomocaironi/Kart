@@ -60,7 +60,7 @@ class TocMarkdown(mistune.Markdown):
             state = {}
         s, state = self.before_parse(s, state)
         tokens = self.block.parse(s, state)
-        tokens.append({"type": "toc", "raw": None, "params": ("Table of Contents", 3)})
+        tokens.append({"type": "toc", "raw": None, "params": ("Table of Contents", 4)})
         tokens = self.before_render(tokens, state)
         result = self.block.render(tokens[-1:], self.inline, state)
         result = self.after_render(result, state)
@@ -73,20 +73,11 @@ def record_toc_heading(text, level, state):
     return {"type": "theading", "text": text, "params": (level, tid)}
 
 
-def render_html_toc(toc, title, _):
-    s = ""
-    if title:
-        s += f'<div class="title">{title}</div>'
-    if not toc:
-        return s
-    for k, text, level in toc:
-        if level > 1:
-            text = f'<span class="d-inline-block pl-{10*(level-1)}">{text}</span>'
-        s += f'<a href="#{k}">{text}</a>'
-    return s
-
-
 class TocPlugin(DirectiveToc):
+    def __init__(self, func):
+        self.func = func
+        super().__init__()
+
     def __call__(self, md):
         self.register_directive(md, "toc")
 
@@ -95,15 +86,27 @@ class TocPlugin(DirectiveToc):
         md.before_render_hooks.append(md_toc_hook)
 
         if md.renderer.NAME == "html":
-            md.renderer.register("toc", render_html_toc)
+            md.renderer.register("toc", self.func)
             md.renderer.register("theading", render_html_theading)
         elif md.renderer.NAME == "ast":
             md.renderer.register("toc", render_ast_toc)
             md.renderer.register("theading", render_ast_theading)
 
 
+def render_html_toc(toc, title, _):
+    s = ""
+    if not toc:
+        return s
+    max_level = toc[0][2]
+    for k, text, level in toc:
+        if level > max_level:
+            text = f'<span style="padding-left:{10*(level-max_level)}px">{text}</span>'
+        s += f'<a href="#{k}">{text}</a>'
+    return s
+
+
 def markdown_to_toc(string):
     return TocMarkdown(
         renderer=mistune.HTMLRenderer(),
-        plugins=[TocPlugin()],
+        plugins=[TocPlugin(render_html_toc)],
     )(string)

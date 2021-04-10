@@ -1,6 +1,6 @@
 import mistune
 from jinja2 import contextfilter
-from kart.markdown import KartMistuneRenderer
+from kart.markdown import KartMistuneRenderer, TocPlugin, TocMarkdown
 from mistune import HTMLRenderer
 from mistune.directives.admonition import Admonition, render_ast_admonition
 from mistune.scanner import escape
@@ -147,4 +147,24 @@ def markdown_to_html(context, string):
             mistune.plugins.plugin_def_list,
             Admonition(),
         ],
+    )(string)
+
+
+def render_html_toc(toc, title, _):
+    s = ""
+    if title:
+        s += f'<div class="title">{title}</div>'
+    if not toc:
+        return s
+    for k, text, level in toc:
+        if level > 1:
+            text = f'<span class="d-inline-block pl-{10*(level-1)}">{text}</span>'
+        s += f'<a href="#{k}">{text}</a>'
+    return s
+
+
+def markdown_to_toc(string):
+    return TocMarkdown(
+        renderer=mistune.HTMLRenderer(),
+        plugins=[TocPlugin(render_html_toc)],
     )(string)

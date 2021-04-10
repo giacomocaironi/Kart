@@ -10,7 +10,7 @@
 
     {% if page.content|length > 0 %}
     <h1>{{page.name}}</h1>
-    {{page.content|markdown}}
+    {{page.content|html}}
     <hr>
     <h3>Posts tagged {{page.name}}</h3>
     {% else %}

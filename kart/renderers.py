@@ -52,7 +52,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         name="default_site_renderer",
         template_folder="templates",
         filters={
-            "markdown": markdown_to_html,
+            "html": markdown_to_html,
             "toc": markdown_to_toc,
             "date_to_string": date_to_string,
         },

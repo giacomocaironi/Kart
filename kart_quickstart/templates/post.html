@@ -17,13 +17,12 @@
           {% endfor %}
       </span>
 
-      {{ page.content|markdown }}
+      {{ page.content|html }}
     </div>
-    <div class="col-lg-3">
-      <div class="card" id="toc">
-        <span id='toc-title'>Table of contents</span>
-        <ul>
-        </ul>
+    <div class="col-md-12 col-lg-3">
+      <div class='card' id='sidebar-toc'>
+        <h3>Table of contents</h3>
+        {{ page.content|toc }}
       </div>
     </div>
   </div>
