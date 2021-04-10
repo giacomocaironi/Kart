@@ -10,9 +10,23 @@ from mistune.directives.toc import (
     render_ast_toc,
     render_html_theading,
 )
+from jinja2 import contextfilter
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):
+    def __init__(self, context, *args, **kwargs):
+        self.context = context
+        super().__init__(*args, **kwargs)
+
+    def link(self, link, text=None, title=None):
+        if text is None:
+            text = link
+
+        s = '<a href="' + self.context["url"](link) + '"'
+        if title:
+            s += ' title="' + mistune.scanner.escape_html(title) + '"'
+        return s + ">" + (text or link) + "</a>"
+
     def block_code(self, text, lang):
         if lang:
             lexer = get_lexer_by_name(lang, stripall=True)
@@ -25,10 +39,18 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
         return f"<h{level} id={slugify(text)}>{text}</h{level}>\n"
 
 
-def markdown_to_html(string):
+@contextfilter
+def markdown_to_html(context, string):
     return mistune.Markdown(
-        renderer=KartMistuneRenderer(escape=False),
-        plugins=[],
+        renderer=KartMistuneRenderer(
+            context=context,
+            escape=False,
+        ),
+        plugins=[
+            mistune.plugins.plugin_strikethrough,
+            mistune.plugins.plugin_footnotes,
+            mistune.plugins.plugin_table,
+        ],
     )(string)
 
 

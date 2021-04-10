@@ -1,4 +1,5 @@
 import mistune
+from jinja2 import contextfilter
 from kart.markdown import KartMistuneRenderer
 from mistune import HTMLRenderer
 from mistune.directives.admonition import Admonition, render_ast_admonition
@@ -134,9 +135,10 @@ class DocumentationMistuneRenderer(KartMistuneRenderer):
             return highlight(text, lexer, formatter)
 
 
-def markdown_to_html(string):
+@contextfilter
+def markdown_to_html(context, string):
     return mistune.Markdown(
-        renderer=DocumentationMistuneRenderer(escape=False),
+        renderer=DocumentationMistuneRenderer(context=context, escape=False),
         plugins=[
             mistune.plugins.plugin_strikethrough,
             mistune.plugins.plugin_footnotes,

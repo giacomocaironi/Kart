@@ -9,8 +9,8 @@ from pathlib import Path
 from feedgen.feed import FeedGenerator
 from jinja2 import Environment, FileSystemLoader
 
-from kart.markdown import markdown_to_html
-from kart.utils import date_to_string, parse
+from kart.markdown import markdown_to_html, markdown_to_toc
+from kart.utils import date_to_string
 
 
 class Renderer:
@@ -53,8 +53,8 @@ class DefaultSiteRenderer(DefaultRenderer):
         template_folder="templates",
         filters={
             "markdown": markdown_to_html,
+            "toc": markdown_to_toc,
             "date_to_string": date_to_string,
-            "parse": parse,
         },
         process_count=1,
     ):
