@@ -101,6 +101,15 @@ class DefaultCollectionMiner(DefaultMarkdownMiner):
         return {self.collection_name: self.data}
 
 
+class DefaultTaxonomyMiner(DefaultMarkdownMiner):
+    def __init__(self, taxonomy_name, directory="taxonomies"):
+        self.taxonomy_name = taxonomy_name
+        self.dir = Path() / directory / taxonomy_name
+
+    def collect(self):
+        return {self.taxonomy_name: self.data}
+
+
 class DefaultPageMiner(DefaultMarkdownMiner):
     def __init__(self, directory="pages"):
         self.dir = Path(directory)

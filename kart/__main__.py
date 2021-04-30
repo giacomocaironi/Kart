@@ -13,9 +13,10 @@ def build_quickstart():
         elif path.is_file():
             shutil.copyfile(path, path.name)
     Path("collections/posts").mkdir(parents=True, exist_ok=True)
-    Path("collections/tags").mkdir(parents=True, exist_ok=True)
+    Path("taxonomies/tags").mkdir(parents=True, exist_ok=True)
     Path("data").mkdir(parents=True, exist_ok=True)
     Path("pages").mkdir(parents=True, exist_ok=True)
+    Path("root").mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":
