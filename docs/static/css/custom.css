@@ -48,3 +48,18 @@ code {
   display: block;
   padding: 1rem;
 }
+
+dl {
+  margin-bottom: 3rem;
+}
+
+dt {
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 3rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
