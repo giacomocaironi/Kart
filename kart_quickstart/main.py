@@ -4,7 +4,7 @@ kart = Kart()
 
 kart.miners = [
     miners.DefaultCollectionMiner("posts"),
-    miners.DefaultCollectionMiner("tags"),
+    miners.DefaultTaxonomyMiner("tags"),
     miners.DefaultDataMiner(),
     miners.DefaultPageMiner(),
 ]
