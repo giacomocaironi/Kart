@@ -1,15 +1,14 @@
 from collections import OrderedDict
 from pathlib import Path
 
-import yaml
 from watchdog.events import RegexMatchingEventHandler
 
 from kart.utils import slug_from_path
 
 try:
-    from yaml import CLoader as Loader
+    from yaml import CSafeLoader as YamlLoader
 except ImportError:
-    from yaml import Loader
+    from yaml import SafeLoader as YamlLoader
 
 
 class Miner:
@@ -79,7 +78,7 @@ class DefaultMarkdownMiner(DefaultMiner):
     def collect_single_file(self, file):
         with file.open("r") as f:
             data = f.read().split("---")
-            metadata = yaml.load(data[1], Loader=Loader)
+            metadata = YamlLoader(data[1]).get_data()
             content = "---".join(data[2:])
             object = metadata
             slug = slug_from_path(self.dir, file)
@@ -125,7 +124,7 @@ class DefaultDataMiner(DefaultMiner):
     def collect_single_file(self, file):
         with file.open("r") as f:
             slug = slug_from_path(self.dir, file)
-            return {slug: yaml.load(f.read(), Loader=Loader)}
+            return {slug: YamlLoader(f.read()).get_data()}
 
     def collect(self):
         return {"data": self.data}

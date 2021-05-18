@@ -1,12 +1,13 @@
 import mistune
 from jinja2 import contextfilter
-from kart.markdown import KartMistuneRenderer, TocPlugin, TocMarkdown
 from mistune import HTMLRenderer
 from mistune.directives.admonition import Admonition, render_ast_admonition
 from mistune.scanner import escape
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
+
+from kart.markdown import KartMistuneRenderer, TocMarkdown, TocPlugin
 
 
 class TextExtractor(HTMLRenderer):

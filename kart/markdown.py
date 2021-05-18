@@ -1,8 +1,5 @@
 import mistune
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name
-from slugify import slugify
+from jinja2 import contextfilter
 from mistune.directives.toc import (
     DirectiveToc,
     md_toc_hook,
@@ -10,7 +7,10 @@ from mistune.directives.toc import (
     render_ast_toc,
     render_html_theading,
 )
-from jinja2 import contextfilter
+from pygments import highlight
+from pygments.formatters import HtmlFormatter
+from pygments.lexers import get_lexer_by_name
+from slugify import slugify
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):

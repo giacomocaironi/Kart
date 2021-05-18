@@ -1,5 +1,4 @@
 import shutil
-import xml.etree.ElementTree as xml
 from datetime import datetime, time, timezone
 from distutils.dir_util import copy_tree
 from http.server import SimpleHTTPRequestHandler
@@ -139,15 +138,14 @@ class DefaultSitemapRenderer(DefaultRenderer):
 
     def render_single(self, page, map, site):
         base_url = site["config"]["base_url"]
-        root = xml.Element("urlset")
-        root.set("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
-        for x in [
-            x["url"] for x in map.values() if x["renderer"] == "default_site_renderer"
-        ]:
-            url = xml.SubElement(root, "url")
-            loc = xml.SubElement(url, "loc")
-            loc.text = base_url + x
-        return '<?xml version="1.0" encoding="UTF-8"?>' + xml.tostring(root).decode()
+        sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
+        sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        for x in map.values():
+            if x["renderer"] != "default_site_renderer":
+                continue
+            sitemap += f"<url><loc>{base_url+x['url']}</loc></url>"
+        sitemap += "</urlset>"
+        return sitemap
 
 
 class DefaultStaticFilesRenderer(Renderer):

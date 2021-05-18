@@ -3,6 +3,7 @@ import fnmatch
 import shutil
 import sys
 import threading
+import traceback
 from copy import deepcopy
 from http.server import HTTPServer
 from pathlib import Path
@@ -123,7 +124,7 @@ class Kart:
                 observer.join()
                 sys.exit()
             except Exception:
-                pass
+                print(traceback.format_exc())
 
     def run(self):
         parser = argparse.ArgumentParser()

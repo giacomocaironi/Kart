@@ -1,3 +1,4 @@
+import queue
 import traceback
 from collections import UserDict
 from http.server import SimpleHTTPRequestHandler
@@ -13,8 +14,10 @@ class KartObserver(Observer):
                 self.dispatch_events(self.event_queue, self.timeout)
                 if self.event_queue.empty():
                     self.action()
+            except queue.Empty:
+                pass
             except Exception:
-                continue
+                print(traceback.format_exc())
 
 
 class KartRequesHandler(SimpleHTTPRequestHandler):
