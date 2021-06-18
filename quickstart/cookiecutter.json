@@ -1,0 +1,5 @@
+{
+  "project_name": "My blog",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+  "_copy_without_render": "*.html"
+}

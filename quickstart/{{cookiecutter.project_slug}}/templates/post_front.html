@@ -1,7 +1,7 @@
 <li>
   <div class="post-front">
     <h2><a href="{{ url("posts." + post.slug) }}">{{ post.title }}</a></h2>
-    <span>{{ date_to_string(post.date) }}</span>
+    <span>{{ post.date|date_to_string }}</span>
     <span style='float:right'>
       Tags:
         {% for tag in post.tags %}

@@ -6,10 +6,16 @@ title: Getting started
 
 ## Generate the basic structure
 
-Before you can generate your blog using Kart, you first need to write the templates and the static files. Fortunately there is a simple command with which you can generate this files automatically. Head over to your root repository and type in the shell this command.
+Before you can generate your blog using Kart, you first need to write the templates and the static files. Fortunately kart provides a way to generate this files automatically. First of all you have to install an additional package called [cookiecutter](https://cookiecutter.readthedocs.io/).
 
 ```shell-session
-$ python -m kart init
+$ pip install cookiecutter
+```
+
+Then you can generate all the files with this command
+
+```shell-session
+$ cookiecutter gl:giacomocaironi/Kart --directory="quickstart"
 ```
 
 This has generated some folders. The one that interests one is the collections folder.
@@ -131,16 +137,6 @@ This is the about page
 The only data which is required in the front matter is the title
 
 Because of the  templates created automatically in the navbar there will be a link for every page you write
-
-## Modify the configuration file
-
-Now that you know how to create a blog it is time to publish it. First of all you have to open the main.py file and look for this lines:
-
-```python
-kart.config["name"] = "My blog"
-kart.config["base_url"] = ""
-```
-Modify this lines accordingly. The first one will modify the title of your site. The second line is the location where your site will be hosted. It is very important because if your site is not hosted in the root url the site may not be able to load its static files, like CSS. Your site will be ugly and you wont understand why.
 
 ## The root folder
 

@@ -12,14 +12,9 @@ kart.miners = [
 kart.content_modifiers = [modifiers.CollectionSorter("posts", "date", True)]
 
 kart.mappers = [
-    mappers.DefaultIndexMapper(
-        collection_name="posts", template="blog_index.html", base_url="/blog"
-    ),
+    mappers.DefaultIndexMapper(collection_name="posts", template="blog_index.html"),
     mappers.DefaultTaxonomyMapper(
-        collection_name="posts",
-        taxonomy_name="tags",
-        template="tag.html",
-        base_url="/blog",
+        collection_name="posts", taxonomy_name="tags", template="tag.html"
     ),
     mappers.DefaultCollectionMapper(collection_name="posts", template="post.html"),
     mappers.DefaultPageMapper(),
@@ -58,7 +53,7 @@ kart.renderers = [
     renderers.DefaultRootDirRenderer(),
 ]
 
-kart.config["name"] = "My blog"
+kart.config["name"] = "{{cookiecutter.project_name}}"
 kart.config["base_url"] = ""
 kart.config["pagination"] = {"per_page": 5}
 

@@ -5,8 +5,6 @@ description = "A very flexible static site generator written in python"
 authors = ["Giacomo Caironi <giacomo.caironi@gmail.com>"]
 license = "MIT"
 readme = 'README.md'
-include = ["kart_quickstart/**/*"]
-exclude = ['kart_quickstart/_site/**/*']
 
 [tool.poetry.dependencies]
 python = "^3.6"
