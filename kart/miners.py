@@ -63,12 +63,8 @@ class DefaultMiner(Miner):
                 file = Path(event.src_path)
                 delete(file)
 
-            def on_created(self, event):
-                file = Path(event.src_path)
-                create(file)
-
         self.read_data()
-        observer.schedule(Handler(), self.dir, recursive=False)
+        observer.schedule(Handler(ignore_directories=True), self.dir, recursive=False)
 
     def stop_watching(self):
         pass

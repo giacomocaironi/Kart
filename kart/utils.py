@@ -1,3 +1,4 @@
+import math
 import queue
 import traceback
 from collections import UserDict
@@ -52,7 +53,7 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     urls = {}
     paginated_objects = [
         objects[x * per_page : (x + 1) * per_page]
-        for x in range(len(objects) // per_page + 1)
+        for x in range(max(math.ceil(len(objects) / per_page), 1))
     ]
     for i, objects in enumerate(paginated_objects, 1):
         url = f"/{i}/" if i > 1 else "/"
