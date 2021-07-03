@@ -93,3 +93,15 @@ def slug_from_path(base_dir, path):
     path = str(path)[: -len(path.suffix)]
     result = slugify(path)
     return path  # result
+
+
+def merge_dicts(a, b):
+    for key in b:
+        if key not in a:
+            a[key] = b[key]
+        else:
+            if isinstance(b[key], dict):
+                if isinstance(a[key], dict):
+                    merge_dicts(a[key], b[key])
+                else:
+                    raise Exception

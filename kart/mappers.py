@@ -88,14 +88,11 @@ class DefaultIndexMapper(Mapper):
         self.collection_name = collection_name
 
     def map(self, site):
-        items = list(site[self.collection_name].values())[1:]
-        try:
-            per_page = site["config"]["pagination"]["per_page"]
-        except Exception:
-            per_page = 5
+        items = list(site[self.collection_name].values())
+        filtered_items = items[site["config"]["pagination"]["skip"] :]
         paginated_map = paginate(
-            objects=items,
-            per_page=per_page,
+            objects=filtered_items,
+            per_page=site["config"]["pagination"]["per_page"],
             template=self.template,
             base_url=self.base_url + "/index/page",
             slug=f"{self.collection_name}_index",
@@ -131,14 +128,10 @@ class DefaultTaxonomyMapper(Mapper):
                 elif isinstance(item[self.taxonomy_name], list):
                     if taxonomy["slug"] in item[self.taxonomy_name]:
                         filtered_items.append(item)
-            try:
-                per_page = site["config"]["pagination"]["per_page"]
-            except Exception:
-                per_page = 5
             urls.update(
                 paginate(
                     objects=filtered_items,
-                    per_page=per_page,
+                    per_page=site["config"]["pagination"]["per_page"],
                     template=self.template,
                     base_url=self.base_url
                     + f"/{self.taxonomy_name}/{taxonomy['slug']}",

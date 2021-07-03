@@ -8,7 +8,7 @@ from copy import deepcopy
 from http.server import HTTPServer
 from pathlib import Path
 
-from kart.utils import KartMap, KartObserver, KartRequesHandler
+from kart.utils import KartMap, KartObserver, KartRequesHandler, merge_dicts
 
 
 class Kart:
@@ -31,7 +31,15 @@ class Kart:
         self.build_location = Path(build_location)
         self.lock = threading.Lock()
 
-    def prepare(self, start=True):
+    def check_config(self):
+        default = {
+            "name": "Example",
+            "base_url": "https://example.org",
+            "pagination": {"per_page": 5, "skip": 1},
+        }
+        merge_dicts(self.config, default)
+
+    def mine_data(self, start=True):
         self.site = {"config": self.config}
         for miner in self.miners:
             if start:
@@ -52,7 +60,8 @@ class Kart:
             renderer.render(self.map, self.site, self.build_location)
 
     def build(self):
-        self.prepare()
+        self.check_config()
+        self.mine_data()
         self.create_map()
         shutil.rmtree(self.build_location, ignore_errors=True)
         self.build_location.mkdir(parents=True, exist_ok=True)
@@ -64,7 +73,8 @@ class Kart:
     # preventing errors when serving the site during development
 
     def update_data(self):
-        self.prepare(False)
+        self.check_config()
+        self.mine_data(False)
         self.create_map()
         _site = deepcopy(self.site)
         _map = deepcopy(self.map)

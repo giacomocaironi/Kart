@@ -92,8 +92,7 @@ class DefaultSiteRenderer(DefaultRenderer):
         else:
             with Pool(self.process_count) as p:
                 p.starmap(
-                    self._render,
-                    ((key, map, site, build_location) for key in map),
+                    self._render, ((key, map, site, build_location) for key in map)
                 )
 
 
