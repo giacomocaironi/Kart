@@ -4,6 +4,9 @@ title: Changelog
 
 # Changelog
 
+## v0.9.1
+Bug fixes. Now kart behaves accordingly when deleting a file. A bug that leaded to unnecessary empty pages was also fixed.
+
 
 ## v0.9
 DefaultSiteRenderer has been greatly improved. The markdown parameter introduced in the 0.8 version has been replaced by a parameter called filters, which is a dict containing custom funcions. In this way we can pass any function we want to the jinja2 filters. A custom markdown function can thus be passed down to the templates as a custom filter. This leads to a better experience when writing custom templates.
