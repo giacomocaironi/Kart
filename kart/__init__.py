@@ -99,8 +99,11 @@ class Kart:
         if url in urls:
             page = site_map[urls[url]]
         else:
-            pattern = next((x for x in regexes if fnmatch.fnmatch(url, x)))
-            page = site_map[regexes[pattern]]
+            try:
+                pattern = next((x for x in regexes if fnmatch.fnmatch(url, x)))
+                page = site_map[regexes[pattern]]
+            except StopIteration:
+                page = None
         if page:
             self.renderer_dict[page["renderer"]].serve(handler, page, site_map, site)
 
