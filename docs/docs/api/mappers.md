@@ -1,6 +1,5 @@
 ---
 title: Mappers
-index: 2
 ---
 # Mappers
 

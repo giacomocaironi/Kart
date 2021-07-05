@@ -4,6 +4,7 @@ title: Changelog
 
 # Changelog
 
+
 ## v0.9.1
 Bug fixes. Now kart behaves accordingly when deleting a file. A bug that leaded to unnecessary empty pages was also fixed.
 

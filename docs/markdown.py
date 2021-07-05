@@ -132,7 +132,7 @@ class DocumentationMistuneRenderer(KartMistuneRenderer):
             return result
         else:
             lexer = get_lexer_by_name(lang, stripall=True)
-            formatter = HtmlFormatter(wrapcode=True)
+            formatter = HtmlFormatter(wrapcode=True, hl_lines=[])
             return highlight(text, lexer, formatter)
 
 

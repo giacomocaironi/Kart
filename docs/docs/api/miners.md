@@ -1,6 +1,5 @@
 ---
 title: Miners
-index: 1
 ---
 # Miners
 

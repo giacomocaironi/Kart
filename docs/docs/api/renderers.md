@@ -1,6 +1,5 @@
 ---
 title: Renderers
-index: 3
 ---
 # Renderers
 
