@@ -108,7 +108,9 @@ The second feature is template inheritance. We could create a base template whic
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    {% block title %}
+      <title></title>
+    {% endblock title %}
   </head>
   <body>
 
