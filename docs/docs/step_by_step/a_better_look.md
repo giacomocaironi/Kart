@@ -103,6 +103,8 @@ k.renderers = [
   renderers.DefaultRootDirRenderer(),
 ]
 
+k.config['name'] = 'The name of your site'
+
 k.run()
 ```
 
