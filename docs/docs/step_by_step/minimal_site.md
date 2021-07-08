@@ -37,7 +37,6 @@ Now create the directory and copy the following lines in a file called ``index.m
 ---
 title: Homepage
 ---
-# Homepage
 
 This is the homepage of my beautiful site
 ```
@@ -56,6 +55,17 @@ k.mappers = [mappers.DefaultPageMapper(template='custom_template_file')]
 
 k.renderers = [renderers.DefaultSiteRenderer(template_folder='custom_template_folder')]
 
+```
+
+If for a particular reason you need a different template for a specific page you can specify it by adding a ``template`` field on the top of the markdown file
+
+```markdown
+---
+title: Homepage
+template: different_template.html
+---
+
+This is the homepage of my beautiful site
 ```
 
 ### Modify the template
@@ -92,13 +102,14 @@ If you reload the page you should see that indeed our site is really working! Ho
     <title></title>
   </head>
   <body>
+    <h1>{{page.title}}</h1>
     {{page.content|html}}
   </body>
 </html>
 
 ```
 
-Now our templates takes the content of our page ('page.content'), converts is to html (by using the '|html' filter) and then prints it (this is done by the double curly brackets). If you want to know how the syntax work you should definitely check out the [Jinja2 documentation](https://jinja.palletsprojects.com/), our you can follow along and learn it as we progress through the tutorial.
+Now our templates takes the content of our page ('page.content'), converts is to html (by using the '|html' filter) and then prints it (this is done by the double curly brackets). Moreover we create a header for the title of the page. If you want to know how the syntax work you should definitely check out the [Jinja2 documentation](https://jinja.palletsprojects.com/), our you can follow along and learn it as we progress through the tutorial.
 
 ### Adding new pages
 
@@ -108,7 +119,6 @@ Let's add a few more pages. Like we have done with the first page, you simply ne
 ---
 title: Second page
 ---
-# This is the second page
 
 Second page
 ```
@@ -122,7 +132,6 @@ However this is only a default location. You can change the url of a page by add
 title: Second page
 url: /new/url/of/the/page/
 ---
-# This is the second page
 
 Second page
 ```

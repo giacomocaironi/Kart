@@ -13,4 +13,4 @@ The core of Kart is an instance of the Kart class. However the majority of the c
 
 ### How do I get started?
 If you just want to create a very simple blog head over to the [getting started](getting_started) section.
-If you then want to customize your site or if you don't want to create a blog go to the step by step tutorial.
+If you then want to customize your site or if you don't want to create a blog go to the [step by step tutorial](step_by_step/minimal_site).

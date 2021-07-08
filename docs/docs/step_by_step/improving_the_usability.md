@@ -38,6 +38,9 @@ Let's now modify our template so that we can navigate through our site.
         {% endif %}
       {% endfor %}
     </nav>
+
+    <h1>{{page.title}}</h1>
+
     {{page.content|html}}
 
   </body>
@@ -93,6 +96,8 @@ The first feature is the ability to include other templates. For example if our 
 
     {% include 'nav.html' %}
 
+    <h1>{{page.title}}</h1>
+
     {{page.content|html}}
 
   </body>
@@ -129,6 +134,8 @@ And then a child template which inherits from ``base.html``
 {% block content %}
 
   {% include 'nav.html' %}
+
+  <h1>{{page.title}}</h1>
 
   {{page.content|html}}
 

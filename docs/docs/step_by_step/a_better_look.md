@@ -137,6 +137,8 @@ Now when we go to our site in the browser we should see the name of the site alo
 
   {% include 'nav.html' %}
 
+  <h1>{{page.title}}</h1>
+
   {{page.content|html}}
 
 {% endblock content %}
