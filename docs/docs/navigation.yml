@@ -2,7 +2,7 @@
 - location: install.md
 - location: getting_started.md
 - name: Step by step tutorial
-  location: step_by_step
+  location: step-by-step
 - name: Advanced
   location: advanced
 - name: Api reference
