@@ -105,9 +105,9 @@ The markdown page is actually very simple, most of the work will be done in the 
 ```html
 {% extends "base.html" %}
 
-{% block content %}
+{% block title %}
 <title>{{site.config.name}} - Blog Index</title>
-{% endblock content %}
+{% endblock title %}
 
 {% block content %}
 
@@ -117,7 +117,7 @@ The markdown page is actually very simple, most of the work will be done in the 
 
   {% for slug in site.collections.posts %}
     {% set post = site.collections.posts[slug] %}
-    <a href="{{ url(slug) }}"> <h1>{{post.title}}</h1> </a>
+    <a href="{{ url('posts', slug) }}"> <h1>{{post.title}}</h1> </a>
     <p>
       {{post.description}}
     </p>

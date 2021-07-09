@@ -35,7 +35,7 @@ class Kart:
         default = {
             "name": "Example",
             "base_url": "https://example.org",
-            "pagination": {"per_page": 5, "skip": 1},
+            "pagination": {"per_page": 5, "skip": 0},
         }
         merge_dicts(self.config, default)
 

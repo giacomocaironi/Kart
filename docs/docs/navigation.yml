@@ -1,6 +1,6 @@
 - location: index.md
 - location: install.md
-- location: getting_started.md
+- location: getting-started.md
 - name: Step by step tutorial
   location: step-by-step
 - name: Advanced

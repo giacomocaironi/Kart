@@ -13,7 +13,7 @@ First of all we have to tell Kart the domain name of our site. This is needed to
 ...
 
 k.config['name'] = 'The name of your site'
-k.config["pagination"] = {"per_page": 5, "skip": 1}
+k.config["pagination"] = {"per_page": 10}
 k.config["base_url"] = "https://the_domain_name_of_your_site.com"
 
 k.run()
