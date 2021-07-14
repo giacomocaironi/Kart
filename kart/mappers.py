@@ -99,10 +99,6 @@ class DefaultIndexMapper(Mapper):
             additional_data={},
         )
         paginated_map[f"{self.collection_name}_index.1"]["url"] = self.base_url + "/"
-        if f"{self.collection_name}_index.2" in paginated_map.keys():
-            paginated_map[f"{self.collection_name}_index.2"]["data"]["paginator"][
-                "previous_page_url"
-            ] = (self.base_url + "/")
         return paginated_map
 
 

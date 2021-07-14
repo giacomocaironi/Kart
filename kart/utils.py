@@ -56,27 +56,27 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
         for x in range(max(math.ceil(len(objects) / per_page), 1))
     ]
     for i, objects in enumerate(paginated_objects, 1):
-        url = f"/{i}/" if i > 1 else "/"
-        if i > 2:
-            previous_page_url = base_url + f"/{i-1}/"
-        elif i == 2:
-            previous_page_url = base_url + "/"
+
+        if i > 1:
+            previous_page = f"{slug}.{i-1}"
         else:
-            previous_page_url = ""
+            previous_page = ""
+
         if i < len(paginated_objects):
-            next_page_url = base_url + f"/{i+1}/"
+            next_page = f"{slug}.{i+1}"
         else:
-            next_page_url = ""
+            next_page = ""
+
         paginator = {
             "objects": objects,
             "index": i,
-            "next_page_url": next_page_url,
-            "previous_page_url": previous_page_url,
+            "next_page": next_page,
+            "previous_page": previous_page,
         }
         data = {"paginator": paginator}
         data.update(additional_data)
         urls[f"{slug}.{i}"] = {
-            "url": base_url + url,
+            "url": base_url + f"/{i}/" if i > 1 else base_url,
             "data": data,
             "template": template,
             "renderer": "default_site_renderer",

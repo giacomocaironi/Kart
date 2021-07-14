@@ -96,16 +96,16 @@ Now we have to modify the ``blog_index.html`` so that we can navigate between th
   <hr>
 {% endfor %}
 
-{% if page.paginator.previous_page_url %}
-  <a href="{{ page.paginator.previous_page_url }}">Newer</a>
+{% if page.paginator.previous_page %}
+  <a href="{{ url(page.paginator.previous_page) }}">Newer</a>
 {% endif %}
-{% if page.paginator.next_page_url %}
-  <a href="{{ page.paginator.next_page_url }}">Older</a>
+{% if page.paginator.next_page %}
+  <a href="{{ url(page.paginator.next_page) }}">Older</a>
 {% endif %}
 
 {% endblock content %}
 ```
 
-After the posts have two ``if`` conditions. If the ``previous_page_url`` value is set it means that this is not the first page in the index, and so we have to create a link that points to the previous page. We do the same thing with ``next_page_url``.
+After the posts have two ``if`` conditions. If the ``previous_page`` value is set it means that this is not the first page in the index, and so we have to create a link that points to the previous page. We do the same thing with ``next_page``.
 
 Creating an index in this way is certainly more complicated, however if you have a great number of objects in a collections it can help to organize you site.
