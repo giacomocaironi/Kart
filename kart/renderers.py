@@ -34,9 +34,11 @@ class DefaultRenderer(Renderer):
         for page in map.values():
             if page["renderer"] != self.name:
                 continue
+            rendered_file = self.render_single(page, map, site)
             path = Path(build_location) / Path(*Path(page["url"]).parts[1:])
+            path.parent.mkdir(parents=True, exist_ok=True)
             with path.open("w") as f:
-                f.write(self.render_single(page, map, site))
+                f.write(rendered_file)
 
     def serve(self, http_handler, page, map, site):
         http_handler.send_response(200)
@@ -78,12 +80,11 @@ class DefaultSiteRenderer(DefaultRenderer):
         if page["renderer"] != self.name:
             return
         rendered_file = self.render_single(page, map, site)
-        if rendered_file:
-            path = Path(build_location) / Path(*Path(page["url"]).parts[1:])
-            path = path / "index.html"
-            path.parent.mkdir(parents=True, exist_ok=True)
-            with path.open("w") as f:
-                f.write(rendered_file)
+        path = Path(build_location) / Path(*Path(page["url"]).parts[1:])
+        path = path / "index.html"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w") as f:
+            f.write(rendered_file)
 
     def render(self, map, site, build_location="_site"):
         if self.process_count == 1:
@@ -105,10 +106,7 @@ class DefaultFeedRenderer(DefaultRenderer):
         base_url = site["config"]["base_url"]
         fg = FeedGenerator()
         fg.title(site["config"]["name"])
-        if not base_url:
-            fg.id("base_url/")
-        else:
-            fg.id(base_url)
+        fg.id(base_url)
         fg.link({"href": base_url})
         fg.link({"href": base_url + "/atom.xml", "rel": "self"})
         feed_entries = []

@@ -66,9 +66,6 @@ class DocumentationMiner(DefaultMarkdownMiner):
             def on_deleted(self, event):
                 read_data()
 
-            def on_created(self, event):
-                read_data()
-
         self.read_data()
         observer.schedule(Handler(), self.dir, recursive=True)
 

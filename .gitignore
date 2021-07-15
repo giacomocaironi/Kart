@@ -1,5 +1,6 @@
 __pycache__
 .python-version
+poetry.lock
 dist
 *.egg-info
 _site

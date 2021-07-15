@@ -46,22 +46,18 @@ class DefaultMiner(Miner):
             self.data.update(self.collect_single_file(file))
 
         def delete(file):
-            slug = slug_from_path(base_dir, file)
-            self.data.pop(slug)
+            self.data.pop(slug_from_path(base_dir, file))
 
         class Handler(RegexMatchingEventHandler):
             def on_moved(self, event):
-                file = Path(event.src_path)
-                delete(file)
-                create(file)
+                delete(Path(event.src_path))
+                create(Path(event.src_path))
 
             def on_modified(self, event):
-                file = Path(event.src_path)
-                create(file)
+                create(Path(event.src_path))
 
             def on_deleted(self, event):
-                file = Path(event.src_path)
-                delete(file)
+                delete(Path(event.src_path))
 
         self.read_data()
         observer.schedule(Handler(ignore_directories=True), self.dir, recursive=False)

@@ -23,7 +23,7 @@ class TextExtractor(HTMLRenderer):
         return s + (text or link)
 
     def image(self, src, alt="", title=None):
-        return
+        return ""
 
     def emphasis(self, text):
         return text
@@ -32,7 +32,7 @@ class TextExtractor(HTMLRenderer):
         return text
 
     def codespan(self, text):
-        escape(text)
+        return escape(text)
 
     def linebreak(self):
         return ""
@@ -65,7 +65,7 @@ class TextExtractor(HTMLRenderer):
         return escape(html)
 
     def block_error(self, html):
-        return
+        return escape(html)
 
     def list(self, text, ordered, level, start=None):
         if ordered:

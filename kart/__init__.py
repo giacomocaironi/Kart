@@ -151,5 +151,5 @@ class Kart:
         if args.command == "build":
             self.build()
         if args.command == "serve":
-            self.config["base_url"] = ""
+            self.config["base_url"] = f"http://localhost:{args.port}"
             self.serve(args.port)
