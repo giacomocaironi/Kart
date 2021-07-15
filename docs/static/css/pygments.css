@@ -4,7 +4,7 @@
   --blue: #61AFEF;
   --purple: #C678DD;
   --green: #98C379;
-  --red: #E06C75;
+  --red: #E0767F;
   --yellow: #E5C07B;
   --orange: #D19A66;
   --grey: #5f697a;
@@ -60,7 +60,7 @@
 
 /* Comment.Multiline */
 .highlight .cp {
-  color: var(--grey) !important;
+  color: var(--text) !important;
 }
 
 /* Comment.Preproc */

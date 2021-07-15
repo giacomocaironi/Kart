@@ -5,7 +5,7 @@ title: A better look
 
 Now are site is workig properly but it is really ugly. Let's change this!
 
-### CSS
+## CSS
 
 To improve the look of the site we have to use CSS. There are two ways to add CSS to your site: you can link to an external CSS framework or write your own CSS files. Using an external CSS framework like [Bootstrap](https://getbootstrap.com/) is very easy and can be done just like this
 
@@ -68,7 +68,7 @@ Now we can create some css files in the ``static`` directory. To add them to our
   ...
 ```
 
-### Favicon
+## Favicon
 
 Now that your site looks better you can add a favicon. The favicon is the little icon you see on the browser address bar. Even if it is very small it is very important because makes your site immediately recognizable among all the other tabs.
 
@@ -110,7 +110,7 @@ k.run()
 
 Like for the ``static`` directory, we had to add an entry in ``ManualMapper``, and then add a new renderer, in this case ``DefaultRootDirRenderer``. Now if you run ``main.py`` again you should see your favicon instead of the ugly default one.
 
-### Title
+## Title
 
 On the right of the favicon on most sites you can see a brief description of the page. On the other hand on our site is written ``localhost:9000``. We can change this by adding a title tag in our html template. Head over to the ``base.html`` template and modify it
 

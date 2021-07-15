@@ -764,3 +764,7 @@ body:not(.dark-mode) .bg-color-box.bg-transparent {
 .dark-mode .sponsor-section-card-scroll-block {
   background-color: rgba(30, 33, 37, 0.95);
 }
+
+.navbar-brand img {
+  height: 32px;
+}

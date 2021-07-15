@@ -23,13 +23,13 @@ k.run()
 
 ```
 
-Copy this to a file ``main.py``. If we try to build the site as we did in the [Getting started](getting_started) guide our script will error saying that it can't find a directory called ``pages``. This error is caused by DefaultPageMiner. The job of a miner is to collect data, and this particular miner looks for files in the ``pages`` directory. If we want we can modify the directory in which it looks just like this:
+Copy this to a file ``main.py``. If we try to build the site as we did in the [Getting started](getting-started) guide our script will error saying that it can't find a directory called ``pages``. This error is caused by DefaultPageMiner. The job of a miner is to collect data, and this particular miner looks for files in the ``pages`` directory. If we want we can modify the directory in which it looks just like this:
 
 ```python
 k.miners = [miners.DefaultPageMiner(directory='custom_directory')]
 ```
 
-### Create the first page
+## Create the first page
 
 Now create the directory and copy the following lines in a file called ``index.md``
 
@@ -43,7 +43,7 @@ This is the homepage of my beautiful site
 
 Now when we will run our file again, our miner should collect the file and store it. Then it will pass this information to the mappers. The role of a mapper is to get information from the miners and output a map of our site. In this case we have added a mapper called ``DefaultPageMapper`` to the list of mappers. This mapper, as we can understand from the name, is designed to work in conjuction with the ``DefaultPageMiner`` we have used in the previous line.
 
-### Try running the site
+## Try running the site
 
 Now that we have a map of our site we have to pass it to the renderers, in this case only ``DefaultSiteRenderer`` so that it can effectively render the pages and then save the files or serve them through a development server.
 
@@ -68,9 +68,9 @@ template: different_template.html
 This is the homepage of my beautiful site
 ```
 
-### Modify the template
+## Modify the template
 
-Now try to run the development server as we have seen in the [Getting started](getting_started) guide
+Now try to run the development server as we have seen in the [Getting started](getting-started) guide
 
 ```bash
 $ python main.py serve
@@ -111,7 +111,7 @@ If you reload the page you should see that indeed our site is really working! Ho
 
 Now our templates takes the content of our page ('page.content'), converts is to html (by using the '|html' filter) and then prints it (this is done by the double curly brackets). Moreover we create a header for the title of the page. If you want to know how the syntax work you should definitely check out the [Jinja2 documentation](https://jinja.palletsprojects.com/), our you can follow along and learn it as we progress through the tutorial.
 
-### Adding new pages
+## Adding new pages
 
 Let's add a few more pages. Like we have done with the first page, you simply need to create a new markdown file in the ``pages`` folder
 

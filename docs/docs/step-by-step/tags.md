@@ -6,7 +6,7 @@ title: Tags
 If you have a good number of posts, maybe you should think about organizing them by topic. In this part we will understand how to group objects of a collection with taxonomies by adding tags to our blog.
 
 
-### Create new tags
+## Create new tags
 
 In Kart a tag is created like a blog post, by creating a new file. In this case we need to create new files in a new directory ``taxonomies/tags``. The ``taxonomies`` directory will contain all the taxonomies folders, like the ``collections`` directory contains all the collections folders. The only required field in a tag markdown file is its name. Now create a new file named, as an example, ``first-tag.md``.
 
@@ -16,7 +16,7 @@ name: First tag
 ---
 ```
 
-### Add tags to posts
+## Add tags to posts
 
 Now that we have created a tag, we can add it to a post. To do this we have to create a new ``tags`` field on the top of the file, and then add the tag.
 
@@ -53,7 +53,7 @@ tags:
 ```
 
 
-### Modify main.py
+## Modify main.py
 
 We have created tags and added them to posts, but nothing will change if we don't modify our ``main.py``.
 
@@ -79,7 +79,7 @@ k.mappers = [
 
 We have added a new miner called ``DefaultTaxonomyMiner`` and we have passed to it the the name of the taxonomy, in this case ``tags``. After that we had to add a new mapper, ``DefaultTaxonomyMapper`` which is very similar to ``DefaultIndexMapper`` but receives a new parameter, the name of the taxonomy.
 
-### Modify the templates
+## Modify the templates
 
 As you can see from ``main.py`` we need a new template for the tags, however we could use the same template of the post index because they work in the same way, only on different sets of objects. So we can copy duplicate ``blog_index.html`` and do just a few modifications.
 

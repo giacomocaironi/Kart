@@ -5,7 +5,7 @@ title: Improving the usability
 
 Now you should have a working site. However there is no way for a user to move between the pages of the site if they don't know exactly the url of the page. Through the power of Jinja2 templates we will now address this problem.
 
-### Navigation
+## Navigation
 
 Let's now modify a little our template
 
@@ -59,7 +59,7 @@ To obtain the location of the page we pass the slug to the ``url`` function. We 
 
 However this is not recommended, as the url function makes the link absolute instead of relative, and this makes a big difference when the site grows.
 
-### Site name
+## Site name
 
 In our navigation bar, other than the link to other pages, we should also have the name of our site. We could hardcode it in our template but there is a better way. If we look in the ``site`` dictionary we can see that there is a ``config`` dictionary, and in it a field called ``name``. It contains the name of the site, and it can be accessed from anywhere in our templates. To use it we have to modify our template
 
@@ -84,7 +84,7 @@ k.run()
 
 Now there should be the name of your site on the top of every page!
 
-### Reorganize the templates
+## Reorganize the templates
 
 Currently we have only one template file. However if our site grows we are going to need many more templates. And most of them will have a lot of things in common. To avoid repeating ourselves we can use some features of Jinja2.
 

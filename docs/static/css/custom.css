@@ -8,6 +8,16 @@
   margin-top: auto;
 }
 
+h2 {
+  font-size: 3rem;
+  line-height: 1.4;
+}
+
+h3 {
+  font-size: 2.4rem;
+  line-height: 1.45;
+}
+
 body {
   --dm-button-border-color: #404040 !important;
   --dm-button-group-button-border-color: #404040 !important;

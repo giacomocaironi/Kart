@@ -6,7 +6,7 @@ title: A better post index
 
 Creating indexes like we have just done is very easy. However after writing many posts you may want to introduce pagination, so to split your index into multiple pages to make them smaller. This could be achieved also using pages, but you would have to write a different page every time you write a certain amount of posts. Fortunately with Kart there is a better way.
 
-### Index mapper
+## Index mapper
 
 First of all we have to modify ``main.py`` and add a new mapper called ``DefaultIndexMapper``
 
@@ -24,7 +24,7 @@ k.mappers = [
 
 To function ``DefaultIndexMapper`` needs a collection to work on, a template file and a ``base_url``. This is the same things as the url we specify for a page. Now we need to delete ``blog-index.md``, we don't need it anymore, and modify ``blog_index.html``.
 
-### Index template
+## Index template
 
 Let's start by seeing what data is available to the template.
 
@@ -76,7 +76,7 @@ k.config["pagination"] = {"per_page": 10}
 k.run()
 ```
 
-### Navigation
+## Navigation
 
 Now we have to modify the ``blog_index.html`` so that we can navigate between the different part of the index
 
