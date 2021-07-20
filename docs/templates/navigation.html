@@ -8,9 +8,9 @@
         Previous
       </div>
       <div class="text-left font-size-16">
-        <a href="{{ page.previous_page.url }}" class="hyperlink">
+        <a href="{{ url(page.previous_page) }}" class="hyperlink">
           <i class="icon icon-angle-left" aria-hidden="true"></i>
-          {{ page.previous_page.title }}
+          {{ site.docs[page.previous_page].title }}
         </a>
       </div>
       {% endif %}
@@ -22,8 +22,8 @@
         Next
       </div>
       <div class="text-right font-size-16">
-        <a href="{{ page.next_page.url }}" class="hyperlink">
-          {{ page.next_page.title }}
+        <a href="{{ url(page.next_page) }}" class="hyperlink">
+          {{ site.docs[page.next_page].title }}
           <i class="icon icon-angle-right" aria-hidden="true"></i>
         </a>
       </div>

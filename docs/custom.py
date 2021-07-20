@@ -31,21 +31,21 @@ class DocumentationMiner(DefaultMarkdownMiner):
                 object = self.collect_single_file(item)
                 slug, page = list(object.items())[0]
                 toc_entry = {"title": page["title"], "slug": slug, "level": level}
-                self.global_toc.append(toc_entry)
+                self.docs_global_toc.append(toc_entry)
                 if object:
                     self.markdown_data.update(object)
             elif item.is_dir():
                 toc_entry = {"title": nav_data[i]["name"], "slug": None, "level": level}
-                self.global_toc.append(toc_entry)
+                self.docs_global_toc.append(toc_entry)
                 self.__recursive_read_data(item, level + 1)
 
     def read_data(self):
         self.markdown_data = OrderedDict()
-        self.global_toc = []
+        self.docs_global_toc = []
         self.__recursive_read_data(self.dir)
 
     def collect(self):
-        return {"docs": self.markdown_data, "global_toc": self.global_toc}
+        return {"docs": self.markdown_data, "docs_global_toc": self.docs_global_toc}
 
     def start_watching(self, observer):
         read_data = self.read_data
@@ -71,9 +71,7 @@ class DocumentationMapper(Mapper):
     def map(self, site):
 
         urls = {}
-
-        map_page = None
-        page_link = None
+        previous_slug = None
 
         for slug, page in site["docs"].items():
 
@@ -84,11 +82,10 @@ class DocumentationMapper(Mapper):
             else:
                 url = f"/{slug}/"
 
-            if map_page:
-                page["previous_page"] = page_link
-            page_link = {"url": url, "title": page["title"]}
-            if map_page:
-                map_page["data"]["next_page"] = page_link
+            if len(urls):
+                page["previous_page"] = previous_slug
+                urls[previous_slug]["data"]["next_page"] = slug
+            previous_slug = slug
 
             map_page = {
                 "url": url,
@@ -98,11 +95,5 @@ class DocumentationMapper(Mapper):
             }
 
             urls[slug] = map_page
-
-        for x in site["global_toc"]:
-            if x["slug"]:
-                x["url"] = urls[x["slug"]]["url"]
-            else:
-                x["url"] = None
 
         return urls
