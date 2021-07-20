@@ -1,10 +1,10 @@
 import pkg_resources
-from custom import DocumentationMapper, DocumentationMiner
-from markdown import markdown_to_html
-
 from kart import Kart, mappers, miners, renderers
 from kart.markdown import markdown_to_toc
 from kart.utils import date_to_string
+
+from custom import DocumentationMapper, DocumentationMiner, LunrRenderer
+from markdown import markdown_to_html
 
 kart = Kart(build_location="public")
 
@@ -19,12 +19,12 @@ kart.mappers = [
     DocumentationMapper(template="default.html"),
     mappers.ManualMapper(
         {
-            # "lunr_data": {
-            #     "url": "/search/search_index.json",
-            #     "data": {},
-            #     "template": "",
-            #     "renderer": "lunr_renderer",
-            # },
+            "lunr_index": {
+                "url": "/search/search_index.json",
+                "data": {},
+                "template": "",
+                "renderer": "lunr_renderer",
+            },
             "sitemap": {
                 "url": "/sitemap.xml",
                 "data": {},
@@ -60,6 +60,7 @@ kart.renderers = [
     renderers.DefaultSitemapRenderer(),
     renderers.DefaultStaticFilesRenderer(),
     renderers.DefaultRootDirRenderer(),
+    LunrRenderer(),
 ]
 
 kart.config["name"] = "Kart"

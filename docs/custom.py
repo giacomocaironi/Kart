@@ -6,10 +6,17 @@ from kart.mappers import Mapper
 from kart.miners import DefaultMarkdownMiner
 from watchdog.events import RegexMatchingEventHandler
 
+from markdown import markdown_to_text
+
 try:
     from yaml import CLoader as Loader
 except ImportError:
     from yaml import Loader
+
+import json
+
+from kart import renderers
+from lunr import lunr
 
 
 class DocumentationMiner(DefaultMarkdownMiner):
@@ -112,3 +119,26 @@ class DocumentationMapper(Mapper):
                 x["url"] = None
 
         return self.urls
+
+
+class LunrRenderer(renderers.DefaultRenderer):
+    def __init__(self, name="lunr_renderer"):
+        self.name = name
+        self.content_type = "application/json"
+
+    def render_single(self, page, map, site):
+        index = []
+        for slug, page in map.items():
+            if page["renderer"] == "default_site_renderer":
+                entry = {
+                    "location": page["url"][1:],
+                    "text": markdown_to_text(page["data"]["content"]),
+                    "title": page["data"]["title"],
+                }
+                index.append(entry)
+        lunr_index = lunr(
+            ref="title",
+            fields=[dict(field_name="title", boost=10), "text"],
+            documents=index,
+        )
+        return json.dumps(lunr_index.serialize())
