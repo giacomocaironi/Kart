@@ -9,12 +9,12 @@ class Mapper:
 class RuleMapper(Mapper):
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
-        self.urls = {}
 
     def map(self, site):
+        urls = {}
         for rule in self.rules:
-            self.urls.update(rule(site))
-        return self.urls
+            urls.update(rule(site))
+        return urls
 
 
 class ManualMapper(Mapper):
@@ -27,7 +27,6 @@ class ManualMapper(Mapper):
 
 class DefaultCollectionMapper(Mapper):
     def __init__(self, collection_name, template="item.html", base_url=""):
-        self.urls = {}
         self.template = template
         self.base_url = base_url
         self.collection_name = collection_name
@@ -54,10 +53,10 @@ class DefaultCollectionMapper(Mapper):
 
 class DefaultPageMapper(Mapper):
     def __init__(self, template="page.html"):
-        self.urls = {}
         self.template = template
 
     def map(self, site):
+        urls = {}
         for slug in site["pages"]:
             page = site["pages"][slug]
             if "url" in page:
@@ -76,13 +75,12 @@ class DefaultPageMapper(Mapper):
                 "template": template,
                 "renderer": "default_site_renderer",
             }
-            self.urls[slug] = page
-        return self.urls
+            urls[slug] = page
+        return urls
 
 
 class DefaultIndexMapper(Mapper):
     def __init__(self, collection_name, template="index.html", base_url=""):
-        self.urls = {}
         self.template = template
         self.base_url = base_url
         self.collection_name = collection_name
@@ -106,7 +104,6 @@ class DefaultTaxonomyMapper(Mapper):
     def __init__(
         self, collection_name, taxonomy_name, template="tag.html", base_url=""
     ):
-        self.urls = {}
         self.template = template
         self.base_url = base_url
         self.collection_name = collection_name
@@ -140,7 +137,6 @@ class DefaultTaxonomyMapper(Mapper):
 
 class DefaultFeedMapper(Mapper):
     def __init__(self, collections=[]):
-        self.urls = {}
         self.collections = collections
 
     def map(self, site):
