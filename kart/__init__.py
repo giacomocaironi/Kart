@@ -36,6 +36,7 @@ class Kart:
             "name": "Example",
             "base_url": "https://example.org",
             "pagination": {"per_page": 5, "skip": 0},
+            "timezone": "UTC",
         }
         merge_dicts(self.config, default)
 

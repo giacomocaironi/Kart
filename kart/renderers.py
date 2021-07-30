@@ -1,11 +1,11 @@
 import shutil
-from datetime import datetime, time, timezone
+from datetime import datetime, time
 from distutils.dir_util import copy_tree
 from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Pool
 from pathlib import Path
 
-from feedgen.feed import FeedGenerator
+from dateutil import tz
 from jinja2 import Environment, FileSystemLoader
 
 from kart.markdown import markdown_to_html, markdown_to_toc
@@ -103,29 +103,33 @@ class DefaultFeedRenderer(DefaultRenderer):
         self.content_type = "application/xml"
 
     def render_single(self, page, map, site):
-        base_url = site["config"]["base_url"]
-        fg = FeedGenerator()
-        fg.title(site["config"]["name"])
-        fg.id(base_url)
-        fg.link({"href": base_url})
-        fg.link({"href": base_url + "/atom.xml", "rel": "self"})
         feed_entries = []
         for collection in page["data"]["collections"]:
             for object in site[collection].values():
-                feed_entries.append([collection, object])
-        feed_entries.sort(key=lambda x: x[1]["date"])
-        for collection, entry in feed_entries:
-            fe = fg.add_entry()
-            if "title" in entry.keys():
-                fe.title(entry["title"])
-            elif "name" in entry.keys():
-                fe.title(entry["name"])
+                feed_entries.append([map.url(collection, object["slug"]), object])
+        feed_entries.sort(key=lambda x: x[1]["date"], reverse=True)
+        atom = '<feed xmlns="http://www.w3.org/2005/Atom">'
+        atom += f'<id>"{map.url("/")}"</id>'
+        atom += f"<title>{site['config']['name']}</title>"
+        timezone = site["config"]["timezone"]
+        updated_time = datetime.now().replace(tzinfo=tz.gettz(timezone))
+        atom += f"<updated>{updated_time.isoformat()}</updated>"
+        atom += f'<link href="{map.url("/")}"/>'
+        atom += f'<link href="{map.url(page["url"])}" rel="self"/>'
+        for url, entry in feed_entries:
+            atom += "<entry>"
+            atom += f"<id>{url}</id>"
+            title = entry["title"] if "title" in entry.keys() else entry["name"]
+            atom += f"<title>{title}</title>"
+            entry_time = datetime.combine(entry["date"], time(12))
+            entry_time.replace(tzinfo=tz.gettz(timezone))
+            atom += f"<updated>{entry_time.isoformat()}</updated>"
             if "description" in entry.keys():
-                fe.description(entry["description"])
-            fe.updated(datetime.combine(entry["date"], time(12), tzinfo=timezone.utc))
-            fe.id(map.url(collection, entry["slug"]))
-            fe.link({"href": map.url(collection, entry["slug"])})
-        return fg.atom_str().decode()
+                atom += f'<summary>{entry["description"]}</summary>'
+            atom += f'<link href="{url}" link="alternate"/>'
+            atom += "</entry>"
+        atom += "</feed>"
+        return atom
 
 
 class DefaultSitemapRenderer(DefaultRenderer):

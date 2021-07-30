@@ -19,6 +19,21 @@ k.config["base_url"] = "https://the_domain_name_of_your_site.com"
 k.run()
 ```
 
+## Timezone
+
+This step is not strictly necessary, but adding the correct timezone of your site can be useful. Simply add your timezone name in the kart configuration dictionary.
+
+```python
+...
+
+k.config['name'] = 'The name of your site'
+k.config["pagination"] = {"per_page": 10}
+k.config["base_url"] = "https://the_domain_name_of_your_site.com"
+k.config["timezone"] = "America/New_York"
+
+k.run()
+```
+
 ## Sitemap
 
 A sitemap is a file that lists all the pages in a site, so that a search engine can crawl it faster without having to follow links. Having it is good SEO practice! To add a sitemap to a Kart site we only have to modify ``main.py``
@@ -29,18 +44,7 @@ A sitemap is a file that lists all the pages in a site, so that a search engine 
 k.mappers = [
   ...
   mappers.ManualMapper(
-    "static": {
-        "url": "/static/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_static_files_renderer",
-    },
-    "root": {
-        "url": "/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_root_dir_renderer",
-    },
+    ...
     "sitemap": {
         "url": "/sitemap.xml",
         "data": {},
