@@ -40,24 +40,16 @@ class DefaultMiner(Miner):
                 self.data.update(object)
 
     def start_watching(self, observer):
-        base_dir = self.dir
-
-        def create(file):
-            self.data.update(self.collect_single_file(file))
-
-        def delete(file):
-            self.data.pop(slug_from_path(base_dir, file))
-
         class Handler(RegexMatchingEventHandler):
-            def on_moved(self, event):
-                delete(Path(event.src_path))
-                create(Path(event.src_path))
+            def on_moved(_, event):
+                self.data.pop(slug_from_path(self.dir, Path(event.src_path)))
+                self.data.update(self.collect_single_file(Path(event.src_path)))
 
-            def on_modified(self, event):
-                create(Path(event.src_path))
+            def on_modified(_, event):
+                self.data.update(self.collect_single_file(Path(event.src_path)))
 
-            def on_deleted(self, event):
-                delete(Path(event.src_path))
+            def on_deleted(_, event):
+                self.data.pop(slug_from_path(self.dir, Path(event.src_path)))
 
         self.read_data()
         observer.schedule(Handler(ignore_directories=True), self.dir, recursive=False)
@@ -120,3 +112,51 @@ class DefaultDataMiner(DefaultMiner):
 
     def collect(self):
         return {"data": self.data}
+
+
+class DefaultDocumentationMiner(DefaultMarkdownMiner):
+    def __init__(self, directory="docs"):
+        self.dir = Path(directory)
+
+    def __recursive_read_data(self, dir, level=0):
+        if dir.joinpath("navigation.yml").exists():
+            nav_file = dir.joinpath("navigation.yml").open()
+            nav_data = YamlLoader(nav_file.read()).get_data()
+            paths = []
+            for x in nav_data:
+                if "page" in x.keys():
+                    paths.append(dir.joinpath(x["page"]))
+                elif "section" in x.keys():
+                    paths.append(dir.joinpath(x["section"]))
+        else:
+            paths = dir.iterdir()
+            nav_data = []
+
+        for i, item in enumerate(paths):
+            if item.is_file():
+                object = self.collect_single_file(item)
+                slug, page = list(object.items())[0]
+                toc_entry = {"title": page["title"], "slug": slug, "level": level}
+                self.docs_global_toc.append(toc_entry)
+                if object:
+                    self.markdown_data.update(object)
+            elif item.is_dir():
+                toc_entry = {"title": nav_data[i]["name"], "slug": None, "level": level}
+                self.docs_global_toc.append(toc_entry)
+                self.__recursive_read_data(item, level + 1)
+
+    def read_data(self):
+        self.markdown_data = OrderedDict()
+        self.docs_global_toc = []
+        self.__recursive_read_data(self.dir)
+
+    def collect(self):
+        return {"docs": self.markdown_data, "docs_global_toc": self.docs_global_toc}
+
+    def start_watching(self, observer):
+        class Handler(RegexMatchingEventHandler):
+            def on_any_event(_, event):
+                self.read_data()
+
+        self.read_data()
+        observer.schedule(Handler(), self.dir, recursive=True)

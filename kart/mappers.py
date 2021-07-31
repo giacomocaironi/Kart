@@ -112,23 +112,23 @@ class DefaultTaxonomyMapper(Mapper):
     def map(self, site):
         urls = {}
         for taxonomy in site[self.taxonomy_name].values():
+            slug = taxonomy["slug"]
             items = site[self.collection_name].values()
             filtered_items = []
             for item in items:
                 if isinstance(item[self.taxonomy_name], str):
-                    if item[self.taxonomy_name] == taxonomy["slug"]:
+                    if item[self.taxonomy_name] == slug:
                         filtered_items.append(item)
                 elif isinstance(item[self.taxonomy_name], list):
-                    if taxonomy["slug"] in item[self.taxonomy_name]:
+                    if slug in item[self.taxonomy_name]:
                         filtered_items.append(item)
             urls.update(
                 paginate(
                     objects=filtered_items,
                     per_page=site["config"]["pagination"]["per_page"],
                     template=self.template,
-                    base_url=self.base_url
-                    + f"/{self.taxonomy_name}/{taxonomy['slug']}",
-                    slug=f"{self.taxonomy_name}.{taxonomy['slug']}",
+                    base_url=self.base_url + f"/{self.taxonomy_name}/{slug}",
+                    slug=f"{self.taxonomy_name}.{slug}",
                     additional_data=taxonomy,
                 )
             )
@@ -148,3 +148,32 @@ class DefaultFeedMapper(Mapper):
                 "renderer": "default_feed_renderer",
             }
         }
+
+
+class DefaultDocumentationMapper(Mapper):
+    def __init__(self, template="page.html", base_url=""):
+        self.template = template
+        self.base_url = base_url
+
+    def map(self, site):
+        urls = {}
+        previous_slug = None
+        for slug, page in site["docs"].items():
+            if "url" in page:
+                url = page["url"]
+            elif slug == "index":
+                url = "/"
+            else:
+                url = f"/{slug}/"
+            if len(urls):
+                page["previous_page"] = previous_slug
+                urls[previous_slug]["data"]["next_page"] = slug
+            previous_slug = slug
+            map_page = {
+                "url": self.base_url + url,
+                "data": {**page},
+                "template": self.template,
+                "renderer": "default_site_renderer",
+            }
+            urls[slug] = map_page
+        return urls

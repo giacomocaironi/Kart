@@ -1,7 +1,7 @@
-- location: minimal-site.md
-- location: improving-the-usability.md
-- location: a-better-look.md
-- location: posts.md
-- location: better-index.md
-- location: tags.md
-- location: publishing.md
+- page: minimal-site.md
+- page: improving-the-usability.md
+- page: a-better-look.md
+- page: posts.md
+- page: better-index.md
+- page: tags.md
+- page: publishing.md

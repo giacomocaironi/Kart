@@ -1,10 +1,10 @@
-- location: index.md
-- location: install.md
-- location: getting-started.md
-- name: Step by step tutorial
-  location: step-by-step
-- name: Advanced
-  location: advanced
-- name: Api reference
-  location: api
-- location: changelog.md
+- page: index.md
+- page: install.md
+- page: getting-started.md
+- section: step-by-step
+  name: Step by step tutorial
+- section: advanced
+  name: Advanced
+- section: api
+  name: Api reference
+- page: changelog.md

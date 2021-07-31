@@ -1,5 +1,4 @@
 import pkg_resources
-from custom import DocumentationMapper, DocumentationMiner
 from markdown import markdown_to_html
 
 from kart import Kart, mappers, miners, renderers
@@ -10,13 +9,13 @@ kart = Kart(build_location="public")
 
 kart.miners = [
     miners.DefaultDataMiner(),
-    DocumentationMiner(),
+    miners.DefaultDocumentationMiner(),
 ]
 
 kart.content_modifiers = []
 
 kart.mappers = [
-    DocumentationMapper(template="default.html"),
+    mappers.DefaultDocumentationMapper(template="default.html"),
     mappers.ManualMapper(
         {
             # "lunr_data": {
