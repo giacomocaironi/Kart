@@ -39,14 +39,15 @@ class KartMap(UserDict):
         if not name:
             return ""
         if name in self.data.keys():
-            result = self.data[name]["url"]
+            return self.base_url + self.data[name]["url"]
         elif name + ".1" in self.data.keys():
-            result = self.data[name + ".1"]["url"]
+            return self.base_url + self.data[name + ".1"]["url"]
+        elif "http" in name:
+            return name
         elif "/" in name:
-            result = name
-        else:
-            return ""
-        return self.base_url + result
+            return self.base_url + name
+        print("Invalid url")
+        return ""
 
 
 def paginate(objects, per_page, template, base_url, slug, additional_data={}):
