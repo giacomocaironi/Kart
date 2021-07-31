@@ -1,0 +1,27 @@
+<div class="sidebar-menu list">
+
+  <h4 class='mb-10'>{{site.config.name}}</h4>
+
+  {% for nav_item in site.docs_global_toc %}
+
+    {% set level = nav_item.level * 15 %}
+
+    {% if nav_item.slug %}
+
+      {% set active = '' %}
+      {% if nav_item.slug == page.slug %}
+        {% set active = 'active' %}
+      {% endif %}
+      <a href="{{ url(nav_item.slug) }}" class='sidebar-link {{active}} pl-{{level}}'>
+        {{nav_item.title}}
+      </a>
+
+    {% else %}
+
+      <h5 class='sidebar-title'>{{nav_item.title}}</h5>
+
+    {% endif %}
+
+  {% endfor %}
+
+</div>

@@ -3,13 +3,19 @@ title: Write a documentation
 ---
 # Write a documentation
 
-If you want to write the documentation of you project with Kart, you can! Tipically a documentation is structured differently from a blog, it's structured more like a tree: the documentation is divided in sections, and this sections can have sub-sections... When using a software that generates a documentation the structure of the site is reflected in the structure of the source files.
+If you want to write the documentation of you project with Kart you can!, even though Kart is more suited towards sites such as blogs. If you nevertheless want to do it, this is the guide for you. I have also created a cookiecutter so that typing this in you terminal:
 
-From what we have seen Kart doesn't work in this way, there is a distinction between a file and a page. Fortunately in Kart there are two classes that break this rule and accept a tree of files to create a documentation.
+```shell-session
+$ cookiecutter gl:giacomocaironi/Kart --directory="cookiecutters/documentation"
+```
+
+will get you up and running with a documentation without creating it from scratch. In either case I recommend you follow this guide to understand better how a documentation is created with Kart.
 
 ## Modify main.py
 
-These two classes are ``DefaultDocumentationMiner`` and ``DefaultDocumentationMapper``. Let's add them to our ``main.py``
+Tipically a documentation is structured differently from a blog, it's structured more like a tree: the documentation is divided in sections, and this sections can have sub-sections... When using a software that generates a documentation the structure of the site is reflected in the structure of the source files.
+
+From what we have seen Kart doesn't work in this way, there is a distinction between a file and a page. Fortunately in Kart there are two classes that break this rule and accept a tree of files to create a documentation. These two classes are ``DefaultDocumentationMiner`` and ``DefaultDocumentationMapper``. Let's add them to our ``main.py``
 
 ```python
 ...
@@ -112,7 +118,7 @@ Now that our documentation has grown in complexity we can create a sidebar that 
 ...
 ```
 
-Ok let's understand what this snippet does. All the information to create the sidebar is contained in the ``site.docs_global_toc`` variable. This is a list of navigation items. A navigation items contains a ``title``, a ``slug`` and a ``level`` field. If the value of ``slug`` is none, it means that the navigation_item is not a page, but it indicates a new subsection. In that case we don't create a link, but a new html header. The ``level`` field is the section depth of the navigation_item. If it is 0, it means that it is in the top level, 1 that it is in a subsection and so on. In this particular case we multiply it by 15 and use it to add padding to each item. 
+Ok let's understand what this snippet does. All the information to create the sidebar is contained in the ``site.docs_global_toc`` variable. This is a list of navigation items. A navigation items contains a ``title``, a ``slug`` and a ``level`` field. If the value of ``slug`` is none, it means that the navigation_item is not a page, but it indicates a new subsection. In that case we don't create a link, but a new html header. The ``level`` field is the section depth of the navigation_item. If it is 0, it means that it is in the top level, 1 that it is in a subsection and so on. In this particular case we multiply it by 15 and use it to add padding to each item.
 
 ## Conclusion
 

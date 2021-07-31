@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block main %}
+
+<div id='page-wrapper' class="page-wrapper with-navbar with-sidebar with-transitions" data-sidebar-type="overlayed-sm-and-down">
+
+  <div class="navbar">
+    {% include "header.html" %}
+  </div>
+
+  <div class="sidebar">
+    {% include "sidebar.html" %}
+  </div>
+  <div class="sidebar-overlay" onclick="halfmoon.toggleSidebar()"></div>
+
+  <div class="content-wrapper main">
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-xl-9">
+          <div class="content">
+            {% block content %}
+              {{ page.content|html }}
+            {% endblock content %}
+          </div>
+        </div>
+
+        <div class="col-xl-3 on-this-page-nav-container">
+          <div class="content">
+            <div class="on-this-page-nav">
+              {{ page.content|toc }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="content bottom navigation">
+      {% include "navigation.html" %}
+    </div>
+
+    <div class="footer">
+      {% include "footer.html" %}
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock main %}

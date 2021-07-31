@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+
+  <title>{{ page.title }}</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css"/>
+  <link rel="stylesheet" href={{ url('/static/css/pygments.css') }}>
+  <link rel="stylesheet" href={{ url('/static/css/documentation.css') }}>
+  <link rel="stylesheet" href={{ url('/static/css/icons.css') }}>
+  <link rel="stylesheet" href={{ url('/static/css/custom.css') }}>
+
+  <link rel="apple-touch-icon" sizes="180x180" href={{ url("/apple-touch-icon.png") }}>
+  <link rel="icon" type="image/png" sizes="32x32" href={{ url("/favicon-32x32.png") }}>
+  <link rel="icon" type="image/png" sizes="16x16" href={{ url("/favicon-16x16.png") }}>
+  <link rel="manifest" href={{ url('/site.webmanifest') }}>
+
+</head>
+
+<body class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars">
+
+  {% block main %}
+  {% endblock main %}
+
+  <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+  {% if site.config.repository_url.split('/')[2].split('.')[0] == 'github' %}
+    <script async defer src={{ url('/static/js/github.js') }}></script>
+  {% elif site.config.repository_url.split('/')[2].split('.')[0] == 'gitlab' %}
+    <script async defer src={{ url('/static/js/gitlab.js') }}></script>
+  {% endif %}
+
+</body>
+</html>

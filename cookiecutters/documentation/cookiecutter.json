@@ -1,0 +1,13 @@
+{
+  "project_name": "My blog",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+  "base_url": "https://example.com/{{cookiecutter.project_slug}}",
+  "repository_url": "https://github.com/example/example_project",
+  "repository_name": "{{ '/'.join(cookiecutter.repository_url.split('/')[-2:]) }}",
+  "maintainer_name": "{{ cookiecutter.repository_name.split('/')[0] }}",
+  "_copy_without_render":
+    [
+      "templates/*",
+      "*.html"
+    ]
+}

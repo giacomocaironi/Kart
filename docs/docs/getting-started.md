@@ -13,7 +13,7 @@ $ pip install cookiecutter
 Then you can generate all the files with this command
 
 ```shell-session
-$ cookiecutter gl:giacomocaironi/Kart --directory="quickstart"
+$ cookiecutter gl:giacomocaironi/Kart --directory="cookiecutters/blog"
 ```
 
 This has generated some folders. The one that interests one is the collections folder.

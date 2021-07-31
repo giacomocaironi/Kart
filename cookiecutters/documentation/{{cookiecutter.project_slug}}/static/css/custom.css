@@ -1,0 +1,81 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.bottom {
+  margin-top: auto;
+}
+
+h2 {
+  font-size: 3rem;
+  line-height: 1.4;
+}
+
+h3 {
+  font-size: 2.4rem;
+  line-height: 1.45;
+}
+
+body {
+  --dm-button-border-color: #404040 !important;
+  --dm-button-group-button-border-color: #404040 !important;
+}
+
+.btn svg {
+  fill: #999;
+}
+
+svg.s16 {
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+}
+
+.navigation {
+  margin-bottom: 1rem;
+}
+
+.icon:before {
+  margin: 0rem;
+}
+
+.sidebar-menu {
+  padding-left: 2rem;
+}
+
+.sidebar-title {
+  margin-left: 0rem;
+}
+
+.highlight pre {
+  margin: 0rem;
+}
+
+pre>code {
+  overflow-x: auto;
+  display: block;
+  padding: 1rem;
+  font-size: 1em;
+}
+
+code {
+  font-size: 0.85em;
+  padding: 0 0.3em;
+}
+
+dl {
+  margin-bottom: 3rem;
+}
+
+dt {
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 3rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}

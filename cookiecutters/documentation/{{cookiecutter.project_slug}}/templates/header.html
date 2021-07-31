@@ -1,0 +1,56 @@
+<nav class="navbar">
+    <div class="navbar-content">
+        <button id="toggle-sidebar-btn" class="btn btn-action" type="button" onclick="halfmoon.toggleSidebar()">
+            <i class="icon icon-menu" aria-hidden="true"></i>
+        </button>
+    </div>
+    <a href="/" class="navbar-brand ml-10 ml-sm-15">
+        <img src="{{ url(site.config.icon) }}" width="32" height="32" class="hidden-dm mr-5 mr-sm-10" alt="kart-logo">
+        <img src="{{ url(site.config.icon) }}" width="32" height="32" class="hidden-lm mr-5 mr-sm-10" alt="kart-logo-white">
+        <span class="badge font-size-12 text-monospace px-5 px-sm-10">
+            v{{site.config.version}}
+        </span>
+    </a>
+
+    <ul class="navbar-nav hidden-sm-and-down">
+        <li class="nav-item">
+            <a href="{{ url('index') }}" class="nav-link">Home</a>
+        </li>
+    </ul>
+    <div class="navbar-content ml-auto">
+
+      <div class="mr-5 d-none d-lg-inline-block">
+        <div class="hidden-dm">
+          {% include "star_button.html" %}
+        </div>
+        <div class="hidden-lm">
+          {% include "star_button.html" %}
+        </div>
+      </div>
+
+        <button class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()" aria-label="Toggle dark mode">
+            <i class="icon icon-moon" aria-hidden="true"></i>
+        </button>
+
+        <div class="dropdown with-arrow hidden-md-and-up">
+            <button class="btn navbar-menu-btn" data-toggle="dropdown" type="button" id="navbar-dropdown-toggle-btn" aria-haspopup="true" aria-expanded="false">
+                <span class="text">Menu</span>
+                <i class="icon icon-angle-down" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-dropdown-toggle-btn">
+                <a href="{{ url('index') }}" class="dropdown-item">Home</a>
+                <div class="dropdown-divider"></div>
+
+                <div class="pt-5">
+                  <div class="dropdown-content py-5 hidden-dm">
+                    {% include "star_button.html" %}
+                  </div>
+                  <div class="dropdown-content py-5 hidden-lm">
+                    {% include "star_button.html" %}
+                  </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>

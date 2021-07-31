@@ -1,0 +1,38 @@
+<div class="container-fluid">
+  <div class="row row-eq-spacing-lg">
+
+    <div class="col-md-4">
+      <div class="content">
+        <span class="content-title font-size-16 mb-10">Learn more</span>
+        <div class="">
+          <a href="{{ url('install') }}" class='footer-link'>Install</a>
+        </div>
+        <div class="">
+          <a href="{{ url('getting-started') }}" class='footer-link'>Getting started</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="content">
+        <span class="content-title font-size-16 mb-10">Get involved</span>
+        <div class="">
+          <a href="{{site.config.repo_url}}" class='footer-link'>Contribute to {{site.config.name}}</a>
+        </div>
+        <div class="">
+          <a href="{{site.config.repo_url}}/issues" class='footer-link'>Report an issue</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="content">
+        <br>
+        <div class="text-muted">
+          © Copyright 2021, {{ site.config.maintainer_name }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
