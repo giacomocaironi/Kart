@@ -4,6 +4,8 @@ title: Changelog
 
 # Changelog
 
+## v0.9.3
+Add dependency
 
 ## v0.9.2
 Fixed a critical bug where external urls would not be formatted correctly
