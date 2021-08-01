@@ -4,8 +4,14 @@ title: Changelog
 
 # Changelog
 
+## v0.10
+
+* python-feedgen dependency has been removed. Now DefaultFeedRenderer use raw strings
+* Two new classes, DefaultDocumentationMiner and DefaultDocumentationMapper, have been added to support documentations
+* When using DefaultIndexMapper, ``previous_page_url`` and ``next_page_url`` have been renamed ``previous_page`` and ``next_page``, and will contain the slug of the target page instead of the url, fixing a logical bug. 
+
 ## v0.9.3
-Add dependency
+Add missing dependency
 
 ## v0.9.2
 Fixed a critical bug where external urls would not be formatted correctly
