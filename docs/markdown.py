@@ -1,86 +1,11 @@
 import mistune
 from jinja2 import contextfilter
-from mistune import HTMLRenderer
-from mistune.directives.admonition import Admonition, render_ast_admonition
-from mistune.scanner import escape
+from mistune.directives.admonition import Admonition
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
-from kart.markdown import KartMistuneRenderer, TocMarkdown, TocPlugin
-
-
-class TextExtractor(HTMLRenderer):
-    NAME = "text"
-
-    def text(self, text):
-        return escape(text)
-
-    def link(self, link, text=None, title=None):
-        if text is None:
-            text = link
-        s = self._safe_url(link)
-        return s + (text or link)
-
-    def image(self, src, alt="", title=None):
-        return ""
-
-    def emphasis(self, text):
-        return text
-
-    def strong(self, text):
-        return text
-
-    def codespan(self, text):
-        return escape(text)
-
-    def linebreak(self):
-        return ""
-
-    def inline_html(self, html):
-        return escape(html)
-
-    def paragraph(self, text):
-        return text + ". "
-
-    def heading(self, text, level):
-        return text + ". "
-
-    def newline(self):
-        return ""
-
-    def thematic_break(self):
-        return ""
-
-    def block_text(self, text):
-        return text
-
-    def block_code(self, code, info=None):
-        return escape(code) + " "
-
-    def block_quote(self, text):
-        return text + " "
-
-    def block_html(self, html):
-        return escape(html)
-
-    def block_error(self, html):
-        return escape(html)
-
-    def list(self, text, ordered, level, start=None):
-        if ordered:
-            html = ""
-            if start is not None:
-                html += str(start)
-            return html + text + "\n"
-        return text + "\n"
-
-    def list_item(self, text, level):
-        return text + "\n"
-
-
-def markdown_to_text(string):
-    return mistune.Markdown(renderer=TextExtractor())(string)
+from kart.markdown import KartMistuneRenderer
 
 
 class Admonition(Admonition):
@@ -96,23 +21,6 @@ class Admonition(Admonition):
         "warning",
         "info",
     }
-
-    def render_html(self, text, name, title=None):
-        html = '<section class="admonition ' + name + '">\n'
-        if title:
-            html += "<p class='admonition-title'>" + title + "</p>\n"
-        if text:
-            html += '<div class="admonition-text">\n' + text + "</div>\n"
-        return html + "</section>\n"
-
-    def __call__(self, md):
-        for name in self.SUPPORTED_NAMES:
-            self.register_directive(md, name)
-
-        if md.renderer.NAME == "html":
-            md.renderer.register("admonition", self.render_html)
-        elif md.renderer.NAME == "ast":
-            md.renderer.register("admonition", render_ast_admonition)
 
 
 class DocumentationMistuneRenderer(KartMistuneRenderer):
@@ -148,24 +56,4 @@ def markdown_to_html(context, string):
             mistune.plugins.plugin_def_list,
             Admonition(),
         ],
-    )(string)
-
-
-def render_html_toc(toc, title, _):
-    s = ""
-    if title:
-        s += f'<div class="title">{title}</div>'
-    if not toc:
-        return s
-    for k, text, level in toc:
-        if level > 1:
-            text = f'<span class="d-inline-block pl-{10*(level-1)}">{text}</span>'
-        s += f'<a href="#{k}">{text}</a>'
-    return s
-
-
-def markdown_to_toc(string):
-    return TocMarkdown(
-        renderer=mistune.HTMLRenderer(),
-        plugins=[TocPlugin(render_html_toc)],
     )(string)

@@ -1,0 +1,5 @@
+{% for h in page.content|toc %}
+  <a href="#{{h.id}}">
+    <span style="padding-left:{{ (h.level - 1) * 10 }}px">{{h.title}}</span>
+  </a>
+{% endfor %}

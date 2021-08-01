@@ -1,12 +1,5 @@
 import mistune
 from jinja2 import contextfilter
-from mistune.directives.toc import (
-    DirectiveToc,
-    md_toc_hook,
-    render_ast_theading,
-    render_ast_toc,
-    render_html_theading,
-)
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
@@ -21,11 +14,11 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
     def link(self, link, text=None, title=None):
         if text is None:
             text = link
-
-        s = '<a href="' + self.context["url"](link) + '"'
+        a = f'<a href="{self.context["url"](link)}"'
         if title:
-            s += ' title="' + mistune.scanner.escape_html(title) + '"'
-        return s + ">" + (text or link) + "</a>"
+            a += f' title="{mistune.scanner.escape_html(title)}"'
+        a += f">{text}</a>"
+        return a
 
     def block_code(self, text, lang):
         if lang:
@@ -42,71 +35,39 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
 @contextfilter
 def markdown_to_html(context, string):
     return mistune.Markdown(
-        renderer=KartMistuneRenderer(
-            context=context,
-            escape=False,
-        ),
+        renderer=KartMistuneRenderer(context=context, escape=False),
         plugins=[
             mistune.plugins.plugin_strikethrough,
-            mistune.plugins.plugin_footnotes,
             mistune.plugins.plugin_table,
+            mistune.plugins.plugin_task_lists,
         ],
     )(string)
 
 
-class TocMarkdown(mistune.Markdown):
-    def parse(self, s, state=None):
-        if state is None:
-            state = {}
-        s, state = self.before_parse(s, state)
-        tokens = self.block.parse(s, state)
-        tokens.append({"type": "toc", "raw": None, "params": ("Table of Contents", 4)})
-        tokens = self.before_render(tokens, state)
-        result = self.block.render(tokens[-1:], self.inline, state)
-        result = self.after_render(result, state)
-        return result
+class TocRenderer(mistune.renderers.BaseRenderer):
+    def text(self, text):
+        return text
 
+    def heading(self, children, level):
+        return {"title": children, "id": slugify(children), "level": level}
 
-def record_toc_heading(text, level, state):
-    tid = slugify(text)
-    state["toc_headings"].append((tid, text, level))
-    return {"type": "theading", "text": text, "params": (level, tid)}
+    def _get_method(self, name):
+        if name in ["heading", "text"]:
+            return super(TocRenderer, self)._get_method(name)
 
+        def null(*args, **kwargs):
+            return ""
 
-class TocPlugin(DirectiveToc):
-    def __init__(self, func):
-        self.func = func
-        super().__init__()
+        return null
 
-    def __call__(self, md):
-        self.register_directive(md, "toc")
-
-        md.block.tokenize_heading = record_toc_heading
-        md.before_parse_hooks.append(self.reset_toc_state)
-        md.before_render_hooks.append(md_toc_hook)
-
-        if md.renderer.NAME == "html":
-            md.renderer.register("toc", self.func)
-            md.renderer.register("theading", render_html_theading)
-        elif md.renderer.NAME == "ast":
-            md.renderer.register("toc", render_ast_toc)
-            md.renderer.register("theading", render_ast_theading)
-
-
-def render_html_toc(toc, title, _):
-    s = ""
-    if not toc:
-        return s
-    max_level = toc[0][2]
-    for k, text, level in toc:
-        if level > max_level:
-            text = f'<span style="padding-left:{10*(level-max_level)}px">{text}</span>'
-        s += f'<a href="#{k}">{text}</a>'
-    return s
+    def finalize(self, data):
+        data = list(data)
+        if len(data) == 1:
+            return data[0]
+        return [x for x in data if x]
 
 
 def markdown_to_toc(string):
-    return TocMarkdown(
-        renderer=mistune.HTMLRenderer(),
-        plugins=[TocPlugin(render_html_toc)],
+    return mistune.Markdown(
+        renderer=TocRenderer(),
     )(string)
