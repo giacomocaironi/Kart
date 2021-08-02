@@ -6,15 +6,16 @@ title: Changelog
 
 ## v0.10
 
-* python-feedgen dependency has been removed. Now DefaultFeedRenderer use raw strings
-* Two new classes, DefaultDocumentationMiner and DefaultDocumentationMapper, have been added to support documentations
-* When using DefaultIndexMapper, ``previous_page_url`` and ``next_page_url`` have been renamed ``previous_page`` and ``next_page``, and will contain the slug of the target page instead of the url, fixing a logical bug. 
+* python-feedgen dependency has been removed. Now DefaultFeedRenderer use raw strings.
+* Two new classes, DefaultDocumentationMiner and DefaultDocumentationMapper, have been added to support documentations.
+* When using DefaultIndexMapper, ``previous_page_url`` and ``next_page_url`` have been renamed ``previous_page`` and ``next_page``, and will contain the slug of the target page instead of the url, fixing a logical bug.
+* utils.markdown_to_toc function now returns a list of headings instead of html.
 
 ## v0.9.3
-Add missing dependency
+Add missing dependency.
 
 ## v0.9.2
-Fixed a critical bug where external urls would not be formatted correctly
+Fixed a critical bug where external urls would not be formatted correctly.
 
 ## v0.9.1
 Bug fixes. Now kart behaves accordingly when deleting a file. A bug that leaded to unnecessary empty pages was also fixed.
@@ -55,6 +56,6 @@ It also support adding files in the top level directory, like favicon.ico and CN
 
 
 ## v0.3
-The 0.3 version comes with default mappers and miners to create a simple blog without coding
+The 0.3 version comes with default mappers and miners to create a simple blog without coding.
 
-It is also the first version to have a proper documentation
+It is also the first version to have a proper documentation.
