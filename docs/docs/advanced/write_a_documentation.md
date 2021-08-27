@@ -18,15 +18,16 @@ Tipically a documentation is structured differently from a blog, it's structured
 From what we have seen Kart doesn't work in this way, there is a distinction between a file and a page. Fortunately in Kart there are two classes that break this rule and accept a tree of files to create a documentation. These two classes are ``DefaultDocumentationMiner`` and ``DefaultDocumentationMapper``. Let's add them to our ``main.py``
 
 ```python
+from kart.ext import documentation
 ...
 k.miners = [
   ...
-  miners.DefaultDocumentationMiner(directory='docs'),
+  documentation.DefaultDocumentationMiner(directory='docs'),
 ]
 
 k.mappers = [
   ...
-  mappers.DefaultDocumentationMapper(template="documentation.html", base_url='base_url_for_the_documentation')
+  documentation.DefaultDocumentationMapper(template="documentation.html", base_url='base_url_for_the_documentation')
 ]
 ...
 ```

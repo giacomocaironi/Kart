@@ -8,7 +8,7 @@ from copy import deepcopy
 from http.server import HTTPServer
 from pathlib import Path
 
-from kart.utils import KartMap, KartObserver, KartRequesHandler, merge_dicts
+from kart.utils import KartMap, KartObserver, KartRequestHandler, merge_dicts
 
 
 class Kart:
@@ -118,7 +118,7 @@ class Kart:
         for renderer in self.renderers:
             self.renderer_dict[renderer.name] = renderer
             renderer.start_serving()
-        handler_class = KartRequesHandler
+        handler_class = KartRequestHandler
         handler_class.action = self.serve_page
         httpd = HTTPServer(("", port), handler_class)
         httpd.timeout = 0.1

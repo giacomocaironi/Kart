@@ -4,18 +4,19 @@ from markdown import markdown_to_html
 from kart import Kart, mappers, miners, renderers
 from kart.markdown import markdown_to_toc
 from kart.utils import date_to_string
+from kart.ext import documentation
 
 kart = Kart(build_location="public")
 
 kart.miners = [
     miners.DefaultDataMiner(),
-    miners.DefaultDocumentationMiner(),
+    documentation.DefaultDocumentationMiner(),
 ]
 
 kart.content_modifiers = []
 
 kart.mappers = [
-    mappers.DefaultDocumentationMapper(template="default.html"),
+    documentation.DefaultDocumentationMapper(template="default.html"),
     mappers.ManualMapper(
         {
             # "lunr_data": {

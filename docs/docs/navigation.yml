@@ -5,6 +5,5 @@
   name: Step by step tutorial
 - section: advanced
   name: Advanced
-- section: api
-  name: Api reference
+- page: api.md
 - page: changelog.md

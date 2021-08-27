@@ -21,7 +21,7 @@ class KartObserver(Observer):
                 print(traceback.format_exc())
 
 
-class KartRequesHandler(SimpleHTTPRequestHandler):
+class KartRequestHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         try:
             self.action(self, self.path)
