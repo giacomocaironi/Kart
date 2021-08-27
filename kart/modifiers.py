@@ -1,14 +1,17 @@
+from abc import ABC, abstractmethod
 from collections import OrderedDict
 
 
-class ContentModifier:
+class ContentModifier(ABC):
+    @abstractmethod
     def modify(self, site):
-        raise NotImplementedError
+        pass
 
 
-class MapModifier:
+class MapModifier(ABC):
+    @abstractmethod
     def modify(self, map, site):
-        raise NotImplementedError
+        pass
 
 
 class RuleContentModifier(ContentModifier):
@@ -29,7 +32,7 @@ class RuleMapModifier(MapModifier):
             rule(map, site)
 
 
-class CollectionSorter:
+class CollectionSorter(ContentModifier):
     def __init__(self, collection_name, key, reverse=False):
         self.collection_name = collection_name
         self.key = key

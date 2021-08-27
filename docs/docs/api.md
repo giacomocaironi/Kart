@@ -4,27 +4,30 @@ title: Api reference
 
 # Miners
 
-class miners.Miner()
+class miners.Miner
 : Base class
 
 
-class miners.DefaultMiner()
+class miners.DefaultMiner(miners.Miner)
 : Base class
 
-
-class miners.DefaultCollectionMiner()
+class miners.DefaultMarkdownMiner(miners.DefaultMiner)
 : Collects data in the collections folder
 
 
-class miners.DefaultTaxonomyMiner()
+class miners.DefaultCollectionMiner(miners.DefaultMarkdownMiner)
+: Collects data in the collections folder
+
+
+class miners.DefaultTaxonomyMiner(miners.DefaultMarkdownMiner)
 : Collects data in the taxonomies folder
 
 
-class miners.DefaultPageMiner()
+class miners.DefaultPageMiner(miners.DefaultMarkdownMiner)
 : Collects data in the page folder
 
 
-class miners.DefaultDataMiner()
+class miners.DefaultDataMiner(miners.DefaultMarkdownMiner)
 : Collects data in the data folder
 
 
@@ -112,3 +115,59 @@ class modifiers.RuleContentModifier(rules)
 
 class modifiers.CollectionSorter(collection_name, key, reverse)
 : Sorts collections based on key
+
+# Utils
+
+class KartObserver(watchdog.observers.Observer)
+: Subclasses a watchdog observer
+
+
+class KartRequestHandler(http.server.SimpleHTTPRequestHandler)
+: Subclasses SimpleHTTPRequestHandler
+
+
+class KartMap(collections.UserDict):
+: Subclasses UserDict
+
+
+function paginate()
+: Takes a list of objects as input and outputs a map with ``n`` objects for each page
+
+
+function date_to_string()
+: formats a date
+
+
+function slug_from_path()
+: takes a path and outputs its slug
+
+
+function merge_dicts
+: merge two dicts
+
+
+# Markdown
+
+class KartMistuneRenderer(mistune.HTMLRenderer)
+: markdown renderer with kart specific features
+
+
+function markdown_to_html()
+: convert markdown to html
+
+
+class TocRenderer(mistune.renderers.BaseRenderer)
+: markdown renderer that produces a list of headers
+
+
+function markdown_to_toc()
+: given a markdown file it outputs a list of the headers
+
+
+# Documentation
+
+class ext.documentation.DefaultDocumentationMiner()
+: Mines data recursively for a documentation
+
+class ext.documentation.DefaultDocumentationMapper()
+: Mapper for a documentation

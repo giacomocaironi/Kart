@@ -1,4 +1,5 @@
 import shutil
+from abc import ABC, abstractmethod
 from datetime import datetime, time
 from distutils.dir_util import copy_tree
 from http.server import SimpleHTTPRequestHandler
@@ -12,23 +13,26 @@ from kart.markdown import markdown_to_html, markdown_to_toc
 from kart.utils import date_to_string
 
 
-class Renderer:
+class Renderer(ABC):
+    @abstractmethod
     def render(self, map, site, build_location):
-        raise NotImplementedError
+        pass
 
     def start_serving(self):
         pass
 
+    @abstractmethod
     def serve(self, http_handler, page, map, site):
-        raise NotImplementedError
+        pass
 
     def stop_serving(self):
         pass
 
 
 class DefaultRenderer(Renderer):
+    @abstractmethod
     def render_single(self, map, site):
-        raise NotImplementedError
+        pass
 
     def render(self, map, site, build_location):
         for page in map.values():
@@ -40,11 +44,17 @@ class DefaultRenderer(Renderer):
             with path.open("w") as f:
                 f.write(rendered_file)
 
+    def start_serving(self):
+        pass
+
     def serve(self, http_handler, page, map, site):
         http_handler.send_response(200)
         http_handler.send_header("Content-type", self.content_type)
         http_handler.end_headers()
         http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
+
+    def stop_serving(self):
+        pass
 
 
 class DefaultSiteRenderer(DefaultRenderer):
@@ -67,15 +77,11 @@ class DefaultSiteRenderer(DefaultRenderer):
         self.env.filters.update(filters)
 
     def render_single(self, page, map, site):
-        if self.name != page["renderer"]:
-            return
-
         template = self.env.get_template(page["template"])
         page = {**page["data"], "url": page["url"]}
-
         return template.render(page=page, site=site, url=map.url)
 
-    def _render(self, key, map, site, build_location):
+    def _render_single(self, key, map, site, build_location):
         page = map[key]
         if page["renderer"] != self.name:
             return
@@ -89,12 +95,11 @@ class DefaultSiteRenderer(DefaultRenderer):
     def render(self, map, site, build_location="_site"):
         if self.process_count == 1:
             for key in map:
-                self._render(key, map, site, build_location)
+                self._render_single(key, map, site, build_location)
         else:
             with Pool(self.process_count) as p:
-                p.starmap(
-                    self._render, ((key, map, site, build_location) for key in map)
-                )
+                data = ((key, map, site, build_location) for key in map)
+                p.starmap(self._render_single, data)
 
 
 class DefaultFeedRenderer(DefaultRenderer):

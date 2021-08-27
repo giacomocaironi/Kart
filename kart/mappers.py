@@ -1,9 +1,12 @@
+from abc import ABC, abstractmethod
+
 from kart.utils import paginate
 
 
-class Mapper:
+class Mapper(ABC):
+    @abstractmethod
     def map(self, site):
-        raise NotImplementedError
+        pass
 
 
 class RuleMapper(Mapper):
