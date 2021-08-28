@@ -34,7 +34,7 @@ class Kart:
     def check_config(self):
         default = {
             "name": "Example",
-            "base_url": "https://example.org",
+            "site_url": "https://example.org",
             "pagination": {"per_page": 5, "skip": 0},
             "timezone": "UTC",
         }
@@ -50,7 +50,7 @@ class Kart:
             modifier.modify(self.site)
 
     def create_map(self):
-        self.map = KartMap(self.config["base_url"])
+        self.map = KartMap(self.config["site_url"])
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
         for modifier in self.map_modifiers:
@@ -152,5 +152,5 @@ class Kart:
         if args.command == "build":
             self.build()
         if args.command == "serve":
-            self.config["base_url"] = f"http://localhost:{args.port}"
+            self.config["site_url"] = f"http://localhost:{args.port}"
             self.serve(args.port)

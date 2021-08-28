@@ -143,13 +143,12 @@ class DefaultSitemapRenderer(DefaultRenderer):
         self.content_type = "application/xml"
 
     def render_single(self, page, map, site):
-        base_url = site["config"]["base_url"]
         sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
         sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
         for x in map.values():
             if x["renderer"] != "default_site_renderer":
                 continue
-            sitemap += f"<url><loc>{base_url+x['url']}</loc></url>"
+            sitemap += f"<url><loc>{map.url(x['url'])}</loc></url>"
         sitemap += "</urlset>"
         return sitemap
 

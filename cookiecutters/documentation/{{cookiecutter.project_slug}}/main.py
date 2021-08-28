@@ -57,6 +57,6 @@ kart.config["name"] = "{{cookiecutter.project_name}}"
 kart.config["version"] = pkg_resources.get_distribution(kart.config["name"]).version
 kart.config["repo_url"] = "{{cookiecutter.repository_url}}"
 kart.config["repo_name"] = "{{cookiecutter.repository_name}}"
-kart.config["base_url"] = "{{cookiecutter.base_url}}"
+kart.config["site_url"] = "{{cookiecutter.site_url}}"
 
 kart.run()

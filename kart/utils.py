@@ -30,23 +30,23 @@ class KartRequestHandler(SimpleHTTPRequestHandler):
 
 
 class KartMap(UserDict):
-    def __init__(self, base_url, *args, **kwargs):
+    def __init__(self, site_url, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.base_url = base_url
+        self.site_url = site_url
 
     def url(self, *name):
         name = ".".join(name)
         if not name:
             return ""
         if name in self.data.keys():
-            return self.base_url + self.data[name]["url"]
+            return self.site_url + self.data[name]["url"]
         elif name + ".1" in self.data.keys():
-            return self.base_url + self.data[name + ".1"]["url"]
+            return self.site_url + self.data[name + ".1"]["url"]
         elif "http" in name:
             return name
         elif "/" in name:
-            return self.base_url + name
         print("Invalid url")
+            return self.site_url + name
         return ""
 
 

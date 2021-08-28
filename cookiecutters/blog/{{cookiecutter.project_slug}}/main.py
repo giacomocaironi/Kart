@@ -54,7 +54,7 @@ kart.renderers = [
 ]
 
 kart.config["name"] = "{{cookiecutter.project_name}}"
-kart.config["base_url"] = "{{cookiecutter.base_url}}"
+kart.config["site_url"] = "{{cookiecutter.site_url}}"
 kart.config["pagination"] = {"per_page": 5}
 
 kart.run()

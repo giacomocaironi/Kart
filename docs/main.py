@@ -67,6 +67,6 @@ kart.config["icon"] = "/favicon-32x32.png"
 kart.config["version"] = pkg_resources.get_distribution(kart.config["name"]).version
 kart.config["repo_url"] = "https://gitlab.com/giacomocaironi/Kart"
 kart.config["repo_name"] = "giacomocaironi/Kart"
-kart.config["base_url"] = "https://giacomocaironi.gitlab.io/Kart"
+kart.config["site_url"] = "https://giacomocaironi.gitlab.io/Kart"
 
 kart.run()
