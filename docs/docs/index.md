@@ -12,5 +12,5 @@ Kart comes out of the box with the ability to generate a very simple blog with p
 The core of Kart is an instance of the Kart class. However the majority of the code is done by mappers, miners and renderers, which are custom classes that are responsible for generating the majority of the site. Kart is very flexible because is very easy to get rid of the defaults class and plug in your own classes. An explanation of this can be found in the step by step tutorial and a more complete one in the documentation section of the site
 
 ## How do I get started?
-If you just want to create a very simple blog head over to the [getting started](getting-started) section.
+If you just want to create a very simple blog head over to the [getting started](getting_started) section.
 If you then want to customize your site or if you don't want to create a blog go to the [step by step tutorial](step-by-step/minimal-site).

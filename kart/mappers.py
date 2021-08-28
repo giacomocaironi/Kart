@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from kart.utils import paginate
+from slugify import slugify
 
 
 class Mapper(ABC):
@@ -29,23 +30,23 @@ class ManualMapper(Mapper):
 
 
 class DefaultCollectionMapper(Mapper):
-    def __init__(self, collection_name, template="item.html", base_url=""):
+    def __init__(self, collection, template="item.html", base_url=""):
         self.template = template
         self.base_url = base_url
-        self.collection_name = collection_name
+        self.collection = collection
 
     def map(self, site):
         urls = {}
-        collection = site[self.collection_name]
+        collection = site[self.collection]
         for object in collection.values():
-            slug = f"{self.collection_name}.{object['slug']}"
-            url = self.base_url + f"/{self.collection_name}/{object['slug']}/"
+            slug = f"{self.collection}.{object['slug']}"
+            url = f"/{slugify(self.collection)}/{slugify(object['slug'])}/"
             if "template" in object:
                 template = object["template"]
             else:
                 template = self.template
             page = {
-                "url": url,
+                "url": self.base_url + url,
                 "data": object,
                 "template": template,
                 "renderer": "default_site_renderer",
@@ -67,7 +68,7 @@ class DefaultPageMapper(Mapper):
             elif slug == "index":
                 url = "/"
             else:
-                url = f"/{slug}/"
+                url = f"/{slugify(slug)}/"
             if "template" in page:
                 template = page["template"]
             else:
@@ -83,55 +84,53 @@ class DefaultPageMapper(Mapper):
 
 
 class DefaultIndexMapper(Mapper):
-    def __init__(self, collection_name, template="index.html", base_url=""):
+    def __init__(self, collection, template="index.html", base_url=""):
         self.template = template
         self.base_url = base_url
-        self.collection_name = collection_name
+        self.collection = collection
 
     def map(self, site):
-        items = list(site[self.collection_name].values())
+        items = list(site[self.collection].values())
         filtered_items = items[site["config"]["pagination"]["skip"] :]
         paginated_map = paginate(
             objects=filtered_items,
             per_page=site["config"]["pagination"]["per_page"],
             template=self.template,
-            base_url=self.base_url + "/index/page",
-            slug=f"{self.collection_name}_index",
+            base_url=self.base_url + "/index/page/",
+            slug=f"{self.collection}_index",
             additional_data={},
         )
-        paginated_map[f"{self.collection_name}_index.1"]["url"] = self.base_url + "/"
+        paginated_map[f"{self.collection}_index.1"]["url"] = self.base_url + "/"
         return paginated_map
 
 
 class DefaultTaxonomyMapper(Mapper):
-    def __init__(
-        self, collection_name, taxonomy_name, template="tag.html", base_url=""
-    ):
+    def __init__(self, collection, taxonomy, template="tag.html", base_url=""):
         self.template = template
         self.base_url = base_url
-        self.collection_name = collection_name
-        self.taxonomy_name = taxonomy_name
+        self.collection = collection
+        self.taxonomy = taxonomy
 
     def map(self, site):
         urls = {}
-        for taxonomy in site[self.taxonomy_name].values():
+        for taxonomy in site[self.taxonomy].values():
             slug = taxonomy["slug"]
-            items = site[self.collection_name].values()
+            items = site[self.collection].values()
             filtered_items = []
             for item in items:
-                if isinstance(item[self.taxonomy_name], str):
-                    if item[self.taxonomy_name] == slug:
+                if isinstance(item[self.taxonomy], str):
+                    if item[self.taxonomy] == slug:
                         filtered_items.append(item)
-                elif isinstance(item[self.taxonomy_name], list):
-                    if slug in item[self.taxonomy_name]:
+                elif isinstance(item[self.taxonomy], list):
+                    if slug in item[self.taxonomy]:
                         filtered_items.append(item)
             urls.update(
                 paginate(
                     objects=filtered_items,
                     per_page=site["config"]["pagination"]["per_page"],
                     template=self.template,
-                    base_url=self.base_url + f"/{self.taxonomy_name}/{slug}",
-                    slug=f"{self.taxonomy_name}.{slug}",
+                    base_url=self.base_url + f"/{self.taxonomy}/{slug}/",
+                    slug=f"{self.taxonomy}.{slug}",
                     additional_data=taxonomy,
                 )
             )

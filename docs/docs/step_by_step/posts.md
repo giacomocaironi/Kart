@@ -27,7 +27,7 @@ k.miners = [
 ]
 
 k.mappers = [
-  mappers.DefaultCollectionMapper(collection_name="posts", template="post.html"),
+  mappers.DefaultCollectionMapper(collection="posts", template="post.html"),
   mappers.DefaultPageMapper(),
   mappers.ManualMapper(
     "static": {

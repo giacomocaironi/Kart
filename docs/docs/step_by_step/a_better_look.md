@@ -148,4 +148,4 @@ Now when we go to our site in the browser we should see the name of the site alo
 the title should better reflect the content of the page.
 
 
-Now we have a beautiful working site, even if very simple. If you don't need to add content very frequently, you probably don't need much more. If that's the case, you can skip the next pages and go to [Publishing](publishing) to learn how to publish your site.
+Now we have a beautiful working site, even if very simple. If you don't need to add content very frequently, you probably don't need much more. If that's the case, you can skip the next pages and go to [Publishing](step-by-step/publishing) to learn how to publish your site.

@@ -33,14 +33,14 @@ class RuleMapModifier(MapModifier):
 
 
 class CollectionSorter(ContentModifier):
-    def __init__(self, collection_name, key, reverse=False):
-        self.collection_name = collection_name
+    def __init__(self, collection, key, reverse=False):
+        self.collection = collection
         self.key = key
         self.reverse = reverse
 
     def modify(self, site):
-        data = site[self.collection_name]
+        data = site[self.collection]
         sorted_data = sorted(data.items(), key=lambda x: x[1][self.key])
         if self.reverse:
             sorted_data.reverse()
-        site[self.collection_name] = OrderedDict(sorted_data)
+        site[self.collection] = OrderedDict(sorted_data)

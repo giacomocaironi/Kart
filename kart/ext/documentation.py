@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from pathlib import Path
 
+from slugify import slugify
 from watchdog.events import RegexMatchingEventHandler
 
 from kart.miners import DefaultMarkdownMiner
@@ -9,6 +10,7 @@ try:
     from yaml import CSafeLoader as YamlLoader
 except ImportError:
     from yaml import SafeLoader as YamlLoader
+
 from kart.mappers import Mapper
 
 
@@ -74,7 +76,7 @@ class DefaultDocumentationMapper(Mapper):
             elif slug == "index":
                 url = "/"
             else:
-                url = f"/{slug}/"
+                url = "/" + "/".join(slugify(part) for part in slug.split(".")) + "/"
             if len(urls):
                 page["previous_page"] = previous_slug
                 urls[previous_slug]["data"]["next_page"] = slug

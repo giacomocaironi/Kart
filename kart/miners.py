@@ -4,7 +4,7 @@ from pathlib import Path
 
 from watchdog.events import RegexMatchingEventHandler
 
-from kart.utils import slug_from_path
+from kart.utils import id_from_path
 
 try:
     from yaml import CSafeLoader as YamlLoader
@@ -52,14 +52,14 @@ class DefaultMiner(Miner):
     def start_watching(self, observer):
         class Handler(RegexMatchingEventHandler):
             def on_moved(_, event):
-                self.data.pop(slug_from_path(self.dir, Path(event.src_path)))
+                self.data.pop(id_from_path(self.dir, Path(event.src_path)))
                 self.data.update(self.collect_single_file(Path(event.src_path)))
 
             def on_modified(_, event):
                 self.data.update(self.collect_single_file(Path(event.src_path)))
 
             def on_deleted(_, event):
-                self.data.pop(slug_from_path(self.dir, Path(event.src_path)))
+                self.data.pop(id_from_path(self.dir, Path(event.src_path)))
 
         self.read_data()
         observer.schedule(Handler(ignore_directories=True), self.dir, recursive=False)
@@ -75,7 +75,7 @@ class DefaultMarkdownMiner(DefaultMiner):
             metadata = YamlLoader(data[1]).get_data()
             content = "---".join(data[2:])
             object = metadata
-            slug = slug_from_path(self.dir, file)
+            slug = id_from_path(self.dir, file)
             object["slug"] = slug
             object["content"] = content
             object["content_type"] = "markdown"
@@ -86,17 +86,17 @@ class DefaultMarkdownMiner(DefaultMiner):
 
 
 class DefaultCollectionMiner(DefaultMarkdownMiner):
-    def __init__(self, collection_name, directory="collections"):
-        self.collection_name = collection_name
-        self.dir = Path() / directory / collection_name
-        self.name = self.collection_name
+    def __init__(self, collection, directory="collections"):
+        self.collection = collection
+        self.dir = Path() / directory / collection
+        self.name = self.collection
 
 
 class DefaultTaxonomyMiner(DefaultMarkdownMiner):
-    def __init__(self, taxonomy_name, directory="taxonomies"):
-        self.taxonomy_name = taxonomy_name
-        self.dir = Path() / directory / taxonomy_name
-        self.name = self.taxonomy_name
+    def __init__(self, taxonomy, directory="taxonomies"):
+        self.taxonomy = taxonomy
+        self.dir = Path() / directory / taxonomy
+        self.name = self.taxonomy
 
 
 class DefaultPageMiner(DefaultMarkdownMiner):
@@ -112,5 +112,5 @@ class DefaultDataMiner(DefaultMiner):
 
     def collect_single_file(self, file):
         with file.open("r") as f:
-            slug = slug_from_path(self.dir, file)
+            slug = id_from_path(self.dir, file)
             return {slug: YamlLoader(f.read()).get_data()}

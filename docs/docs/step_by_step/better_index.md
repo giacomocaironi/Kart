@@ -14,9 +14,9 @@ First of all we have to modify ``main.py`` and add a new mapper called ``Default
 ...
 k.mappers = [
   mappers.DefaultIndexMapper(
-    collection_name="posts", template="blog_index.html", base_url="/base/url/of/blog/index"
+    collection="posts", template="blog_index.html", base_url="/base/url/of/blog/index"
   ),
-  mappers.DefaultCollectionMapper(collection_name="posts", template="post.html"),
+  mappers.DefaultCollectionMapper(collection="posts", template="post.html"),
   ...
 ]
 ...

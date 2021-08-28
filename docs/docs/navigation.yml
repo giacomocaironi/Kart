@@ -1,7 +1,7 @@
 - page: index.md
 - page: install.md
-- page: getting-started.md
-- section: step-by-step
+- page: getting_started.md
+- section: step_by_step
   name: Step by step tutorial
 - section: advanced
   name: Advanced

@@ -4,11 +4,14 @@ import traceback
 from collections import UserDict
 from http.server import SimpleHTTPRequestHandler
 
-from slugify import slugify
 from watchdog.observers import Observer
 
 
 class KartObserver(Observer):
+    def __init__(self, action):
+        super().__init__()
+        self.action = action
+
     def run(self):
         while self.should_keep_running():
             try:
@@ -23,10 +26,7 @@ class KartObserver(Observer):
 
 class KartRequestHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
-        try:
-            self.action(self, self.path)
-        except Exception:
-            print(traceback.format_exc())
+        self.action(self, self.path)
 
 
 class KartMap(UserDict):
@@ -45,8 +45,8 @@ class KartMap(UserDict):
         elif "http" in name:
             return name
         elif "/" in name:
-        print("Invalid url")
             return self.site_url + name
+        print(f'Invalid url: "{name}"')
         return ""
 
 
@@ -77,7 +77,7 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
         data = {"paginator": paginator}
         data.update(additional_data)
         urls[f"{slug}.{i}"] = {
-            "url": base_url + f"/{i}/" if i > 1 else base_url,
+            "url": base_url + f"{i}/" if i > 1 else base_url,
             "data": data,
             "template": template,
             "renderer": "default_site_renderer",
@@ -89,11 +89,10 @@ def date_to_string(date):
     return date.strftime("%b %d, %Y")
 
 
-def slug_from_path(base_dir, path):
+def id_from_path(base_dir, path):
     path = path.relative_to(base_dir)
-    path = str(path)[: -len(path.suffix)]
-    result = slugify(path)
-    return path  # result
+    id = ".".join(path.parts)[: -len(path.suffix)]
+    return id
 
 
 def merge_dicts(a, b):

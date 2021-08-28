@@ -23,7 +23,7 @@ k.run()
 
 ```
 
-Copy this to a file ``main.py``. If we try to build the site as we did in the [Getting started](getting-started) guide our script will error saying that it can't find a directory called ``pages``. This error is caused by DefaultPageMiner. The job of a miner is to collect data, and this particular miner looks for files in the ``pages`` directory. If we want we can modify the directory in which it looks just like this:
+Copy this to a file ``main.py``. If we try to build the site as we did in the [Getting started](getting_started) guide our script will error saying that it can't find a directory called ``pages``. This error is caused by DefaultPageMiner. The job of a miner is to collect data, and this particular miner looks for files in the ``pages`` directory. If we want we can modify the directory in which it looks just like this:
 
 ```python
 k.miners = [miners.DefaultPageMiner(directory='custom_directory')]
@@ -70,7 +70,7 @@ This is the homepage of my beautiful site
 
 ## Modify the template
 
-Now try to run the development server as we have seen in the [Getting started](getting-started) guide
+Now try to run the development server as we have seen in the [Getting started](getting_started) guide
 
 ```bash
 $ python main.py serve

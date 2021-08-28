@@ -1,7 +1,6 @@
 import argparse
 import fnmatch
 import shutil
-import sys
 import threading
 import traceback
 from copy import deepcopy
@@ -110,8 +109,7 @@ class Kart:
 
     def serve(self, port=9000):
         self.renderer_dict = {}
-        observer = KartObserver()
-        observer.action = self.update_data
+        observer = KartObserver(action=self.update_data)
         for miner in self.miners:
             miner.start_watching(observer)
         observer.start()
@@ -121,7 +119,6 @@ class Kart:
         handler_class = KartRequestHandler
         handler_class.action = self.serve_page
         httpd = HTTPServer(("", port), handler_class)
-        httpd.timeout = 0.1
         self.update_data()
         shutil.rmtree(self.build_location, ignore_errors=True)
 
@@ -129,16 +126,17 @@ class Kart:
             try:
                 httpd.handle_request()
             except KeyboardInterrupt:
-                print("\rexiting")
-                for miner in self.miners:
-                    miner.stop_watching()
-                for renderer in self.renderers:
-                    renderer.stop_serving()
-                observer.stop()
-                observer.join()
-                sys.exit()
+                break
             except Exception:
                 print(traceback.format_exc())
+
+        print("\rexiting")
+        for miner in self.miners:
+            miner.stop_watching()
+        for renderer in self.renderers:
+            renderer.stop_serving()
+        observer.stop()
+        observer.join()
 
     def run(self):
         parser = argparse.ArgumentParser()

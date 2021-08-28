@@ -67,10 +67,10 @@ k.miners = [
 
 k.mappers = [
   mappers.DefaultTaxonomyMapper(
-    collection_name="posts", taxonomy_name="tags", template="tag.html", base_url="/base/url/of/blog/index"
+    collection="posts", taxonomy="tags", template="tag.html", base_url="/base/url/of/blog/index"
   ),
   mappers.DefaultIndexMapper(
-    collection_name="posts", template="blog_index.html", base_url="/base/url/of/blog/index"
+    collection="posts", template="blog_index.html", base_url="/base/url/of/blog/index"
   ),
   ...
 ]

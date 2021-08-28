@@ -45,7 +45,7 @@ class ManualMapper(pages)
 : Updates map with user defined pages
 
 
-class DefaultCollectionMapper(collection_name, template, base_url)
+class DefaultCollectionMapper(collection, template, base_url)
 : Updates maps with every item in a collection
 
 
@@ -53,11 +53,11 @@ class DefaultPageMapper(template)
 : Updates maps with site pages
 
 
-class DefaultIndexMapper(collection_name, template, base_url)
+class DefaultIndexMapper(collection, template, base_url)
 : Updates map with a collection index
 
 
-class DefaultTaxonomyMapper(collection_name, taxonomy_name, template, base_url)
+class DefaultTaxonomyMapper(collection, taxonomy, template, base_url)
 :  Updates map with a collection index grouped in the same taxonomy
 
 
@@ -113,7 +113,7 @@ class modifiers.RuleContentModifier(rules)
 : Modifies site based on supplied rules
 
 
-class modifiers.CollectionSorter(collection_name, key, reverse)
+class modifiers.CollectionSorter(collection, key, reverse)
 : Sorts collections based on key
 
 # Utils
@@ -138,7 +138,7 @@ function date_to_string()
 : formats a date
 
 
-function slug_from_path()
+function id_from_path()
 : takes a path and outputs its slug
 
 
