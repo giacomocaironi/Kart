@@ -24,8 +24,7 @@ before_script:
   - apt-get install gzip brotli -y
   - python -m venv venv
   - source venv/bin/activate
-  - pip install poetry
-  - poetry install
+  - pip install .
 
 pages:
   script:
