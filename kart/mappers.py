@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 
-from kart.utils import paginate
 from slugify import slugify
+
+from kart.utils import paginate
 
 
 class Mapper(ABC):

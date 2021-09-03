@@ -73,7 +73,6 @@ class Kart:
     # preventing errors when serving the site during development
 
     def update_data(self):
-        self.check_config()
         self.mine_data(False)
         self.create_map()
         _site = deepcopy(self.site)
@@ -108,6 +107,7 @@ class Kart:
             self.renderer_dict[page["renderer"]].serve(handler, page, site_map, site)
 
     def serve(self, port=9000):
+        self.check_config()
         self.renderer_dict = {}
         observer = KartObserver(action=self.update_data)
         for miner in self.miners:
@@ -146,9 +146,17 @@ class Kart:
         parser.add_argument(
             "-p", "--port", help="port to bind to", default=9000, type=int
         )
+        parser.add_argument(
+            "--dev-url",
+            help="serve your site on a different url",
+            type=str,
+        )
         args = parser.parse_args()
         if args.command == "build":
             self.build()
         if args.command == "serve":
-            self.config["site_url"] = f"http://localhost:{args.port}"
+            if args.dev_url:
+                self.config["site_url"] = args.dev_url
+            else:
+                self.config["site_url"] = f"http://localhost:{args.port}"
             self.serve(args.port)
