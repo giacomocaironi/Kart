@@ -1,5 +1,4 @@
 import pkg_resources
-from markdown import markdown_to_html
 
 from kart import Kart, mappers, miners, renderers
 from kart.ext import documentation
@@ -52,10 +51,9 @@ kart.map_modifiers = []
 kart.renderers = [
     renderers.DefaultSiteRenderer(
         filters={
-            "html": markdown_to_html,
+            "html": documentation.markdown_to_html,
             "toc": markdown_to_toc,
             "date_to_string": date_to_string,
-            "html_doc": documentation.markdown_to_html,
         }
     ),
     renderers.DefaultSitemapRenderer(),

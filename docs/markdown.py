@@ -5,6 +5,7 @@ from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
+from kart.ext.documentation import DocumentationDirective
 from kart.markdown import KartMistuneRenderer
 
 
@@ -50,10 +51,9 @@ def markdown_to_html(context, string):
         renderer=DocumentationMistuneRenderer(context=context, escape=False),
         plugins=[
             mistune.plugins.plugin_strikethrough,
-            mistune.plugins.plugin_footnotes,
             mistune.plugins.plugin_table,
             mistune.plugins.plugin_task_lists,
-            mistune.plugins.plugin_def_list,
+            DocumentationDirective(),
             Admonition(),
         ],
     )(string)

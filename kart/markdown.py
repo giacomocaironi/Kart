@@ -50,6 +50,8 @@ def markdown_to_html(context, markdown: str) -> str:
 class TocRenderer(mistune.renderers.BaseRenderer):
     """"""
 
+    SUPPORTED_ELEMENTS = {"heading", "text"}
+
     def text(self, text):
         return text
 
@@ -57,7 +59,7 @@ class TocRenderer(mistune.renderers.BaseRenderer):
         return {"title": children, "id": slugify(children), "level": level}
 
     def _get_method(self, name):
-        if name in ["heading", "text"]:
+        if name in self.SUPPORTED_ELEMENTS:
             return super(TocRenderer, self)._get_method(name)
 
         def null(*args, **kwargs):
@@ -74,6 +76,4 @@ class TocRenderer(mistune.renderers.BaseRenderer):
 
 def markdown_to_toc(markdown: str) -> str:
     """Extracts a list of header from markdown data"""
-    return mistune.Markdown(
-        renderer=TocRenderer(),
-    )(markdown)
+    return mistune.Markdown(renderer=TocRenderer())(markdown)

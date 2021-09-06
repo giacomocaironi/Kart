@@ -127,7 +127,7 @@ The markdown page is actually very simple, most of the work will be done in the 
 {% endblock content %}
 ```
 
-After the header, we iterate through each blog post slug, and we use it to create a link just like we did for the navigation header in the [previous](step-by-step/improving-the-usability) part.
+After the header, we iterate through each blog post slug, and we use it to create a link just like we did for the navigation header in the [previous](step_by_step.improving_the_usability) part.
 
 
 ## Sorting

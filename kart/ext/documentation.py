@@ -16,10 +16,10 @@ import inspect
 
 import mistune
 from jinja2 import contextfilter
+from mistune.directives import Directive
 
 from kart.mappers import Mapper
-from kart.markdown import KartMistuneRenderer
-from mistune.directives import Directive
+from kart.markdown import KartMistuneRenderer, TocRenderer
 
 
 class DefaultDocumentationMiner(DefaultMarkdownMiner):
@@ -108,15 +108,13 @@ class DefaultDocumentationMapper(Mapper):
 
 
 class DocumentationDirective(Directive):
-    SUPPORTED_NAMES = {"function", "class"}
+    """"""
 
     def parse(self, block, m, state):
-        # options = self.parse_options(m)
         name = m.group("name")
         title = m.group("value")
         text = self.parse_text(m)
-        rules = list(block.rules)
-        children = block.parse(text, state, rules)
+        children = block.parse(text, state, block.rules)
         return {"type": name, "children": children, "params": (name, title)}
 
     def render_html_function(self, text, name, loc):
@@ -165,7 +163,7 @@ class DocumentationDirective(Directive):
         return {"type": name, "children": children, "name": name, "title": title}
 
     def __call__(self, md):
-        for name in self.SUPPORTED_NAMES:
+        for name in {"function", "class"}:
             self.register_directive(md, name)
             if md.renderer.NAME == "ast":
                 md.renderer.register(name, self.render_ast)
@@ -183,5 +181,27 @@ def markdown_to_html(context, markdown: str) -> str:
     """
     return mistune.Markdown(
         renderer=KartMistuneRenderer(context=context, escape=False),
-        plugins=[DocumentationDirective(), mistune.plugins.plugin_def_list],
+        plugins=[DocumentationDirective()],
+    )(markdown)
+
+
+class DocumentationTocRenderer(TocRenderer):
+    """"""
+
+    def __init__(self):
+        self._methods = {"class": self._class}
+        self.SUPPORTED_ELEMENTS = {"heading", "text", "class", "function"}
+
+    def function(self, _, type, name, **kwargs):
+        return {"title": name.split(".")[-1], "id": name, "level": 2}
+
+    def _class(self, _, type, name, **kwargs):
+        return {"title": name.split(".")[-1], "id": name, "level": 2}
+
+
+def markdown_to_toc(markdown: str) -> str:
+    """Extracts a list of header from markdown data"""
+    return mistune.Markdown(
+        renderer=DocumentationTocRenderer(),
+        plugins=[DocumentationDirective()],
     )(markdown)

@@ -1,6 +1,5 @@
 ---
 title: Api reference
-template: api.html
 ---
 
 # Miners

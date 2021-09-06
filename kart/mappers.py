@@ -72,8 +72,8 @@ class DefaultPageMapper(Mapper):
 
     def map(self, site):
         urls = {}
-        for slug in site["pages"]:
-            page = site["pages"][slug]
+        for page in site["pages"].values():
+            slug = page["slug"]
             if "url" in page:
                 url = page["url"]
             elif slug == "index":
