@@ -1,4 +1,4 @@
-import shutil
+from distutils.dir_util import copy_tree
 from abc import ABC, abstractmethod
 from datetime import datetime, time
 from http.server import SimpleHTTPRequestHandler
@@ -66,7 +66,7 @@ class DefaultDirectoryRenderer(Renderer):
             if page["renderer"] != self.name:
                 continue
             destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
-            shutil.copytree(self.dir, destination)
+            copy_tree(self.dir, str(destination))
 
     def serve(self, http_handler, page, map, site):
         http_handler.path = self.base_url + http_handler.path
