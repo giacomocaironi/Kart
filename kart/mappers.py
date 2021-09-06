@@ -47,7 +47,7 @@ class DefaultCollectionMapper(Mapper):
     def map(self, site):
         urls = {}
         collection = site[self.collection]
-        for object in collection.values():
+        for object in collection:
             slug = f"{self.collection}.{object['slug']}"
             url = f"/{slugify(self.collection)}/{slugify(object['slug'])}/"
             if "template" in object:
@@ -72,7 +72,7 @@ class DefaultPageMapper(Mapper):
 
     def map(self, site):
         urls = {}
-        for page in site["pages"].values():
+        for page in site["pages"]:
             slug = page["slug"]
             if "url" in page:
                 url = page["url"]
@@ -103,7 +103,7 @@ class DefaultIndexMapper(Mapper):
         self.collection = collection
 
     def map(self, site):
-        items = list(site[self.collection].values())
+        items = list(site[self.collection])
         filtered_items = items[site["config"]["pagination"]["skip"] :]
         paginated_map = paginate(
             objects=filtered_items,
@@ -128,9 +128,9 @@ class DefaultTaxonomyMapper(Mapper):
 
     def map(self, site):
         urls = {}
-        for taxonomy in site[self.taxonomy].values():
+        for taxonomy in site[self.taxonomy]:
             slug = taxonomy["slug"]
-            items = site[self.collection].values()
+            items = site[self.collection]
             filtered_items = []
             for item in items:
                 if isinstance(item[self.taxonomy], str):

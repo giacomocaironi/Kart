@@ -76,6 +76,8 @@ title: Api reference
 
 .. class:: kart.utils.KartRequestHandler
 
+.. class:: kart.utils.KartDict
+
 .. class:: kart.utils.KartMap
 
 .. function:: kart.utils.paginate

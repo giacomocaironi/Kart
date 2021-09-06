@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections import OrderedDict
+from kart.utils import KartDict
 
 
 class ContentModifier(ABC):
@@ -53,4 +53,4 @@ class CollectionSorter(ContentModifier):
         sorted_data = sorted(data.items(), key=lambda x: x[1][self.key])
         if self.reverse:
             sorted_data.reverse()
-        site[self.collection] = OrderedDict(sorted_data)
+        site[self.collection] = KartDict(sorted_data)

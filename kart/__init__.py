@@ -51,7 +51,7 @@ class Kart:
             modifier.modify(self.site)
 
     def create_map(self):
-        self.map = KartMap(self.config["site_url"])
+        self.map = KartMap(site_url=self.config["site_url"])
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
         for modifier in self.map_modifiers:

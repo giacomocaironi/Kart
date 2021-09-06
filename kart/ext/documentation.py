@@ -1,4 +1,4 @@
-from collections import OrderedDict
+from kart.utils import KartDict
 from pathlib import Path
 
 from slugify import slugify
@@ -56,7 +56,7 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
                 self.__recursive_read_data(item, level + 1)
 
     def read_data(self):
-        self.markdown_data = OrderedDict()
+        self.markdown_data = KartDict()
         self.docs_global_toc = []
         self.__recursive_read_data(self.dir)
 

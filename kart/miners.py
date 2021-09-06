@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from collections import OrderedDict
 from pathlib import Path
 
 from watchdog.events import RegexMatchingEventHandler
@@ -11,6 +10,8 @@ try:
 except ImportError:
     from yaml import SafeLoader as YamlLoader
 from typing import Dict
+
+from kart.utils import KartDict
 
 
 class Miner(ABC):
@@ -49,7 +50,7 @@ class DefaultMiner(Miner):
 
         It iterates over a directory and calls collect_single_file() for each file
         """
-        self.data = OrderedDict()
+        self.data = KartDict()
         for file in filter(Path.is_file, self.dir.iterdir()):
             object = self.collect_single_file(file)
             if object:

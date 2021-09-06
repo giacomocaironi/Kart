@@ -38,7 +38,7 @@ class DefaultFileRenderer(Renderer):
         """"""
 
     def render(self, map, site, build_location):
-        for page in map.values():
+        for page in map:
             if page["renderer"] != self.name:
                 continue
             rendered_file = self.render_single(page, map, site)
@@ -62,7 +62,7 @@ class DefaultDirectoryRenderer(Renderer):
         pass
 
     def render(self, map, site, build_location):
-        for page in map.values():
+        for page in map:
             if page["renderer"] != self.name:
                 continue
             destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
@@ -112,7 +112,7 @@ class DefaultSiteRenderer(DefaultFileRenderer):
 
     def render(self, map, site, build_location="_site"):
         if self.process_count == 1:
-            for key in map:
+            for key in map.keys():
                 self._render_single(key, map, site, build_location)
         else:
             with Pool(self.process_count) as p:
@@ -130,7 +130,7 @@ class DefaultFeedRenderer(DefaultFileRenderer):
     def render_single(self, page, map, site):
         feed_entries = []
         for collection in page["data"]["collections"]:
-            for object in site[collection].values():
+            for object in site[collection]:
                 feed_entries.append([map.url(collection, object["slug"]), object])
         feed_entries.sort(key=lambda x: x[1]["date"], reverse=True)
         atom = '<feed xmlns="http://www.w3.org/2005/Atom">'
@@ -167,7 +167,7 @@ class DefaultSitemapRenderer(DefaultFileRenderer):
     def render_single(self, page, map, site):
         sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
         sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-        for x in map.values():
+        for x in map:
             if x["renderer"] != "default_site_renderer":
                 continue
             sitemap += f"<url><loc>{map.url(x['url'])}</loc></url>"

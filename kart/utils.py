@@ -1,7 +1,7 @@
 import math
 import queue
 import traceback
-from collections import UserDict
+from collections import UserDict, OrderedDict
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 from pathlib import Path
@@ -36,21 +36,28 @@ class KartRequestHandler(SimpleHTTPRequestHandler):
         self.action(self, self.path)
 
 
-class KartMap(UserDict):
+class KartDict(OrderedDict):
     """"""
 
-    def __init__(self, site_url, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __iter__(self):
+        return iter(self.values())
+
+
+class KartMap(KartDict):
+    """"""
+
+    def __init__(self, initial_data={}, site_url="", *args, **kwargs):
+        super().__init__(initial_data, *args, **kwargs)
         self.site_url = site_url
 
     def url(self, *name):
         name = ".".join(name)
         if not name:
             return ""
-        if name in self.data.keys():
-            return self.site_url + self.data[name]["url"]
-        elif name + ".1" in self.data.keys():
-            return self.site_url + self.data[name + ".1"]["url"]
+        if name in self.keys():
+            return self.site_url + self[name]["url"]
+        elif name + ".1" in self.keys():
+            return self.site_url + self[name + ".1"]["url"]
         elif "http" in name:
             return name
         elif "/" in name:
