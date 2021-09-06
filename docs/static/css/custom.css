@@ -66,11 +66,10 @@ code {
 }
 
 dl {
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 dt {
-  margin-bottom: 0.3rem;
   font-weight: bold;
 }
 
@@ -78,4 +77,14 @@ dd {
   margin-left: 3rem;
   margin-top: 0.8rem;
   margin-bottom: 0.8rem;
+}
+
+dl>dl {
+  margin-left: 3rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+dd>p {
+  margin-top: 0.5rem;
 }

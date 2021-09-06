@@ -3,18 +3,24 @@ from collections import OrderedDict
 
 
 class ContentModifier(ABC):
+    """"""
+
     @abstractmethod
     def modify(self, site):
-        pass
+        """"""
 
 
 class MapModifier(ABC):
+    """"""
+
     @abstractmethod
     def modify(self, map, site):
-        pass
+        """"""
 
 
 class RuleContentModifier(ContentModifier):
+    """"""
+
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
 
@@ -24,6 +30,8 @@ class RuleContentModifier(ContentModifier):
 
 
 class RuleMapModifier(MapModifier):
+    """"""
+
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
 
@@ -33,6 +41,8 @@ class RuleMapModifier(MapModifier):
 
 
 class CollectionSorter(ContentModifier):
+    """"""
+
     def __init__(self, collection, key, reverse=False):
         self.collection = collection
         self.key = key

@@ -1,173 +1,108 @@
 ---
 title: Api reference
+template: api.html
 ---
 
 # Miners
 
-class miners.Miner
-: Base class
+.. class:: kart.miners.Miner
 
+.. class:: kart.miners.DefaultMiner
 
-class miners.DefaultMiner(miners.Miner)
-: Base class
+.. class:: kart.miners.DefaultMarkdownMiner
 
-class miners.DefaultMarkdownMiner(miners.DefaultMiner)
-: Collects data in the collections folder
+.. class:: kart.miners.DefaultCollectionMiner
 
+.. class:: kart.miners.DefaultTaxonomyMiner
 
-class miners.DefaultCollectionMiner(miners.DefaultMarkdownMiner)
-: Collects data in the collections folder
+.. class:: kart.miners.DefaultPageMiner
 
-
-class miners.DefaultTaxonomyMiner(miners.DefaultMarkdownMiner)
-: Collects data in the taxonomies folder
-
-
-class miners.DefaultPageMiner(miners.DefaultMarkdownMiner)
-: Collects data in the page folder
-
-
-class miners.DefaultDataMiner(miners.DefaultMarkdownMiner)
-: Collects data in the data folder
+.. class:: kart.miners.DefaultDataMiner
 
 
 # Mappers
 
-class Mapper()
-: Base class
+.. class:: kart.mappers.Mapper
 
+.. class:: kart.mappers.RuleMapper
 
-class RuleMapper(rules)
-: Updates map with user defined functions
+.. class:: kart.mappers.ManualMapper
 
+.. class:: kart.mappers.DefaultCollectionMapper
 
-class ManualMapper(pages)
-: Updates map with user defined pages
+.. class:: kart.mappers.DefaultPageMapper
 
+.. class:: kart.mappers.DefaultIndexMapper
 
-class DefaultCollectionMapper(collection, template, base_url)
-: Updates maps with every item in a collection
+.. class:: kart.mappers.DefaultTaxonomyMapper
 
-
-class DefaultPageMapper(template)
-: Updates maps with site pages
-
-
-class DefaultIndexMapper(collection, template, base_url)
-: Updates map with a collection index
-
-
-class DefaultTaxonomyMapper(collection, taxonomy, template, base_url)
-:  Updates map with a collection index grouped in the same taxonomy
-
-
-class DefaultFeedMapper(collections)
-: Updates map with atom feeds page
+.. class:: kart.mappers.DefaultFeedMapper
 
 
 # Renderers
 
-class renderers.Renderer()
-: Base class
+.. class:: kart.renderers.Renderer
 
+.. class:: kart.renderers.DefaultFileRenderer
 
-class renderers.DefaultRenderer()
-: Base class
+.. class:: kart.renderers.DefaultDirectoryRenderer
 
+.. class:: kart.renderers.DefaultSiteRenderer
 
-class renderers.DefaultSiteRenderer(name, template_folder, markdown, process_count)
-: Default jinja2 renderer
+.. class:: kart.renderers.DefaultFeedRenderer
 
+.. class:: kart.renderers.DefaultSitemapRenderer
 
-class renderers.DefaultFeedRenderer(name)
-: Atom feed renderer
+.. class:: kart.renderers.DefaultStaticFilesRenderer
 
-
-class renderers.DefaultSitemapRenderer(name)
-: Sitemap renderer
-
-
-class renderers.DefaultStaticFilesRenderer(name)
-: Static files renderer
-
-
-class renderers.DefaultRootDirRenderer(name)
-: Root directory renderer
+.. class:: kart.renderers.DefaultRootDirRenderer
 
 
 # Modifiers
 
-class modifiers.MapModifier()
-: Base class
+.. class:: kart.modifiers.MapModifier
 
+.. class:: kart.modifiers.ContentModifier
 
-class modifiers.ContentModifier()
-: Base class
+.. class:: kart.modifiers.RuleMapModifier
 
+.. class:: kart.modifiers.RuleContentModifier
 
-class modifiers.RuleMapModifier(rules)
-: Modifies site based on supplied rules
+.. class:: kart.modifiers.CollectionSorter
 
-
-class modifiers.RuleContentModifier(rules)
-: Modifies site based on supplied rules
-
-
-class modifiers.CollectionSorter(collection, key, reverse)
-: Sorts collections based on key
 
 # Utils
 
-class KartObserver(watchdog.observers.Observer)
-: Subclasses a watchdog observer
+.. class:: kart.utils.KartObserver
 
+.. class:: kart.utils.KartRequestHandler
 
-class KartRequestHandler(http.server.SimpleHTTPRequestHandler)
-: Subclasses SimpleHTTPRequestHandler
+.. class:: kart.utils.KartMap
 
+.. function:: kart.utils.paginate
 
-class KartMap(collections.UserDict):
-: Subclasses UserDict
+.. function:: kart.utils.date_to_string
 
+.. function:: kart.utils.id_from_path
 
-function paginate()
-: Takes a list of objects as input and outputs a map with ``n`` objects for each page
-
-
-function date_to_string()
-: formats a date
-
-
-function id_from_path()
-: takes a path and outputs its slug
-
-
-function merge_dicts
-: merge two dicts
+.. function:: kart.utils.merge_dicts
 
 
 # Markdown
 
-class KartMistuneRenderer(mistune.HTMLRenderer)
-: markdown renderer with kart specific features
+.. class:: kart.markdown.KartMistuneRenderer
 
+.. function:: kart.markdown.markdown_to_html
 
-function markdown_to_html()
-: convert markdown to html
+.. class:: kart.markdown.TocRenderer
 
-
-class TocRenderer(mistune.renderers.BaseRenderer)
-: markdown renderer that produces a list of headers
-
-
-function markdown_to_toc()
-: given a markdown file it outputs a list of the headers
+.. function:: kart.markdown.markdown_to_toc
 
 
 # Documentation
 
-class ext.documentation.DefaultDocumentationMiner()
-: Mines data recursively for a documentation
+.. class:: kart.ext.documentation.DefaultDocumentationMiner
 
-class ext.documentation.DefaultDocumentationMapper()
-: Mapper for a documentation
+.. class:: kart.ext.documentation.DefaultDocumentationMapper
+
+.. function:: kart.ext.documentation.markdown_to_html

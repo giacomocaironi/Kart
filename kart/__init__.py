@@ -11,6 +11,8 @@ from kart.utils import KartMap, KartObserver, KartRequestHandler, merge_dicts
 
 
 class Kart:
+    """"""
+
     def __init__(
         self,
         miners=[],

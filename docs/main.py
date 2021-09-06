@@ -55,6 +55,7 @@ kart.renderers = [
             "html": markdown_to_html,
             "toc": markdown_to_toc,
             "date_to_string": date_to_string,
+            "html_doc": documentation.markdown_to_html,
         }
     ),
     renderers.DefaultSitemapRenderer(),

@@ -11,10 +11,20 @@ try:
 except ImportError:
     from yaml import SafeLoader as YamlLoader
 
+import importlib
+import inspect
+
+import mistune
+from jinja2 import contextfilter
+
 from kart.mappers import Mapper
+from kart.markdown import KartMistuneRenderer
+from mistune.directives import Directive
 
 
 class DefaultDocumentationMiner(DefaultMarkdownMiner):
+    """"""
+
     def __init__(self, directory="docs"):
         self.dir = Path(directory)
 
@@ -63,6 +73,8 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
 
 
 class DefaultDocumentationMapper(Mapper):
+    """"""
+
     def __init__(self, template="page.html", base_url=""):
         self.template = template
         self.base_url = base_url
@@ -77,6 +89,10 @@ class DefaultDocumentationMapper(Mapper):
                 url = "/"
             else:
                 url = "/" + "/".join(slugify(part) for part in slug.split(".")) + "/"
+            if "template" in page:
+                template = page["template"]
+            else:
+                template = self.template
             if len(urls):
                 page["previous_page"] = previous_slug
                 urls[previous_slug]["data"]["next_page"] = slug
@@ -84,8 +100,88 @@ class DefaultDocumentationMapper(Mapper):
             map_page = {
                 "url": self.base_url + url,
                 "data": {**page},
-                "template": self.template,
+                "template": template,
                 "renderer": "default_site_renderer",
             }
             urls[slug] = map_page
         return urls
+
+
+class DocumentationDirective(Directive):
+    SUPPORTED_NAMES = {"function", "class"}
+
+    def parse(self, block, m, state):
+        # options = self.parse_options(m)
+        name = m.group("name")
+        title = m.group("value")
+        text = self.parse_text(m)
+        rules = list(block.rules)
+        children = block.parse(text, state, rules)
+        return {"type": name, "children": children, "params": (name, title)}
+
+    def render_html_function(self, text, name, loc):
+        module_name = ".".join(loc.split(".")[:-1])
+        func_name = loc.split(".")[-1]
+        module = importlib.import_module(module_name)
+        module = importlib.reload(module)
+        func = module.__dict__[func_name]
+        sig = inspect.signature(func)
+        html = '<dl classs="function">'
+        html += f'<dt id="{loc}">function {loc}{sig}</dt>'
+        html += f"<dd><p>{func.__doc__}</p></dd>"
+        html += "</dl>"
+        return html
+
+    def render_html_class(self, text, name, loc):
+        module_name = ".".join(loc.split(".")[:-1])
+        func_name = loc.split(".")[-1]
+        module = importlib.import_module(module_name)
+        module = importlib.reload(module)
+        cls = module.__dict__[func_name]
+        parents = []
+        for p in cls.__bases__:
+            parents.append(p.__module__ + "." + p.__name__)
+        html = '<dl classs="class">'
+        html += f'<dt id="{loc}">class {loc}({", ".join(parents)})</dt>'
+        html += f"<dd><p>{cls.__doc__}</p></dd>"
+        for x in inspect.getmembers(cls):
+            try:
+                if x[1].__module__ != module_name:
+                    continue
+                if x[1].__qualname__.split(".")[0] != cls.__name__:
+                    continue
+            except Exception:
+                continue
+            func = cls.__dict__[x[0]]
+            sig = inspect.signature(func)
+            html += '<dl classs="function">'
+            html += f'<dt id="">{func.__name__}{sig}</dt>'
+            html += f"<dd><p>{func.__doc__}</p></dd>"
+            html += "</dl>"
+        html += "</dl>"
+        return html
+
+    def render_ast(self, children, name, title=None):
+        return {"type": name, "children": children, "name": name, "title": title}
+
+    def __call__(self, md):
+        for name in self.SUPPORTED_NAMES:
+            self.register_directive(md, name)
+            if md.renderer.NAME == "ast":
+                md.renderer.register(name, self.render_ast)
+
+        if md.renderer.NAME == "html":
+            md.renderer.register("function", self.render_html_function)
+            md.renderer.register("class", self.render_html_class)
+
+
+@contextfilter
+def markdown_to_html(context, markdown: str) -> str:
+    """Converts markdown data to html.
+    It supports markdown directives to extract the documentation out of python
+    docstrings.
+    """
+    return mistune.Markdown(
+        renderer=KartMistuneRenderer(context=context, escape=False),
+        plugins=[DocumentationDirective(), mistune.plugins.plugin_def_list],
+    )(markdown)

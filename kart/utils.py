@@ -2,17 +2,22 @@ import math
 import queue
 import traceback
 from collections import UserDict
+from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
+from pathlib import Path
 
 from watchdog.observers import Observer
 
 
 class KartObserver(Observer):
+    """Extends whatchdog observer to execute a function after each event"""
+
     def __init__(self, action):
         super().__init__()
         self.action = action
 
     def run(self):
+        """Ovverrides Observer.run() to execute an function each time an even is handled"""
         while self.should_keep_running():
             try:
                 self.dispatch_events(self.event_queue, self.timeout)
@@ -25,11 +30,15 @@ class KartObserver(Observer):
 
 
 class KartRequestHandler(SimpleHTTPRequestHandler):
+    """"""
+
     def do_GET(self):
         self.action(self, self.path)
 
 
 class KartMap(UserDict):
+    """"""
+
     def __init__(self, site_url, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.site_url = site_url
@@ -50,7 +59,15 @@ class KartMap(UserDict):
         return ""
 
 
-def paginate(objects, per_page, template, base_url, slug, additional_data={}):
+def paginate(
+    objects,
+    per_page: int,
+    template: str,
+    base_url: str,
+    slug: str,
+    additional_data: dict = {},
+):
+    """"""
     urls = {}
     paginated_objects = [
         objects[x * per_page : (x + 1) * per_page]
@@ -85,17 +102,20 @@ def paginate(objects, per_page, template, base_url, slug, additional_data={}):
     return urls
 
 
-def date_to_string(date):
+def date_to_string(date: datetime) -> str:
+    "Formats a date to be displayed"
     return date.strftime("%b %d, %Y")
 
 
-def id_from_path(base_dir, path):
+def id_from_path(base_dir: Path, path: Path) -> str:
+    "Return the identifier of a page from its relative filepath"
     path = path.relative_to(base_dir)
     id = ".".join(path.parts)[: -len(path.suffix)]
     return id
 
 
-def merge_dicts(a, b):
+def merge_dicts(a: dict, b: dict) -> dict:
+    """Merge two dicts"""
     for key in b:
         if key not in a:
             a[key] = b[key]

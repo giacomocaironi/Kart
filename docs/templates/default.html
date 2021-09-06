@@ -17,21 +17,21 @@
     <div class="container-fluid">
       <div class="row">
 
-        <div class="col-xl-9">
-          <div class="content">
-            {% block content %}
-              {{ page.content|html }}
-            {% endblock content %}
-          </div>
-        </div>
-
-        <div class="col-xl-3 on-this-page-nav-container">
-          <div class="content">
-            <div class="on-this-page-nav">
-              {% include "toc.html" %}
+        {% block content %}
+          <div class="col-xl-9">
+            <div class="content">
+                {{ page.content|html }}
             </div>
           </div>
-        </div>
+
+          <div class="col-xl-3 on-this-page-nav-container">
+            <div class="content">
+              <div class="on-this-page-nav">
+                {% include "toc.html" %}
+              </div>
+            </div>
+          </div>
+        {% endblock content %}
 
       </div>
     </div>

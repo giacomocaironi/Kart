@@ -1,0 +1,16 @@
+{% extends "default.html" %}
+{% block content %}
+<div class="col-xl-9">
+  <div class="content">
+    {{ page.content|html_doc }}
+  </div>
+</div>
+
+<div class="col-xl-3 on-this-page-nav-container">
+  <div class="content">
+    <div class="on-this-page-nav">
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

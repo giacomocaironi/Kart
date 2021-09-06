@@ -6,12 +6,16 @@ from kart.utils import paginate
 
 
 class Mapper(ABC):
+    """"""
+
     @abstractmethod
     def map(self, site):
-        pass
+        """"""
 
 
 class RuleMapper(Mapper):
+    """"""
+
     def __init__(self, rules=[]):
         self.rules = rules  # a rule is a function
 
@@ -23,6 +27,8 @@ class RuleMapper(Mapper):
 
 
 class ManualMapper(Mapper):
+    """"""
+
     def __init__(self, pages={}):
         self.pages = pages
 
@@ -31,6 +37,8 @@ class ManualMapper(Mapper):
 
 
 class DefaultCollectionMapper(Mapper):
+    """"""
+
     def __init__(self, collection, template="item.html", base_url=""):
         self.template = template
         self.base_url = base_url
@@ -57,6 +65,8 @@ class DefaultCollectionMapper(Mapper):
 
 
 class DefaultPageMapper(Mapper):
+    """"""
+
     def __init__(self, template="page.html"):
         self.template = template
 
@@ -85,6 +95,8 @@ class DefaultPageMapper(Mapper):
 
 
 class DefaultIndexMapper(Mapper):
+    """"""
+
     def __init__(self, collection, template="index.html", base_url=""):
         self.template = template
         self.base_url = base_url
@@ -106,6 +118,8 @@ class DefaultIndexMapper(Mapper):
 
 
 class DefaultTaxonomyMapper(Mapper):
+    """"""
+
     def __init__(self, collection, taxonomy, template="tag.html", base_url=""):
         self.template = template
         self.base_url = base_url
@@ -139,6 +153,8 @@ class DefaultTaxonomyMapper(Mapper):
 
 
 class DefaultFeedMapper(Mapper):
+    """"""
+
     def __init__(self, collections=[]):
         self.collections = collections
 

@@ -7,6 +7,8 @@ from slugify import slugify
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):
+    """"""
+
     def __init__(self, context, *args, **kwargs):
         self.context = context
         super().__init__(*args, **kwargs)
@@ -33,7 +35,8 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
 
 
 @contextfilter
-def markdown_to_html(context, string):
+def markdown_to_html(context, markdown: str) -> str:
+    """Converts markdown data to html"""
     return mistune.Markdown(
         renderer=KartMistuneRenderer(context=context, escape=False),
         plugins=[
@@ -41,10 +44,12 @@ def markdown_to_html(context, string):
             mistune.plugins.plugin_table,
             mistune.plugins.plugin_task_lists,
         ],
-    )(string)
+    )(markdown)
 
 
 class TocRenderer(mistune.renderers.BaseRenderer):
+    """"""
+
     def text(self, text):
         return text
 
@@ -67,7 +72,8 @@ class TocRenderer(mistune.renderers.BaseRenderer):
         return [x for x in data if x]
 
 
-def markdown_to_toc(string):
+def markdown_to_toc(markdown: str) -> str:
+    """Extracts a list of header from markdown data"""
     return mistune.Markdown(
         renderer=TocRenderer(),
-    )(string)
+    )(markdown)
