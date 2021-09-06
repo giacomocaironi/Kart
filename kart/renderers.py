@@ -1,7 +1,6 @@
 import shutil
 from abc import ABC, abstractmethod
 from datetime import datetime, time
-from distutils.dir_util import copy_tree
 from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Pool
 from pathlib import Path
@@ -14,25 +13,29 @@ from kart.utils import date_to_string
 
 
 class Renderer(ABC):
+    """"""
+
     @abstractmethod
     def render(self, map, site, build_location):
-        pass
+        """"""
 
     def start_serving(self):
-        pass
+        """"""
 
     @abstractmethod
     def serve(self, http_handler, page, map, site):
-        pass
+        """"""
 
     def stop_serving(self):
-        pass
+        """"""
 
 
-class DefaultRenderer(Renderer):
+class DefaultFileRenderer(Renderer):
+    """"""
+
     @abstractmethod
     def render_single(self, map, site):
-        pass
+        """"""
 
     def render(self, map, site, build_location):
         for page in map.values():
@@ -44,20 +47,35 @@ class DefaultRenderer(Renderer):
             with path.open("w") as f:
                 f.write(rendered_file)
 
-    def start_serving(self):
-        pass
-
     def serve(self, http_handler, page, map, site):
         http_handler.send_response(200)
         http_handler.send_header("Content-type", self.content_type)
         http_handler.end_headers()
         http_handler.wfile.write(bytes(self.render_single(page, map, site), "utf-8"))
 
-    def stop_serving(self):
+
+class DefaultDirectoryRenderer(Renderer):
+    """"""
+
+    @abstractmethod
+    def __init__(self, name, directory):
         pass
 
+    def render(self, map, site, build_location):
+        for page in map.values():
+            if page["renderer"] != self.name:
+                continue
+            destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
+            shutil.copytree(self.dir, destination)
 
-class DefaultSiteRenderer(DefaultRenderer):
+    def serve(self, http_handler, page, map, site):
+        http_handler.path = self.base_url + http_handler.path
+        return SimpleHTTPRequestHandler.do_GET(http_handler)
+
+
+class DefaultSiteRenderer(DefaultFileRenderer):
+    """"""
+
     def __init__(
         self,
         name="default_site_renderer",
@@ -102,7 +120,9 @@ class DefaultSiteRenderer(DefaultRenderer):
                 p.starmap(self._render_single, data)
 
 
-class DefaultFeedRenderer(DefaultRenderer):
+class DefaultFeedRenderer(DefaultFileRenderer):
+    """"""
+
     def __init__(self, name="default_feed_renderer"):
         self.name = name
         self.content_type = "application/xml"
@@ -137,7 +157,9 @@ class DefaultFeedRenderer(DefaultRenderer):
         return atom
 
 
-class DefaultSitemapRenderer(DefaultRenderer):
+class DefaultSitemapRenderer(DefaultFileRenderer):
+    """"""
+
     def __init__(self, name="default_sitemap_renderer"):
         self.name = name
         self.content_type = "application/xml"
@@ -153,34 +175,19 @@ class DefaultSitemapRenderer(DefaultRenderer):
         return sitemap
 
 
-class DefaultStaticFilesRenderer(Renderer):
+class DefaultStaticFilesRenderer(DefaultDirectoryRenderer):
+    """"""
+
     def __init__(self, name="default_static_files_renderer", directory="static"):
         self.name = name
         self.dir = directory
-
-    def render(self, map, site, build_location):
-        for page in map.values():
-            if page["renderer"] != self.name:
-                continue
-            destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
-            shutil.copytree(self.dir, destination)
-
-    def serve(self, http_handler, page, map, site):
-        return SimpleHTTPRequestHandler.do_GET(http_handler)
+        self.base_url = ""
 
 
-class DefaultRootDirRenderer(Renderer):
+class DefaultRootDirRenderer(DefaultDirectoryRenderer):
+    """"""
+
     def __init__(self, name="default_root_dir_renderer", directory="root"):
         self.name = name
         self.dir = directory
-
-    def render(self, map, site, build_location):
-        for page in map.values():
-            if page["renderer"] != self.name:
-                continue
-            destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
-            copy_tree(self.dir, str(destination))
-
-    def serve(self, http_handler, page, map, site):
-        http_handler.path = "/root" + http_handler.path
-        return SimpleHTTPRequestHandler.do_GET(http_handler)
+        self.base_url = "/root"
