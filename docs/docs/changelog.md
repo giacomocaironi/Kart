@@ -4,6 +4,15 @@ title: Changelog
 
 # Changelog
 
+## v0.11
+
+* base_url in the site configuration has been renamed to site_url
+* collection_name and taxonomy_name have been renamed to collection and taxonomy
+* A new option, --dev-url, has been added to serve the site under a different url
+* The site data and map are now stored in a custom dictionary for easier templates
+* The documentation extension has been improved, and now has the ability to generate documentation from python files, thus ...
+* Now Kart has a technical api reference!
+
 ## v0.10
 
 * python-feedgen dependency has been removed. Now DefaultFeedRenderer use raw strings.
