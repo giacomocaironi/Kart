@@ -1,8 +1,15 @@
 ---
 title: Api reference
 ---
+# Api reference
 
-# Miners
+Api reference for every class and function of Kart.
+
+## Main
+
+.. class:: kart.Kart
+
+## Miners
 
 .. class:: kart.miners.Miner
 
@@ -19,7 +26,7 @@ title: Api reference
 .. class:: kart.miners.DefaultDataMiner
 
 
-# Mappers
+## Mappers
 
 .. class:: kart.mappers.Mapper
 
@@ -38,7 +45,7 @@ title: Api reference
 .. class:: kart.mappers.DefaultFeedMapper
 
 
-# Renderers
+## Renderers
 
 .. class:: kart.renderers.Renderer
 
@@ -57,7 +64,7 @@ title: Api reference
 .. class:: kart.renderers.DefaultRootDirRenderer
 
 
-# Modifiers
+## Modifiers
 
 .. class:: kart.modifiers.MapModifier
 
@@ -70,7 +77,7 @@ title: Api reference
 .. class:: kart.modifiers.CollectionSorter
 
 
-# Utils
+## Utils
 
 .. class:: kart.utils.KartObserver
 
@@ -89,7 +96,7 @@ title: Api reference
 .. function:: kart.utils.merge_dicts
 
 
-# Markdown
+## Markdown
 
 .. class:: kart.markdown.KartMistuneRenderer
 
@@ -100,10 +107,16 @@ title: Api reference
 .. function:: kart.markdown.markdown_to_toc
 
 
-# Documentation
+## Documentation
 
 .. class:: kart.ext.documentation.DefaultDocumentationMiner
 
 .. class:: kart.ext.documentation.DefaultDocumentationMapper
 
+.. class:: kart.ext.documentation.DocumentationDirective
+
 .. function:: kart.ext.documentation.markdown_to_html
+
+.. class:: kart.ext.documentation.DocumentationTocRenderer
+
+.. function:: kart.ext.documentation.markdown_to_toc

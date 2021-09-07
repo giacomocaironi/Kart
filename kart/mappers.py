@@ -2,24 +2,25 @@ from abc import ABC, abstractmethod
 
 from slugify import slugify
 
-from kart.utils import paginate
+from kart.utils import KartDict, KartMap, paginate
 
 
 class Mapper(ABC):
-    """"""
+    """Base mapper class"""
 
     @abstractmethod
-    def map(self, site):
-        """"""
+    def map(self, site: KartDict) -> KartMap:
+        """Takes the site as inputs and outputs a site map"""
 
 
 class RuleMapper(Mapper):
-    """"""
+    """Mapper that uses user defined functions to build the map"""
 
-    def __init__(self, rules=[]):
+    def __init__(self, rules: list = []):
+        """Initializes the mapper with a list of functions"""
         self.rules = rules  # a rule is a function
 
-    def map(self, site):
+    def map(self, site: KartDict) -> KartMap:
         urls = {}
         for rule in self.rules:
             urls.update(rule(site))
@@ -27,24 +28,27 @@ class RuleMapper(Mapper):
 
 
 class ManualMapper(Mapper):
-    """"""
+    """Mapper that adds user defined pages to the map"""
 
-    def __init__(self, pages={}):
+    def __init__(self, pages: dict = {}):
+        """Initializes the mapper with a list of pages"""
         self.pages = pages
 
-    def map(self, site):
+    def map(self, site: KartDict) -> KartMap:
         return self.pages
 
 
 class DefaultCollectionMapper(Mapper):
-    """"""
+    """Mapper intended to be used with DefaultCollectionMiner"""
 
-    def __init__(self, collection, template="item.html", base_url=""):
+    def __init__(
+        self, collection: str, template: str = "item.html", base_url: str = ""
+    ):
         self.template = template
         self.base_url = base_url
         self.collection = collection
 
-    def map(self, site):
+    def map(self, site: KartDict) -> KartMap:
         urls = {}
         collection = site[self.collection]
         for object in collection:
@@ -65,12 +69,12 @@ class DefaultCollectionMapper(Mapper):
 
 
 class DefaultPageMapper(Mapper):
-    """"""
+    """Mapper intended to be used with DefaultPageMiner"""
 
-    def __init__(self, template="page.html"):
+    def __init__(self, template: str = "page.html"):
         self.template = template
 
-    def map(self, site):
+    def map(self, site: KartDict) -> KartMap:
         urls = {}
         for page in site["pages"]:
             slug = page["slug"]
@@ -95,14 +99,16 @@ class DefaultPageMapper(Mapper):
 
 
 class DefaultIndexMapper(Mapper):
-    """"""
+    """Mapper that creates the index pages of a collection"""
 
-    def __init__(self, collection, template="index.html", base_url=""):
+    def __init__(
+        self, collection: str, template: str = "index.html", base_url: str = ""
+    ):
         self.template = template
         self.base_url = base_url
         self.collection = collection
 
-    def map(self, site):
+    def map(self, site: KartDict) -> KartMap:
         items = list(site[self.collection])
         filtered_items = items[site["config"]["pagination"]["skip"] :]
         paginated_map = paginate(
@@ -118,15 +124,21 @@ class DefaultIndexMapper(Mapper):
 
 
 class DefaultTaxonomyMapper(Mapper):
-    """"""
+    """Mapper that creates the index pages of a taxonomy of a collection"""
 
-    def __init__(self, collection, taxonomy, template="tag.html", base_url=""):
+    def __init__(
+        self,
+        collection: str,
+        taxonomy: str,
+        template: str = "tag.html",
+        base_url: str = "",
+    ):
         self.template = template
         self.base_url = base_url
         self.collection = collection
         self.taxonomy = taxonomy
 
-    def map(self, site):
+    def map(self, site: KartDict) -> KartMap:
         urls = {}
         for taxonomy in site[self.taxonomy]:
             slug = taxonomy["slug"]
@@ -153,12 +165,12 @@ class DefaultTaxonomyMapper(Mapper):
 
 
 class DefaultFeedMapper(Mapper):
-    """"""
+    """Mapper that adds an entry for DefaultFeedMapper"""
 
-    def __init__(self, collections=[]):
+    def __init__(self, collections: list = []):
         self.collections = collections
 
-    def map(self, site):
+    def map(self, site: KartDict) -> KartMap:
         return {
             "feed": {
                 "url": "/atom.xml",

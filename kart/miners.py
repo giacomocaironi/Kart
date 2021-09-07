@@ -11,7 +11,7 @@ except ImportError:
     from yaml import SafeLoader as YamlLoader
 from typing import Dict
 
-from kart.utils import KartDict
+from kart.utils import KartDict, KartObserver
 
 
 class Miner(ABC):
@@ -26,7 +26,7 @@ class Miner(ABC):
         """Collects all data"""
 
     @abstractmethod
-    def start_watching(self, observer):
+    def start_watching(self, observer: KartObserver):
         """Start watching for data changes"""
 
     @abstractmethod
@@ -39,14 +39,14 @@ class DefaultMiner(Miner):
 
     @abstractmethod
     def __init__(self):
-        pass
+        """Initializes miner. Must set the ``name`` and ``dir`` variables"""
 
     @abstractmethod
     def collect_single_file(self, file: Path):
         """Reads data from a single file"""
 
     def read_data(self):
-        """Implements Miner.read_data()
+        """Implements Miner.read_data().
 
         It iterates over a directory and calls collect_single_file() for each file
         """
@@ -57,14 +57,10 @@ class DefaultMiner(Miner):
                 self.data.update(object)
 
     def collect(self):
-        """Implements Miner.collect()"""
         return {self.name: self.data}
 
-    def start_watching(self, observer):
-        """Implements Miner.start_watching()
-
-        It register a watchdog handler that calls collect_single_file() when a file has changed
-        """
+    def start_watching(self, observer: KartObserver):
+        """Registers a watchdog handler that calls collect_single_file() when a file has changed"""
 
         class Handler(RegexMatchingEventHandler):
             def on_moved(_, event):
@@ -81,19 +77,15 @@ class DefaultMiner(Miner):
         observer.schedule(Handler(ignore_directories=True), self.dir, recursive=False)
 
     def stop_watching(self):
-        """Implements Miner.stop_watching()
-
-        It does nothing as no cleanup is needed
-        """
+        """Implements Miner.stop_watching(). It does nothing as no cleanup is needed"""
 
 
 class DefaultMarkdownMiner(DefaultMiner):
     """Base miner that implements collect_single_file() for markdown files"""
 
-    def collect_single_file(self, file):
-        """Implements DefaultMiner.collect_single_file()
-
-        It stores the data included in the frontmatter in a dictionary, adds
+    def collect_single_file(self, file: Path) -> str:
+        """
+        Stores the data included in the frontmatter in a dictionary, adds
         the markdown content in the ``content`` field and then return the dictionary
         """
         with file.open("r") as f:
@@ -114,7 +106,8 @@ class DefaultMarkdownMiner(DefaultMiner):
 class DefaultCollectionMiner(DefaultMarkdownMiner):
     """Miner that looks for data in the ``collections`` folder"""
 
-    def __init__(self, collection, directory="collections"):
+    def __init__(self, collection: str, directory: str = "collections"):
+        "Initializes miner. Sets the ``name``, ``dir`` and ``collection`` variables"
         self.collection = collection
         self.dir = Path() / directory / collection
         self.name = self.collection
@@ -123,7 +116,8 @@ class DefaultCollectionMiner(DefaultMarkdownMiner):
 class DefaultTaxonomyMiner(DefaultMarkdownMiner):
     """Miner that looks for data in the ``taxonomy`` folder"""
 
-    def __init__(self, taxonomy, directory="taxonomies"):
+    def __init__(self, taxonomy: str, directory: str = "taxonomies"):
+        "Initializes miner. Sets the ``name``, ``dir`` and ``taxonomy`` variables"
         self.taxonomy = taxonomy
         self.dir = Path() / directory / taxonomy
         self.name = self.taxonomy
@@ -132,23 +126,22 @@ class DefaultTaxonomyMiner(DefaultMarkdownMiner):
 class DefaultPageMiner(DefaultMarkdownMiner):
     """Miner that get data from the ``pages`` folder"""
 
-    def __init__(self, directory="pages"):
+    def __init__(self, directory: str = "pages"):
+        "Initializes miner. Sets the ``name`` and ``dir`` variables"
         self.dir = Path(directory)
         self.name = "pages"
 
 
 class DefaultDataMiner(DefaultMiner):
-    """Miner that get data from the ``data`` folder"""
+    """Miner that get yaml data from the ``data`` folder"""
 
-    def __init__(self, directory="data"):
+    def __init__(self, directory: str = "data"):
+        "Initializes miner. Sets the ``name`` and ``dir`` variables"
         self.dir = Path(directory)
         self.name = "data"
 
-    def collect_single_file(self, file):
-        """Implements DefaultMiner.collect_single_file()
-
-        It uses the yaml loader to get the data from the yaml file
-        """
+    def collect_single_file(self, file: Path) -> str:
+        """Users YamlLoader to get data from a yaml file"""
         with file.open("r") as f:
             slug = id_from_path(self.dir, file)
             return {slug: YamlLoader(f.read()).get_data()}

@@ -75,8 +75,8 @@ dt {
 
 dd {
   margin-left: 3rem;
-  margin-top: 0.8rem;
-  margin-bottom: 0.8rem;
+  margin-top: 0.4rem;
+  margin-bottom: 1.5rem;
 }
 
 dl>dl {
@@ -86,5 +86,5 @@ dl>dl {
 }
 
 dd>p {
-  margin-top: 0.5rem;
+  margin: 0;
 }

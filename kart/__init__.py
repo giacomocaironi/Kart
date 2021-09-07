@@ -11,17 +11,17 @@ from kart.utils import KartMap, KartObserver, KartRequestHandler, merge_dicts
 
 
 class Kart:
-    """"""
+    """Main Kart class"""
 
     def __init__(
         self,
-        miners=[],
-        content_modifiers=[],
-        mappers=[],
-        map_modifiers=[],
-        renderers=[],
-        config={},
-        build_location="_site",
+        miners: list = [],
+        content_modifiers: list = [],
+        mappers: list = [],
+        map_modifiers: list = [],
+        renderers: list = [],
+        config: list = {},
+        build_location: str = "_site",
     ):
         self.miners = miners
         self.content_modifiers = content_modifiers
@@ -33,6 +33,7 @@ class Kart:
         self.lock = threading.Lock()
 
     def check_config(self):
+        """Checks if the config has all the necessary fields and sets them to default values if not"""
         default = {
             "name": "Example",
             "site_url": "https://example.org",
@@ -41,7 +42,8 @@ class Kart:
         }
         merge_dicts(self.config, default)
 
-    def mine_data(self, start=True):
+    def mine_data(self, start: bool = True):
+        """Calls miners and content modifiers"""
         self.site = {"config": self.config}
         for miner in self.miners:
             if start:
@@ -51,6 +53,7 @@ class Kart:
             modifier.modify(self.site)
 
     def create_map(self):
+        """Calls mappers and map modifiers"""
         self.map = KartMap(site_url=self.config["site_url"])
         for mapper in self.mappers:
             self.map.update(mapper.map(self.site))
@@ -58,10 +61,12 @@ class Kart:
             modifier.modify(self.map, self.site)
 
     def write(self):
+        """Calls renderers"""
         for renderer in self.renderers:
             renderer.render(self.map, self.site, self.build_location)
 
     def build(self):
+        """Build the entire site"""
         self.check_config()
         self.mine_data()
         self.create_map()
@@ -75,6 +80,7 @@ class Kart:
     # preventing errors when serving the site during development
 
     def update_data(self):
+        """Update the site data after a file has been changed"""
         self.mine_data(False)
         self.create_map()
         _site = deepcopy(self.site)
@@ -91,7 +97,8 @@ class Kart:
             self._urls = _urls
             self._regexes = _regexes
 
-    def serve_page(self, handler, url):
+    def serve_page(self, handler, url: str):
+        """Serve a single page"""
         with self.lock:
             site_map = self._map
             urls = self._urls
@@ -108,7 +115,8 @@ class Kart:
         if page:
             self.renderer_dict[page["renderer"]].serve(handler, page, site_map, site)
 
-    def serve(self, port=9000):
+    def serve(self, port: int = 9000):
+        """Main loop for serving the site"""
         self.check_config()
         self.renderer_dict = {}
         observer = KartObserver(action=self.update_data)
@@ -141,6 +149,7 @@ class Kart:
         observer.join()
 
     def run(self):
+        """Starts the kart execution. See --help for more information"""
         parser = argparse.ArgumentParser()
         parser.add_argument(
             "command", help="command to execute", choices={"build", "serve"}

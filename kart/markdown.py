@@ -1,5 +1,6 @@
 import mistune
 from jinja2 import contextfilter
+from jinja2.runtime import Context
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
@@ -7,13 +8,14 @@ from slugify import slugify
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):
-    """"""
+    """Custom mistune renderers used by markdown_to_html()"""
 
     def __init__(self, context, *args, **kwargs):
         self.context = context
         super().__init__(*args, **kwargs)
 
     def link(self, link, text=None, title=None):
+        """Renders the ``link`` block"""
         if text is None:
             text = link
         a = f'<a href="{self.context["url"](link)}"'
@@ -23,6 +25,7 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
         return a
 
     def block_code(self, text, lang):
+        """Renders the ``code`` block"""
         if lang:
             lexer = get_lexer_by_name(lang, stripall=True)
             formatter = HtmlFormatter(wrapcode=True)
@@ -31,11 +34,12 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
             return f"<pre><code>{mistune.escape(text.strip())}</code></pre>\n"
 
     def heading(self, text, level, raw=None):
+        """Renders the ``heading`` block"""
         return f"<h{level} id={slugify(text)}>{text}</h{level}>\n"
 
 
 @contextfilter
-def markdown_to_html(context, markdown: str) -> str:
+def markdown_to_html(context: Context, markdown: str) -> str:
     """Converts markdown data to html"""
     return mistune.Markdown(
         renderer=KartMistuneRenderer(context=context, escape=False),
@@ -48,19 +52,21 @@ def markdown_to_html(context, markdown: str) -> str:
 
 
 class TocRenderer(mistune.renderers.BaseRenderer):
-    """"""
+    """Mistune renderer used by markdown_to_toc()"""
 
     SUPPORTED_ELEMENTS = {"heading", "text"}
 
     def text(self, text):
+        """Renders the ``text`` block"""
         return text
 
     def heading(self, children, level):
+        """Renders the ``heading`` block"""
         return {"title": children, "id": slugify(children), "level": level}
 
     def _get_method(self, name):
         if name in self.SUPPORTED_ELEMENTS:
-            return super(TocRenderer, self)._get_method(name)
+            return super()._get_method(name)
 
         def null(*args, **kwargs):
             return ""

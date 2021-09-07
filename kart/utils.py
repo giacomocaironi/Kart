@@ -1,10 +1,11 @@
 import math
 import queue
 import traceback
-from collections import UserDict, OrderedDict
+from collections import OrderedDict
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 from pathlib import Path
+from typing import Callable, List
 
 from watchdog.observers import Observer
 
@@ -12,7 +13,8 @@ from watchdog.observers import Observer
 class KartObserver(Observer):
     """Extends whatchdog observer to execute a function after each event"""
 
-    def __init__(self, action):
+    def __init__(self, action: Callable):
+        """Initializes the observer with the ``action`` variable"""
         super().__init__()
         self.action = action
 
@@ -30,27 +32,30 @@ class KartObserver(Observer):
 
 
 class KartRequestHandler(SimpleHTTPRequestHandler):
-    """"""
+    """Extends SimpleHTTPRequestHandler execute a function for each request"""
 
     def do_GET(self):
+        """Executes self.action() for every get request"""
         self.action(self, self.path)
 
 
 class KartDict(OrderedDict):
-    """"""
+    """Subclass of OrderedDict with a custom iterator"""
 
     def __iter__(self):
+        """Iterate over the dict values instead of the keys"""
         return iter(self.values())
 
 
 class KartMap(KartDict):
-    """"""
+    """Custom dictionary that holds the site map"""
 
-    def __init__(self, initial_data={}, site_url="", *args, **kwargs):
+    def __init__(self, initial_data: dict = {}, site_url: str = "", *args, **kwargs):
         super().__init__(initial_data, *args, **kwargs)
         self.site_url = site_url
 
-    def url(self, *name):
+    def url(self, *name: List[str]) -> str:
+        """Takes as input the slug of a page and returns its absolute url"""
         name = ".".join(name)
         if not name:
             return ""
@@ -67,14 +72,14 @@ class KartMap(KartDict):
 
 
 def paginate(
-    objects,
+    objects: list,
     per_page: int,
     template: str,
     base_url: str,
     slug: str,
     additional_data: dict = {},
-):
-    """"""
+) -> dict:
+    """Splits objects and for each group create an entry in the site map"""
     urls = {}
     paginated_objects = [
         objects[x * per_page : (x + 1) * per_page]

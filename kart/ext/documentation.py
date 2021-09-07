@@ -1,10 +1,10 @@
-from kart.utils import KartDict
 from pathlib import Path
 
 from slugify import slugify
 from watchdog.events import RegexMatchingEventHandler
 
 from kart.miners import DefaultMarkdownMiner
+from kart.utils import KartDict
 
 try:
     from yaml import CSafeLoader as YamlLoader
@@ -16,19 +16,23 @@ import inspect
 
 import mistune
 from jinja2 import contextfilter
+from jinja2.runtime import Context
 from mistune.directives import Directive
 
 from kart.mappers import Mapper
 from kart.markdown import KartMistuneRenderer, TocRenderer
+from kart.utils import KartObserver
 
 
 class DefaultDocumentationMiner(DefaultMarkdownMiner):
-    """"""
+    """Miner that recursively looks for data in the ``docs`` folder"""
 
-    def __init__(self, directory="docs"):
+    def __init__(self, directory: str = "docs"):
+        "Initializes miner. Sets the ``dir`` variable"
         self.dir = Path(directory)
 
-    def __recursive_read_data(self, dir, level=0):
+    def __recursive_read_data(self, dir: Path, level: int = 0):
+        """Helper function"""
         if dir.joinpath("navigation.yml").exists():
             nav_file = dir.joinpath("navigation.yml").open()
             nav_data = YamlLoader(nav_file.read()).get_data()
@@ -63,7 +67,9 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
     def collect(self):
         return {"docs": self.markdown_data, "docs_global_toc": self.docs_global_toc}
 
-    def start_watching(self, observer):
+    def start_watching(self, observer: KartObserver):
+        """Registers a watchdog handler that calls read_data() when a file has changed"""
+
         class Handler(RegexMatchingEventHandler):
             def on_any_event(_, event):
                 self.read_data()
@@ -73,13 +79,13 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
 
 
 class DefaultDocumentationMapper(Mapper):
-    """"""
+    """Mapper intended to be used with DefaultDocumentationMapper"""
 
-    def __init__(self, template="page.html", base_url=""):
+    def __init__(self, template: str = "page.html", base_url: str = ""):
         self.template = template
         self.base_url = base_url
 
-    def map(self, site):
+    def map(self, site: KartDict) -> dict:
         urls = {}
         previous_slug = None
         for slug, page in site["docs"].items():
@@ -108,7 +114,7 @@ class DefaultDocumentationMapper(Mapper):
 
 
 class DocumentationDirective(Directive):
-    """"""
+    """Mistune class that add the ``function`` and ``class`` directive to build a techical documentation"""
 
     def parse(self, block, m, state):
         name = m.group("name")
@@ -118,19 +124,21 @@ class DocumentationDirective(Directive):
         return {"type": name, "children": children, "params": (name, title)}
 
     def render_html_function(self, text, name, loc):
+        """Renders the ``function`` directive"""
         module_name = ".".join(loc.split(".")[:-1])
         func_name = loc.split(".")[-1]
         module = importlib.import_module(module_name)
         module = importlib.reload(module)
         func = module.__dict__[func_name]
         sig = inspect.signature(func)
-        html = '<dl classs="function">'
+        html = "<dl>"
         html += f'<dt id="{loc}">function {loc}{sig}</dt>'
         html += f"<dd><p>{func.__doc__}</p></dd>"
         html += "</dl>"
         return html
 
     def render_html_class(self, text, name, loc):
+        """Renders the ``class`` directive"""
         module_name = ".".join(loc.split(".")[:-1])
         func_name = loc.split(".")[-1]
         module = importlib.import_module(module_name)
@@ -142,6 +150,7 @@ class DocumentationDirective(Directive):
         html = '<dl classs="class">'
         html += f'<dt id="{loc}">class {loc}({", ".join(parents)})</dt>'
         html += f"<dd><p>{cls.__doc__}</p></dd>"
+        functions = []
         for x in inspect.getmembers(cls):
             try:
                 if x[1].__module__ != module_name:
@@ -150,12 +159,19 @@ class DocumentationDirective(Directive):
                     continue
             except Exception:
                 continue
-            func = cls.__dict__[x[0]]
+            functions.append(cls.__dict__[x[0]])
+        if functions:
+            html += "<dl>"
+        for func in functions:
             sig = inspect.signature(func)
-            html += '<dl classs="function">'
-            html += f'<dt id="">{func.__name__}{sig}</dt>'
-            html += f"<dd><p>{func.__doc__}</p></dd>"
+            if inspect.isabstract(cls) and func.__name__ in cls.__abstractmethods__:
+                html += "<dt>@abstractmethod</dt>"
+            html += f"<dt>{func.__name__}{sig}</dt>"
+            if inspect.getdoc(func):
+                html += f"<dd><p>{inspect.getdoc(func)}</p></dd>"
+        if functions:
             html += "</dl>"
+
         html += "</dl>"
         return html
 
@@ -174,7 +190,7 @@ class DocumentationDirective(Directive):
 
 
 @contextfilter
-def markdown_to_html(context, markdown: str) -> str:
+def markdown_to_html(context: Context, markdown: str) -> str:
     """Converts markdown data to html.
     It supports markdown directives to extract the documentation out of python
     docstrings.
@@ -186,16 +202,18 @@ def markdown_to_html(context, markdown: str) -> str:
 
 
 class DocumentationTocRenderer(TocRenderer):
-    """"""
+    """Mistune renderer used by markdown_to_toc()"""
 
     def __init__(self):
         self._methods = {"class": self._class}
         self.SUPPORTED_ELEMENTS = {"heading", "text", "class", "function"}
 
     def function(self, _, type, name, **kwargs):
+        """Renders the ``function`` directive"""
         return {"title": name.split(".")[-1], "id": name, "level": 2}
 
     def _class(self, _, type, name, **kwargs):
+        """Renders the ``class`` directive"""
         return {"title": name.split(".")[-1], "id": name, "level": 2}
 
 

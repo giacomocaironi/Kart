@@ -9,33 +9,37 @@ from dateutil import tz
 from jinja2 import Environment, FileSystemLoader
 
 from kart.markdown import markdown_to_html, markdown_to_toc
-from kart.utils import date_to_string
+from kart.utils import KartDict, KartMap, date_to_string
 
 
 class Renderer(ABC):
-    """"""
+    """Base Renderer class"""
 
     @abstractmethod
-    def render(self, map, site, build_location):
-        """"""
+    def render(self, map: KartMap, site: KartDict, build_location: str):
+        """Renders each page indented for this renderer"""
 
     def start_serving(self):
-        """"""
+        """Start the dev server, if necessary"""
 
     @abstractmethod
-    def serve(self, http_handler, page, map, site):
-        """"""
+    def serve(self, http_handler, page: dict, map: KartMap, site: KartDict):
+        """Serves the the requested page"""
 
     def stop_serving(self):
-        """"""
+        """Stops the dev server, if necessary"""
 
 
 class DefaultFileRenderer(Renderer):
-    """"""
+    """Base class for renderers that render file individually"""
 
     @abstractmethod
-    def render_single(self, map, site):
-        """"""
+    def __init__(self, name: str):
+        """Initializes renderer. Must set the ``name`` and ``content_type`` variables"""
+
+    @abstractmethod
+    def render_single(self, page: dict, map: KartMap, site: KartDict) -> str:
+        """Renders a single file"""
 
     def render(self, map, site, build_location):
         for page in map:
@@ -47,7 +51,7 @@ class DefaultFileRenderer(Renderer):
             with path.open("w") as f:
                 f.write(rendered_file)
 
-    def serve(self, http_handler, page, map, site):
+    def serve(self, http_handler, page: dict, map: KartMap, site: KartDict):
         http_handler.send_response(200)
         http_handler.send_header("Content-type", self.content_type)
         http_handler.end_headers()
@@ -55,37 +59,38 @@ class DefaultFileRenderer(Renderer):
 
 
 class DefaultDirectoryRenderer(Renderer):
-    """"""
+    """Base class for renderers that render directories"""
 
     @abstractmethod
-    def __init__(self, name, directory):
-        pass
+    def __init__(self, name: str, directory: str):
+        """Initializes renderer. Must set the ``name``, ``dir`` and ``base_url`` variables"""
 
-    def render(self, map, site, build_location):
+    def render(self, map: KartMap, site: KartDict, build_location: str):
+        """Copies the entire directory to the target destination"""
         for page in map:
             if page["renderer"] != self.name:
                 continue
             destination = Path(build_location) / Path(*Path(page["url"][:-1]).parts[1:])
             copy_tree(self.dir, str(destination))
 
-    def serve(self, http_handler, page, map, site):
+    def serve(self, http_handler, page: dict, map: KartMap, site: KartDict):
         http_handler.path = self.base_url + http_handler.path
         return SimpleHTTPRequestHandler.do_GET(http_handler)
 
 
 class DefaultSiteRenderer(DefaultFileRenderer):
-    """"""
+    """Default renderer for rendering html files"""
 
     def __init__(
         self,
-        name="default_site_renderer",
-        template_folder="templates",
-        filters={
+        name: str = "default_site_renderer",
+        template_folder: str = "templates",
+        filters: dict = {
             "html": markdown_to_html,
             "toc": markdown_to_toc,
             "date_to_string": date_to_string,
         },
-        process_count=1,
+        process_count: int = 1,
     ):
         self.name = name
         self.content_type = "text/html"
@@ -94,12 +99,15 @@ class DefaultSiteRenderer(DefaultFileRenderer):
         self.env = Environment(loader=FileSystemLoader(self.template_folder))
         self.env.filters.update(filters)
 
-    def render_single(self, page, map, site):
+    def render_single(self, page: dict, map: KartMap, site: KartDict) -> str:
         template = self.env.get_template(page["template"])
         page = {**page["data"], "url": page["url"]}
         return template.render(page=page, site=site, url=map.url)
 
-    def _render_single(self, key, map, site, build_location):
+    def _render_single(
+        self, key: str, map: KartMap, site: KartDict, build_location: str
+    ):
+        """Renderers a single file and saves it to the disk"""
         page = map[key]
         if page["renderer"] != self.name:
             return
@@ -110,7 +118,8 @@ class DefaultSiteRenderer(DefaultFileRenderer):
         with path.open("w") as f:
             f.write(rendered_file)
 
-    def render(self, map, site, build_location="_site"):
+    def render(self, map: KartMap, site: KartDict, build_location: str = "_site"):
+        """Renderers all the files with a multiprocessing Pool for faster build times"""
         if self.process_count == 1:
             for key in map.keys():
                 self._render_single(key, map, site, build_location)
@@ -121,13 +130,15 @@ class DefaultSiteRenderer(DefaultFileRenderer):
 
 
 class DefaultFeedRenderer(DefaultFileRenderer):
-    """"""
+    """Renders an atom feed file"""
 
-    def __init__(self, name="default_feed_renderer"):
+    def __init__(self, name: str = "default_feed_renderer"):
+        """Initializes renderer. Sets the ``name`` and ``content_type`` variables"""
         self.name = name
         self.content_type = "application/xml"
 
-    def render_single(self, page, map, site):
+    def render_single(self, page: dict, map: KartMap, site: KartDict) -> str:
+        """Creates the atom feeds"""
         feed_entries = []
         for collection in page["data"]["collections"]:
             for object in site[collection]:
@@ -158,13 +169,15 @@ class DefaultFeedRenderer(DefaultFileRenderer):
 
 
 class DefaultSitemapRenderer(DefaultFileRenderer):
-    """"""
+    """Renders the sitemap of the site"""
 
-    def __init__(self, name="default_sitemap_renderer"):
+    def __init__(self, name: str = "default_sitemap_renderer"):
+        """Initializes renderer. Sets the ``name`` and ``content_type`` variables"""
         self.name = name
         self.content_type = "application/xml"
 
-    def render_single(self, page, map, site):
+    def render_single(self, page: dict, map: KartMap, site: KartDict):
+        """Uses the site ``map`` variable to create the sitemap"""
         sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
         sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
         for x in map:
@@ -176,18 +189,24 @@ class DefaultSitemapRenderer(DefaultFileRenderer):
 
 
 class DefaultStaticFilesRenderer(DefaultDirectoryRenderer):
-    """"""
+    """Renders all files in the ``static`` directory"""
 
-    def __init__(self, name="default_static_files_renderer", directory="static"):
+    def __init__(
+        self, name: str = "default_static_files_renderer", directory: str = "static"
+    ):
+        """Initializes renderer. Sets the ``name``, ``dir`` and ``content_type`` variables"""
         self.name = name
         self.dir = directory
         self.base_url = ""
 
 
 class DefaultRootDirRenderer(DefaultDirectoryRenderer):
-    """"""
+    """Renders all files in the ``root`` directory"""
 
-    def __init__(self, name="default_root_dir_renderer", directory="root"):
+    def __init__(
+        self, name: str = "default_root_dir_renderer", directory: str = "root"
+    ):
+        """Initializes renderer. Sets the ``name``, ``dir`` and ``content_type`` variables"""
         self.name = name
         self.dir = directory
         self.base_url = "/root"
