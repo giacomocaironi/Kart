@@ -77,6 +77,8 @@ class DefaultPageMapper(Mapper):
     def map(self, site: KartDict) -> KartMap:
         urls = {}
         for page in site["pages"]:
+            if "draft" in page and page["draft"] and site["config"]["serving"]:
+                continue
             slug = page["slug"]
             if "url" in page:
                 url = page["url"]
@@ -179,3 +181,48 @@ class DefaultFeedMapper(Mapper):
                 "renderer": "default_feed_renderer",
             }
         }
+
+
+# class DefaultSitemapMapper(Mapper):
+#     """Mapper that adds an entry for DefaultFeedMapper"""
+#
+#     def map(self, site: KartDict) -> KartMap:
+#         return {
+#             "feed": {
+#                 "url": "/atom.xml",
+#                 "data": {"collections": self.collections},
+#                 "template": "",
+#                 "renderer": "default_feed_renderer",
+#             }
+#         }
+#
+#
+# class DefaultStaticFilesMapper(Mapper):
+#     """Mapper that adds an entry for DefaultFeedMapper"""
+#
+#     def map(self, site: KartDict) -> KartMap:
+#         return {
+#             "feed": {
+#                 "url": "/atom.xml",
+#                 "data": {"collections": self.collections},
+#                 "template": "",
+#                 "renderer": "default_feed_renderer",
+#             }
+#         }
+#
+#
+# class DefaultRootDirMapper(Mapper):
+#     """Mapper that adds an entry for DefaultFeedMapper"""
+#
+#     def __init__(self, collections: list = []):
+#         self.collections = collections
+#
+#     def map(self, site: KartDict) -> KartMap:
+#         return {
+#             "feed": {
+#                 "url": "/atom.xml",
+#                 "data": {"collections": self.collections},
+#                 "template": "",
+#                 "renderer": "default_feed_renderer",
+#             }
+#         }

@@ -6,6 +6,10 @@ title: Changelog
 
 ## v0.11
 
+Show pages with draft equal to true when serving the site. A new field, ``serving``, has been added to the config dict that signals if we are serving or building. 
+
+## v0.11
+
 * base_url in the site configuration has been renamed to site_url
 * collection_name and taxonomy_name have been renamed to collection and taxonomy
 * A new option, --dev-url, has been added to serve the site under a different url

@@ -97,9 +97,6 @@ class DefaultMarkdownMiner(DefaultMiner):
             object["slug"] = slug
             object["content"] = content
             object["content_type"] = "markdown"
-            if "draft" in object.keys():
-                if object["draft"]:
-                    return False
             return {slug: object}
 
 

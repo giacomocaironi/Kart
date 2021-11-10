@@ -165,7 +165,9 @@ class Kart:
         args = parser.parse_args()
         if args.command == "build":
             self.build()
+            self.config["serving"] = False
         if args.command == "serve":
+            self.config["serving"] = True
             if args.dev_url:
                 self.config["site_url"] = args.dev_url
             else:
