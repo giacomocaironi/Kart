@@ -4,6 +4,11 @@ title: Changelog
 
 # Changelog
 
+## v0.12
+
+* The ``config`` dictionary is now given as input to every function. It is also passed as a separate argument to Jinja2 templates instead of being a part of ``site``.
+* Kart now properly addresses the ``draft`` field in markdown files
+
 ## v0.11
 
 * base_url in the site configuration has been renamed to site_url
