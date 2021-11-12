@@ -20,7 +20,7 @@ class Kart:
         mappers: list = [],
         map_modifiers: list = [],
         renderers: list = [],
-        config: list = {},
+        config: dict = {},
         build_location: str = "_site",
     ):
         self.miners = miners
@@ -39,31 +39,32 @@ class Kart:
             "site_url": "https://example.org",
             "pagination": {"per_page": 5, "skip": 0},
             "timezone": "UTC",
+            "serving": False,
         }
         merge_dicts(self.config, default)
 
     def mine_data(self, start: bool = True):
         """Calls miners and content modifiers"""
-        self.site = {"config": self.config}
+        self.site = {}
         for miner in self.miners:
             if start:
-                miner.read_data()
-            self.site.update(miner.collect())
+                miner.read_data(self.config)
+            self.site.update(miner.collect(self.config))
         for modifier in self.content_modifiers:
-            modifier.modify(self.site)
+            modifier.modify(self.config, self.site)
 
     def create_map(self):
         """Calls mappers and map modifiers"""
         self.map = KartMap(site_url=self.config["site_url"])
         for mapper in self.mappers:
-            self.map.update(mapper.map(self.site))
+            self.map.update(mapper.map(self.config, self.site))
         for modifier in self.map_modifiers:
-            modifier.modify(self.map, self.site)
+            modifier.modify(self.config, self.site, self.map)
 
     def write(self):
         """Calls renderers"""
         for renderer in self.renderers:
-            renderer.render(self.map, self.site, self.build_location)
+            renderer.render(self.config, self.site, self.map, self.build_location)
 
     def build(self):
         """Build the entire site"""
@@ -113,7 +114,8 @@ class Kart:
             except StopIteration:
                 page = None
         if page:
-            self.renderer_dict[page["renderer"]].serve(handler, page, site_map, site)
+            renderer = self.renderer_dict[page["renderer"]]
+            renderer.serve(handler, page, self.config, site, site_map)
 
     def serve(self, port: int = 9000):
         """Main loop for serving the site"""
@@ -121,11 +123,11 @@ class Kart:
         self.renderer_dict = {}
         observer = KartObserver(action=self.update_data)
         for miner in self.miners:
-            miner.start_watching(observer)
+            miner.start_watching(self.config, observer)
         observer.start()
         for renderer in self.renderers:
             self.renderer_dict[renderer.name] = renderer
-            renderer.start_serving()
+            renderer.start_serving(self.config)
         handler_class = KartRequestHandler
         handler_class.action = self.serve_page
         httpd = HTTPServer(("", port), handler_class)
@@ -142,9 +144,9 @@ class Kart:
 
         print("\rexiting")
         for miner in self.miners:
-            miner.stop_watching()
+            miner.stop_watching(self.config)
         for renderer in self.renderers:
-            renderer.stop_serving()
+            renderer.stop_serving(self.config)
         observer.stop()
         observer.join()
 
@@ -164,8 +166,8 @@ class Kart:
         )
         args = parser.parse_args()
         if args.command == "build":
-            self.build()
             self.config["serving"] = False
+            self.build()
         if args.command == "serve":
             self.config["serving"] = True
             if args.dev_url:

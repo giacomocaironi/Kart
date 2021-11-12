@@ -9,7 +9,7 @@ class Mapper(ABC):
     """Base mapper class"""
 
     @abstractmethod
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         """Takes the site as inputs and outputs a site map"""
 
 
@@ -20,7 +20,7 @@ class RuleMapper(Mapper):
         """Initializes the mapper with a list of functions"""
         self.rules = rules  # a rule is a function
 
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         urls = {}
         for rule in self.rules:
             urls.update(rule(site))
@@ -34,7 +34,7 @@ class ManualMapper(Mapper):
         """Initializes the mapper with a list of pages"""
         self.pages = pages
 
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         return self.pages
 
 
@@ -48,7 +48,7 @@ class DefaultCollectionMapper(Mapper):
         self.base_url = base_url
         self.collection = collection
 
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         urls = {}
         collection = site[self.collection]
         for object in collection:
@@ -74,11 +74,9 @@ class DefaultPageMapper(Mapper):
     def __init__(self, template: str = "page.html"):
         self.template = template
 
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         urls = {}
         for page in site["pages"]:
-            if "draft" in page and page["draft"] and site["config"]["serving"]:
-                continue
             slug = page["slug"]
             if "url" in page:
                 url = page["url"]
@@ -110,12 +108,12 @@ class DefaultIndexMapper(Mapper):
         self.base_url = base_url
         self.collection = collection
 
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         items = list(site[self.collection])
-        filtered_items = items[site["config"]["pagination"]["skip"] :]
+        filtered_items = items[config["pagination"]["skip"] :]
         paginated_map = paginate(
             objects=filtered_items,
-            per_page=site["config"]["pagination"]["per_page"],
+            per_page=config["pagination"]["per_page"],
             template=self.template,
             base_url=self.base_url + "/index/page/",
             slug=f"{self.collection}_index",
@@ -140,7 +138,7 @@ class DefaultTaxonomyMapper(Mapper):
         self.collection = collection
         self.taxonomy = taxonomy
 
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         urls = {}
         for taxonomy in site[self.taxonomy]:
             slug = taxonomy["slug"]
@@ -156,7 +154,7 @@ class DefaultTaxonomyMapper(Mapper):
             urls.update(
                 paginate(
                     objects=filtered_items,
-                    per_page=site["config"]["pagination"]["per_page"],
+                    per_page=config["pagination"]["per_page"],
                     template=self.template,
                     base_url=self.base_url + f"/{self.taxonomy}/{slug}/",
                     slug=f"{self.taxonomy}.{slug}",
@@ -172,7 +170,7 @@ class DefaultFeedMapper(Mapper):
     def __init__(self, collections: list = []):
         self.collections = collections
 
-    def map(self, site: KartDict) -> KartMap:
+    def map(self, config: dict, site: KartDict) -> KartMap:
         return {
             "feed": {
                 "url": "/atom.xml",

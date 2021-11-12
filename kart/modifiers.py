@@ -7,7 +7,7 @@ class ContentModifier(ABC):
     """Base ContentModifier class"""
 
     @abstractmethod
-    def modify(self, site: KartDict):
+    def modify(self, config: dict, site: KartDict):
         """Takes as input the site and modifies it"""
 
 
@@ -15,7 +15,7 @@ class MapModifier(ABC):
     """Base MapModifier class"""
 
     @abstractmethod
-    def modify(self, map: KartMap, site: KartDict):
+    def modify(self, config: dict, site: KartDict, map: KartMap):
         """Takes as input the site and the site map and modifies them"""
 
 
@@ -25,7 +25,7 @@ class RuleContentModifier(ContentModifier):
     def __init__(self, rules: list = []):
         self.rules = rules  # a rule is a function
 
-    def modify(self, site: KartDict):
+    def modify(self, config: dict, site: KartDict):
         for rule in self.rules:
             rule(site)
 
@@ -36,7 +36,7 @@ class RuleMapModifier(MapModifier):
     def __init__(self, rules: list = []):
         self.rules = rules  # a rule is a function
 
-    def modify(self, map: KartMap, site: KartDict):
+    def modify(self, config: dict, site: KartDict, map: KartMap):
         for rule in self.rules:
             rule(map, site)
 
@@ -49,7 +49,7 @@ class CollectionSorter(ContentModifier):
         self.key = key
         self.reverse = reverse
 
-    def modify(self, site: KartDict):
+    def modify(self, config: dict, site: KartDict):
         """Sorts the collection"""
         data = site[self.collection]
         sorted_data = sorted(data.items(), key=lambda x: x[1][self.key])

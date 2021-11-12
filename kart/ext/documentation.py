@@ -59,22 +59,22 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
                 self.docs_global_toc.append(toc_entry)
                 self.__recursive_read_data(item, level + 1)
 
-    def read_data(self):
+    def read_data(self, config: dict):
         self.markdown_data = KartDict()
         self.docs_global_toc = []
         self.__recursive_read_data(self.dir)
 
-    def collect(self):
+    def collect(self, config: dict):
         return {"docs": self.markdown_data, "docs_global_toc": self.docs_global_toc}
 
-    def start_watching(self, observer: KartObserver):
+    def start_watching(self, config: dict, observer: KartObserver):
         """Registers a watchdog handler that calls read_data() when a file has changed"""
 
         class Handler(RegexMatchingEventHandler):
             def on_any_event(_, event):
                 self.read_data()
 
-        self.read_data()
+        self.read_data(config)
         observer.schedule(Handler(), self.dir, recursive=True)
 
 
@@ -85,7 +85,7 @@ class DefaultDocumentationMapper(Mapper):
         self.template = template
         self.base_url = base_url
 
-    def map(self, site: KartDict) -> dict:
+    def map(self, config: dict, site: KartDict) -> dict:
         urls = {}
         previous_slug = None
         for slug, page in site["docs"].items():

@@ -18,19 +18,19 @@ class Miner(ABC):
     """Base miner class"""
 
     @abstractmethod
-    def read_data(self):
+    def read_data(self, config: dict):
         """Reads data from its source"""
 
     @abstractmethod
-    def collect(self) -> Dict:
+    def collect(self, config: dict) -> Dict:
         """Collects all data"""
 
     @abstractmethod
-    def start_watching(self, observer: KartObserver):
+    def start_watching(self, config: dict, observer: KartObserver):
         """Start watching for data changes"""
 
     @abstractmethod
-    def stop_watching(self):
+    def stop_watching(self, config: dict):
         """Stop watching for data changes"""
 
 
@@ -45,7 +45,7 @@ class DefaultMiner(Miner):
     def collect_single_file(self, file: Path):
         """Reads data from a single file"""
 
-    def read_data(self):
+    def read_data(self, config: dict):
         """Implements Miner.read_data().
 
         It iterates over a directory and calls collect_single_file() for each file
@@ -56,10 +56,10 @@ class DefaultMiner(Miner):
             if object:
                 self.data.update(object)
 
-    def collect(self):
+    def collect(self, config: dict):
         return {self.name: self.data}
 
-    def start_watching(self, observer: KartObserver):
+    def start_watching(self, config: dict, observer: KartObserver):
         """Registers a watchdog handler that calls collect_single_file() when a file has changed"""
 
         class Handler(RegexMatchingEventHandler):
@@ -73,10 +73,10 @@ class DefaultMiner(Miner):
             def on_deleted(_, event):
                 self.data.pop(id_from_path(self.dir, Path(event.src_path)))
 
-        self.read_data()
+        self.read_data(config)
         observer.schedule(Handler(ignore_directories=True), self.dir, recursive=False)
 
-    def stop_watching(self):
+    def stop_watching(self, config: dict):
         """Implements Miner.stop_watching(). It does nothing as no cleanup is needed"""
 
 
