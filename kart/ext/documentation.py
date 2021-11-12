@@ -31,7 +31,7 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
         "Initializes miner. Sets the ``dir`` variable"
         self.dir = Path(directory)
 
-    def __recursive_read_data(self, dir: Path, level: int = 0):
+    def __recursive_read_data(self, config: dict, dir: Path, level: int = 0):
         """Helper function"""
         if dir.joinpath("navigation.yml").exists():
             nav_file = dir.joinpath("navigation.yml").open()
@@ -48,7 +48,7 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
 
         for i, item in enumerate(paths):
             if item.is_file():
-                object = self.collect_single_file(item)
+                object = self.collect_single_file(item, config)
                 slug, page = list(object.items())[0]
                 toc_entry = {"title": page["title"], "slug": slug, "level": level}
                 self.docs_global_toc.append(toc_entry)
@@ -57,12 +57,12 @@ class DefaultDocumentationMiner(DefaultMarkdownMiner):
             elif item.is_dir():
                 toc_entry = {"title": nav_data[i]["name"], "slug": None, "level": level}
                 self.docs_global_toc.append(toc_entry)
-                self.__recursive_read_data(item, level + 1)
+                self.__recursive_read_data(config, item, level + 1)
 
     def read_data(self, config: dict):
         self.markdown_data = KartDict()
         self.docs_global_toc = []
-        self.__recursive_read_data(self.dir)
+        self.__recursive_read_data(config, self.dir)
 
     def collect(self, config: dict):
         return {"docs": self.markdown_data, "docs_global_toc": self.docs_global_toc}
