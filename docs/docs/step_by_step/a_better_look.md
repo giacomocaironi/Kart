@@ -120,7 +120,7 @@ On the right of the favicon on most sites you can see a brief description of the
   <head>
     <meta charset="utf-8">
     {% block title %}
-      <title>{{site.config.name}}</title>
+      <title>{{config.name}}</title>
     {% endblock title %}
 
 ...
@@ -132,7 +132,7 @@ Now when we go to our site in the browser we should see the name of the site alo
 {% extends "base.html" %}
 
 {% block content %}
-<title>{{site.config.name}} - {{page.title}}</title>
+<title>{{config.name}} - {{page.title}}</title>
 {% endblock content %}
 
 {% block content %}

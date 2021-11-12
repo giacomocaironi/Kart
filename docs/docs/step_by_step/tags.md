@@ -87,7 +87,7 @@ As you can see from ``main.py`` we need a new template for the tags, however we 
 {% extends "base.html" %}
 
 {% block title %}
-<title>{{site.config.name}} - Tags - {{ page.name }}</title>
+<title>{{config.name}} - Tags - {{ page.name }}</title>
 {% endblock title %}
 
 {% block content %}

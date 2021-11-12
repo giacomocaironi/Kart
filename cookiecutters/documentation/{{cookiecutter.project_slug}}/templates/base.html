@@ -25,9 +25,9 @@
   {% endblock main %}
 
   <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
-  {% if site.config.repository_url.split('/')[2].split('.')[0] == 'github' %}
+  {% if config.repository_url.split('/')[2].split('.')[0] == 'github' %}
     <script async defer src={{ url('/static/js/github.js') }}></script>
-  {% elif site.config.repository_url.split('/')[2].split('.')[0] == 'gitlab' %}
+  {% elif config.repository_url.split('/')[2].split('.')[0] == 'gitlab' %}
     <script async defer src={{ url('/static/js/gitlab.js') }}></script>
   {% endif %}
 

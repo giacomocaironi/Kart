@@ -106,7 +106,7 @@ The markdown page is actually very simple, most of the work will be done in the 
 {% extends "base.html" %}
 
 {% block title %}
-<title>{{site.config.name}} - Blog Index</title>
+<title>{{config.name}} - Blog Index</title>
 {% endblock title %}
 
 {% block content %}

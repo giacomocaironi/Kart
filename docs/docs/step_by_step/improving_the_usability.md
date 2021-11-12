@@ -66,7 +66,7 @@ In our navigation bar, other than the link to other pages, we should also have t
 ```html
 ...
     <nav>
-      {{site.config.name}}
+      {{config.name}}
       {% for slug in site.pages %}
 ...
 ```
