@@ -42,7 +42,7 @@ class DefaultMiner(Miner):
         """Initializes miner. Must set the ``name`` and ``dir`` variables"""
 
     @abstractmethod
-    def collect_single_file(self, file: Path):
+    def collect_single_file(self, file: Path, config: dict):
         """Reads data from a single file"""
 
     def read_data(self, config: dict):
@@ -52,7 +52,7 @@ class DefaultMiner(Miner):
         """
         self.data = KartDict()
         for file in filter(Path.is_file, self.dir.iterdir()):
-            object = self.collect_single_file(file)
+            object = self.collect_single_file(file, config)
             if object:
                 self.data.update(object)
 
@@ -65,10 +65,10 @@ class DefaultMiner(Miner):
         class Handler(RegexMatchingEventHandler):
             def on_moved(_, event):
                 self.data.pop(id_from_path(self.dir, Path(event.src_path)))
-                self.data.update(self.collect_single_file(Path(event.src_path)))
+                self.data.update(self.collect_single_file(Path(event.src_path), config))
 
             def on_modified(_, event):
-                self.data.update(self.collect_single_file(Path(event.src_path)))
+                self.data.update(self.collect_single_file(Path(event.src_path), config))
 
             def on_deleted(_, event):
                 self.data.pop(id_from_path(self.dir, Path(event.src_path)))
@@ -83,7 +83,7 @@ class DefaultMiner(Miner):
 class DefaultMarkdownMiner(DefaultMiner):
     """Base miner that implements collect_single_file() for markdown files"""
 
-    def collect_single_file(self, file: Path) -> str:
+    def collect_single_file(self, file: Path, config: dict) -> str:
         """
         Stores the data included in the frontmatter in a dictionary, adds
         the markdown content in the ``content`` field and then return the dictionary
@@ -91,6 +91,8 @@ class DefaultMarkdownMiner(DefaultMiner):
         with file.open("r") as f:
             data = f.read().split("---")
             metadata = YamlLoader(data[1]).get_data()
+            if "draft" in metadata and metadata["draft"] and not config["serving"]:
+                return
             content = "---".join(data[2:])
             object = metadata
             slug = id_from_path(self.dir, file)
@@ -137,7 +139,7 @@ class DefaultDataMiner(DefaultMiner):
         self.dir = Path(directory)
         self.name = "data"
 
-    def collect_single_file(self, file: Path) -> str:
+    def collect_single_file(self, file: Path, config: dict) -> str:
         """Users YamlLoader to get data from a yaml file"""
         with file.open("r") as f:
             slug = id_from_path(self.dir, file)
