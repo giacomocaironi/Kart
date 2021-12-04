@@ -11,7 +11,7 @@
       <span>{{ page.date|date_to_string }}</span>
       <span style='float:right'>
         Tags:
-          {% for tag in page.tags %}
+          {% for tag_slug in page.tags %}
             {% set tag = site.tags[tag_slug] %}
             <a href="{{ url("tags." + tag_slug + ".1") }}">{{tag.name}}</a>
           {% endfor %}
@@ -22,7 +22,12 @@
     <div class="col-md-12 col-lg-3">
       <div class='card' id='sidebar-toc'>
         <h3>Table of contents</h3>
-        {{ page.content|toc }}
+        {{page.content|toc}}
+        {% for h in page.content|toc %}
+          <a href="#{{h.id}}">
+            <span style="padding-left:{{ (h.level - 1) * 10 }}px">{{h.title}}</span>
+          </a>
+        {% endfor %}
       </div>
     </div>
   </div>

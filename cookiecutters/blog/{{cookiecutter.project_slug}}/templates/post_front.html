@@ -4,7 +4,7 @@
     <span>{{ post.date|date_to_string }}</span>
     <span style='float:right'>
       Tags:
-        {% for tag in post.tags %}
+        {% for tag_slug in post.tags %}
           {% set tag = site.tags[tag_slug] %}
           <a href="{{ url("tags." + tag_slug + ".1") }}">{{tag.name}}</a>
         {% endfor %}
