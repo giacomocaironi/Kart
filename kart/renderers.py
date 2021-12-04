@@ -138,7 +138,7 @@ class DefaultSiteRenderer(DefaultFileRenderer):
                 self._render_single(key, config, site, map, build_location)
         else:
             with Pool(self.process_count) as p:
-                data = ((key, map, site, build_location) for key in map)
+                data = ((key, config, site, map, build_location) for key in map.keys())
                 p.starmap(self._render_single, data)
 
 

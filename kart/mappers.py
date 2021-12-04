@@ -145,6 +145,8 @@ class DefaultTaxonomyMapper(Mapper):
             items = site[self.collection]
             filtered_items = []
             for item in items:
+                if self.taxonomy not in item:
+                    continue
                 if isinstance(item[self.taxonomy], str):
                     if item[self.taxonomy] == slug:
                         filtered_items.append(item)
