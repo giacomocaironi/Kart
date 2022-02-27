@@ -1,7 +1,7 @@
 import pkg_resources
 
 from kart import Kart, mappers, miners, renderers
-from kart.markdown import markdown_to_html, markdown_to_toc
+from kart.ext.markdown import markdown_to_html, markdown_to_toc
 from kart.utils import date_to_string
 
 kart = Kart()

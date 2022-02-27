@@ -11,6 +11,7 @@ title: Changelog
 * Default Mappers now accept an extra parameter ``renderer`` to specify the name of the renderer to use
 * Miners now only process files of the specified file format
 * Jinja2 code is now executed by markdown_to_html, leading to the ability to add custom functionality inside the page content too, and not only in templates
+* Update to Jinja 3.0
 
 ## v0.12
 

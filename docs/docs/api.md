@@ -98,13 +98,13 @@ Api reference for every class and function of Kart.
 
 ## Markdown
 
-.. class:: kart.markdown.KartMistuneRenderer
+.. class:: kart.ext.markdown.KartMistuneRenderer
 
-.. function:: kart.markdown.markdown_to_html
+.. function:: kart.ext.markdown.markdown_to_html
 
-.. class:: kart.markdown.TocRenderer
+.. class:: kart.ext.markdown.TocRenderer
 
-.. function:: kart.markdown.markdown_to_toc
+.. function:: kart.ext.markdown.markdown_to_toc
 
 
 ## Documentation
