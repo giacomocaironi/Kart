@@ -8,7 +8,7 @@ from pathlib import Path
 from dateutil import tz
 from jinja2 import Environment, FileSystemLoader
 
-from kart.markdown import markdown_to_html, markdown_to_toc
+from kart.ext.markdown import markdown_to_html, markdown_to_toc
 from kart.utils import KartDict, KartMap, date_to_string
 
 

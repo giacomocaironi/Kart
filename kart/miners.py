@@ -52,6 +52,8 @@ class DefaultMiner(Miner):
         """
         self.data = KartDict()
         for file in filter(Path.is_file, self.dir.iterdir()):
+            if file.suffix not in self.extension:
+                continue
             object = self.collect_single_file(file, config)
             if object:
                 self.data.update(object)
@@ -82,6 +84,8 @@ class DefaultMiner(Miner):
 
 class DefaultMarkdownMiner(DefaultMiner):
     """Base miner that implements collect_single_file() for markdown files"""
+
+    extension = (".md",)
 
     def collect_single_file(self, file: Path, config: dict) -> str:
         """
@@ -133,6 +137,8 @@ class DefaultPageMiner(DefaultMarkdownMiner):
 
 class DefaultDataMiner(DefaultMiner):
     """Miner that get yaml data from the ``data`` folder"""
+
+    extension = (".yml", ".yaml")
 
     def __init__(self, directory: str = "data"):
         "Initializes miner. Sets the ``name`` and ``dir`` variables"

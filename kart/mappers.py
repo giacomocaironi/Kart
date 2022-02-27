@@ -42,11 +42,16 @@ class DefaultCollectionMapper(Mapper):
     """Mapper intended to be used with DefaultCollectionMiner"""
 
     def __init__(
-        self, collection: str, template: str = "item.html", base_url: str = ""
+        self,
+        collection: str,
+        template: str = "item.html",
+        base_url: str = "",
+        renderer: str = "default_site_renderer",
     ):
         self.template = template
         self.base_url = base_url
         self.collection = collection
+        self.renderer = renderer
 
     def map(self, config: dict, site: KartDict) -> KartMap:
         urls = {}
@@ -62,7 +67,7 @@ class DefaultCollectionMapper(Mapper):
                 "url": self.base_url + url,
                 "data": object,
                 "template": template,
-                "renderer": "default_site_renderer",
+                "renderer": self.renderer,
             }
             urls[slug] = page
         return urls
@@ -71,8 +76,11 @@ class DefaultCollectionMapper(Mapper):
 class DefaultPageMapper(Mapper):
     """Mapper intended to be used with DefaultPageMiner"""
 
-    def __init__(self, template: str = "page.html"):
+    def __init__(
+        self, template: str = "page.html", renderer: str = "default_site_renderer"
+    ):
         self.template = template
+        self.renderer = renderer
 
     def map(self, config: dict, site: KartDict) -> KartMap:
         urls = {}
@@ -92,7 +100,7 @@ class DefaultPageMapper(Mapper):
                 "url": url,
                 "data": page,
                 "template": template,
-                "renderer": "default_site_renderer",
+                "renderer": self.renderer,
             }
             urls[slug] = page
         return urls
@@ -102,11 +110,16 @@ class DefaultIndexMapper(Mapper):
     """Mapper that creates the index pages of a collection"""
 
     def __init__(
-        self, collection: str, template: str = "index.html", base_url: str = ""
+        self,
+        collection: str,
+        template: str = "index.html",
+        base_url: str = "",
+        renderer: str = "default_site_renderer",
     ):
         self.template = template
         self.base_url = base_url
         self.collection = collection
+        self.renderer = renderer
 
     def map(self, config: dict, site: KartDict) -> KartMap:
         items = list(site[self.collection])
@@ -117,6 +130,7 @@ class DefaultIndexMapper(Mapper):
             template=self.template,
             base_url=self.base_url + "/index/page/",
             slug=f"{self.collection}_index",
+            renderer=self.renderer,
             additional_data={},
         )
         paginated_map[f"{self.collection}_index.1"]["url"] = self.base_url + "/"
@@ -132,11 +146,13 @@ class DefaultTaxonomyMapper(Mapper):
         taxonomy: str,
         template: str = "tag.html",
         base_url: str = "",
+        renderer: str = "default_site_renderer",
     ):
         self.template = template
         self.base_url = base_url
         self.collection = collection
         self.taxonomy = taxonomy
+        self.renderer = renderer
 
     def map(self, config: dict, site: KartDict) -> KartMap:
         urls = {}
@@ -160,6 +176,7 @@ class DefaultTaxonomyMapper(Mapper):
                     template=self.template,
                     base_url=self.base_url + f"/{self.taxonomy}/{slug}/",
                     slug=f"{self.taxonomy}.{slug}",
+                    renderer=self.renderer,
                     additional_data=taxonomy,
                 )
             )
@@ -169,8 +186,9 @@ class DefaultTaxonomyMapper(Mapper):
 class DefaultFeedMapper(Mapper):
     """Mapper that adds an entry for DefaultFeedMapper"""
 
-    def __init__(self, collections: list = []):
+    def __init__(self, collections: list = [], renderer: str = "default_feed_renderer"):
         self.collections = collections
+        self.renderer = renderer
 
     def map(self, config: dict, site: KartDict) -> KartMap:
         return {
@@ -178,7 +196,7 @@ class DefaultFeedMapper(Mapper):
                 "url": "/atom.xml",
                 "data": {"collections": self.collections},
                 "template": "",
-                "renderer": "default_feed_renderer",
+                "renderer": self.renderer,
             }
         }
 

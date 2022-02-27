@@ -4,6 +4,14 @@ title: Changelog
 
 # Changelog
 
+
+## v0.13 (in development, not yet released)
+
+* Markdown functions have been moved to the ext subdirectory
+* Default Mappers now accept an extra parameter ``renderer`` to specify the name of the renderer to use
+* Miners now only process files of the specified file format
+* Jinja2 code is now executed by markdown_to_html, leading to the ability to add custom functionality inside the page content too, and not only in templates
+
 ## v0.12
 
 * The ``config`` dictionary is now given as input to every function. It is also passed as a separate argument to Jinja2 templates instead of being a part of ``site``.

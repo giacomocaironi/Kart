@@ -6,7 +6,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
 from kart.ext.documentation import DocumentationDirective
-from kart.markdown import KartMistuneRenderer
+from kart.ext.markdown import KartMistuneRenderer
 
 
 class Admonition(Admonition):

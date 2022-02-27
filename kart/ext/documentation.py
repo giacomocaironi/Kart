@@ -20,7 +20,7 @@ from jinja2.runtime import Context
 from mistune.directives import Directive
 
 from kart.mappers import Mapper
-from kart.markdown import KartMistuneRenderer, TocRenderer
+from kart.ext.markdown import KartMistuneRenderer, TocRenderer
 from kart.utils import KartObserver
 
 

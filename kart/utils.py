@@ -77,6 +77,7 @@ def paginate(
     template: str,
     base_url: str,
     slug: str,
+    renderer: str,
     additional_data: dict = {},
 ) -> dict:
     """Splits objects and for each group create an entry in the site map"""
@@ -109,7 +110,7 @@ def paginate(
             "url": base_url + f"{i}/" if i > 1 else base_url,
             "data": data,
             "template": template,
-            "renderer": "default_site_renderer",
+            "renderer": renderer,
         }
     return urls
 
