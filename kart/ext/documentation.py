@@ -3,7 +3,7 @@ from pathlib import Path
 from slugify import slugify
 from watchdog.events import RegexMatchingEventHandler
 
-from kart.miners import DefaultMarkdownMiner
+from kart.miners import DefaultMarkupMiner
 from kart.utils import KartDict
 
 try:
@@ -24,7 +24,7 @@ from kart.ext.markdown import KartMistuneRenderer, TocRenderer
 from kart.utils import KartObserver
 
 
-class DefaultDocumentationMiner(DefaultMarkdownMiner):
+class DefaultDocumentationMiner(DefaultMarkupMiner):
     """Miner that recursively looks for data in the ``docs`` folder"""
 
     def __init__(self, directory: str = "docs"):
