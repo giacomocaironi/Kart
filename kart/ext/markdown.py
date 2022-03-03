@@ -5,6 +5,7 @@ from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from slugify import slugify
+from pygments.styles import get_style_by_name
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):
@@ -28,7 +29,13 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
         """Renders the ``code`` block"""
         if lang:
             lexer = get_lexer_by_name(lang, stripall=True)
-            formatter = HtmlFormatter(wrapcode=True)
+            config = self.context["config"]["code_highlighting"]
+            formatter = HtmlFormatter(
+                wrapcode=True,
+                style=get_style_by_name(config["style"]),
+                noclasses=config["noclasses"],
+                prestyles="color: #EEFFFF" if config["noclasses"] else "",
+            )
             return highlight(text, lexer, formatter)
         else:
             return f"<pre><code>{mistune.escape(text.strip())}</code></pre>\n"
@@ -41,6 +48,7 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
 @contextfilter
 def markdown_to_html(context: Context, markdown: str) -> str:
     """Converts markdown data to html"""
+    parsed_markdown = context.environment.from_string(markdown).render(context)
     return mistune.Markdown(
         renderer=KartMistuneRenderer(context=context, escape=False),
         plugins=[
@@ -48,7 +56,7 @@ def markdown_to_html(context: Context, markdown: str) -> str:
             mistune.plugins.plugin_table,
             mistune.plugins.plugin_task_lists,
         ],
-    )(markdown)
+    )(parsed_markdown)
 
 
 class TocRenderer(mistune.renderers.BaseRenderer):

@@ -38,6 +38,7 @@ class Kart:
             "name": "Example",
             "site_url": "https://example.org",
             "pagination": {"per_page": 5, "skip": 0},
+            "code_highlighting": {"style": "default", "noclasses": True},
             "timezone": "UTC",
             "serving": False,
         }

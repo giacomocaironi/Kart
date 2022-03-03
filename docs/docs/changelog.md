@@ -7,11 +7,13 @@ title: Changelog
 
 ## v0.13 (in development, not yet released)
 
+* DefaultMarkdownMiner has been renamed DefaultMarkupMiner
 * Markdown functions have been moved to the ext subdirectory
 * Default Mappers now accept an extra parameter ``renderer`` to specify the name of the renderer to use
-* Miners now only process files of the specified file format
+* Miners now only process files of the specified extension
 * Jinja2 code is now executed by markdown_to_html, leading to the ability to add custom functionality inside the page content too, and not only in templates
 * Update to Jinja 3.0
+* A new field, ``code_highlighting`` has been added to the kart config
 
 ## v0.12
 
