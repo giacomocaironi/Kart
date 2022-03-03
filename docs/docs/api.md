@@ -15,7 +15,7 @@ Api reference for every class and function of Kart.
 
 .. class:: kart.miners.DefaultMiner
 
-.. class:: kart.miners.DefaultMarkdownMiner
+.. class:: kart.miners.DefaultMarkupMiner
 
 .. class:: kart.miners.DefaultCollectionMiner
 

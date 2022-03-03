@@ -12,6 +12,7 @@ except ImportError:
 from typing import Dict
 
 from kart.utils import KartDict, KartObserver
+import mimetypes
 
 
 class Miner(ABC):
@@ -82,16 +83,17 @@ class DefaultMiner(Miner):
         """Implements Miner.stop_watching(). It does nothing as no cleanup is needed"""
 
 
-class DefaultMarkdownMiner(DefaultMiner):
-    """Base miner that implements collect_single_file() for markdown files"""
+class DefaultMarkupMiner(DefaultMiner):
+    """Base miner that implements collect_single_file() for markup files"""
 
     extension = (".md",)
 
     def collect_single_file(self, file: Path, config: dict) -> str:
         """
         Stores the data included in the frontmatter in a dictionary, adds
-        the markdown content in the ``content`` field and then return the dictionary
+        the content in the ``content`` field and then return the dictionary
         """
+        mimetypes.init()
         with file.open("r") as f:
             data = f.read().split("---")
             metadata = YamlLoader(data[1]).get_data()
@@ -102,11 +104,11 @@ class DefaultMarkdownMiner(DefaultMiner):
             slug = id_from_path(self.dir, file)
             object["slug"] = slug
             object["content"] = content
-            object["content_type"] = "markdown"
+            object["content_type"] = mimetypes.guess_type(file)
             return {slug: object}
 
 
-class DefaultCollectionMiner(DefaultMarkdownMiner):
+class DefaultCollectionMiner(DefaultMarkupMiner):
     """Miner that looks for data in the ``collections`` folder"""
 
     def __init__(self, collection: str, directory: str = "collections"):
@@ -116,7 +118,7 @@ class DefaultCollectionMiner(DefaultMarkdownMiner):
         self.name = self.collection
 
 
-class DefaultTaxonomyMiner(DefaultMarkdownMiner):
+class DefaultTaxonomyMiner(DefaultMarkupMiner):
     """Miner that looks for data in the ``taxonomy`` folder"""
 
     def __init__(self, taxonomy: str, directory: str = "taxonomies"):
@@ -126,7 +128,7 @@ class DefaultTaxonomyMiner(DefaultMarkdownMiner):
         self.name = self.taxonomy
 
 
-class DefaultPageMiner(DefaultMarkdownMiner):
+class DefaultPageMiner(DefaultMarkupMiner):
     """Miner that get data from the ``pages`` folder"""
 
     def __init__(self, directory: str = "pages"):
