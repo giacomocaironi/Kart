@@ -14,6 +14,7 @@ title: Changelog
 * Jinja2 code is now executed by markdown_to_html, leading to the ability to add custom functionality inside the page content too, and not only in templates
 * Update to Jinja 3.0
 * A new field, ``code_highlighting`` has been added to the kart config
+* Add optional support for asciidoc via asciidoctor
 
 ## v0.12
 
