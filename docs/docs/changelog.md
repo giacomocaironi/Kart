@@ -5,7 +5,7 @@ title: Changelog
 # Changelog
 
 
-## v0.13 (in development, not yet released)
+## v0.13
 
 * DefaultMarkdownMiner has been renamed DefaultMarkupMiner
 * Markdown functions have been moved to the ext subdirectory
