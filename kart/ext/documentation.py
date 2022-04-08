@@ -15,7 +15,7 @@ import importlib
 import inspect
 
 import mistune
-from jinja2 import contextfilter
+from jinja2 import pass_context
 from jinja2.runtime import Context
 from mistune.directives import Directive
 
@@ -189,7 +189,7 @@ class DocumentationDirective(Directive):
             md.renderer.register("class", self.render_html_class)
 
 
-@contextfilter
+@pass_context
 def markdown_to_html(context: Context, markdown: str) -> str:
     """Converts markdown data to html.
     It supports markdown directives to extract the documentation out of python

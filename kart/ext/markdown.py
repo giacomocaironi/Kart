@@ -1,5 +1,5 @@
 import mistune
-from jinja2 import contextfilter
+from jinja2 import pass_context
 from jinja2.runtime import Context
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -45,7 +45,7 @@ class KartMistuneRenderer(mistune.HTMLRenderer):
         return f"<h{level} id={slugify(text)}>{text}</h{level}>\n"
 
 
-@contextfilter
+@pass_context
 def markdown_to_html(context: Context, markdown: str) -> str:
     """Converts markdown data to html"""
     parsed_markdown = context.environment.from_string(markdown).render(context)

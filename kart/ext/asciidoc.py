@@ -1,10 +1,10 @@
-from jinja2 import contextfilter
+from jinja2 import pass_context
 from jinja2.runtime import Context
 from subprocess import Popen, PIPE
 import xml.etree.ElementTree as xml
 
 
-@contextfilter
+@pass_context
 def asciidoc_to_html(context: Context, asciidoc: str) -> str:
     """Converts asciidoc data to html"""
     parsed_asciidoc = context.environment.from_string(asciidoc).render(context)

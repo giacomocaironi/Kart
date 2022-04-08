@@ -1,5 +1,5 @@
 import mistune
-from jinja2 import contextfilter
+from jinja2 import pass_context
 from mistune.directives.admonition import Admonition
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -45,7 +45,7 @@ class DocumentationMistuneRenderer(KartMistuneRenderer):
             return highlight(text, lexer, formatter)
 
 
-@contextfilter
+@pass_context
 def markdown_to_html(context, string):
     return mistune.Markdown(
         renderer=DocumentationMistuneRenderer(context=context, escape=False),
