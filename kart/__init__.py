@@ -161,18 +161,20 @@ class Kart:
             "-p", "--port", help="port to bind to", default=9000, type=int
         )
         parser.add_argument(
-            "--dev-url",
-            help="serve your site on a different url",
+            "--url",
+            help="specify website url",
             type=str,
         )
         args = parser.parse_args()
-        if args.command == "build":
-            self.config["serving"] = False
-            self.build()
+
+        self.config["serving"] = False
         if args.command == "serve":
             self.config["serving"] = True
-            if args.dev_url:
-                self.config["site_url"] = args.dev_url
-            else:
-                self.config["site_url"] = f"http://localhost:{args.port}"
+            self.config["site_url"] = f"http://localhost:{args.port}"
+        if args.url:
+            self.config["site_url"] = args.url
+
+        if args.command == "build":
+            self.build()
+        if args.command == "serve":
             self.serve(args.port)
