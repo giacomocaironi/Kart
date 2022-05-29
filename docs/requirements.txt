@@ -1,2 +1,3 @@
 git+https://gitlab.com/giacomocaironi/kart@master#egg=kart
 mkdocs==1.3.0
+beautifulsoup4

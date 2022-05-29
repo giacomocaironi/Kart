@@ -12,6 +12,8 @@ build:
   jobs:
     pre_build:
       - bash docs/build.sh
+    post_build:
+      - bash docs/create_search_index.sh
 
 python:
   install:

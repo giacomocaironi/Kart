@@ -18,12 +18,6 @@ kart.mappers = [
     documentation.DefaultDocumentationMapper(template="default.html"),
     mappers.ManualMapper(
         {
-            # "lunr_data": {
-            #     "url": "/search/search_index.json",
-            #     "data": {},
-            #     "template": "",
-            #     "renderer": "lunr_renderer",
-            # },
             "sitemap": {
                 "url": "/sitemap.xml",
                 "data": {},
