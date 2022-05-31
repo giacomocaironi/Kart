@@ -1,1 +1,0 @@
-mv docs/public/search/search_index.json docs/_build/html/search/search_index.json

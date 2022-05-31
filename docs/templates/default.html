@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block main %}
 
-<div id='page-wrapper' class="page-wrapper with-navbar with-sidebar with-transitions" data-sidebar-type="overlayed-sm-and-down">
+<div id='page-wrapper' class="page-wrapper with-navbar with-sidebar with-transitions"
+  data-sidebar-type="overlayed-sm-and-down">
 
   <div class="navbar">
     {% include "header.html" %}
@@ -18,19 +19,19 @@
       <div class="row">
 
         {% block content %}
-          <div class="col-xl-9">
-            <div class="content">
-                {{ page.content|html }}
-            </div>
+        <div class="col-xl-9">
+          <div class="content" role="main">
+            {{ page.content|html }}
           </div>
+        </div>
 
-          <div class="col-xl-3 on-this-page-nav-container">
-            <div class="content">
-              <div class="on-this-page-nav">
-                {% include "toc.html" %}
-              </div>
+        <div class="col-xl-3 on-this-page-nav-container">
+          <div class="content">
+            <div class="on-this-page-nav">
+              {% include "toc.html" %}
             </div>
           </div>
+        </div>
         {% endblock content %}
 
       </div>

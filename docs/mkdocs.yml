@@ -1,3 +1,9 @@
 site_name: Kart Documentation
 
 docs_dir: "public"
+
+plugins:
+  - search
+  - mkdocs-simple-hooks:
+      hooks:
+        on_post_build: "docs.lunr:build_search_index"
