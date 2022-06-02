@@ -61,5 +61,6 @@ kart.config["version"] = pkg_resources.get_distribution(kart.config["name"]).ver
 kart.config["repo_url"] = "https://gitlab.com/giacomocaironi/kart"
 kart.config["repo_name"] = "giacomocaironi/kart"
 kart.config["site_url"] = "https://giacomocaironi.gitlab.io/kart"
+kart.config["code_highlighting"] = {"style": "material"}
 
 kart.run()
