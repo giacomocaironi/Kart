@@ -16,28 +16,9 @@ kart.content_modifiers = []
 
 kart.mappers = [
     documentation.DefaultDocumentationMapper(template="default.html"),
-    mappers.ManualMapper(
-        {
-            "sitemap": {
-                "url": "/sitemap.xml",
-                "data": {},
-                "template": "",
-                "renderer": "default_sitemap_renderer",
-            },
-            "static": {
-                "url": "/static/*",
-                "data": {},
-                "template": "",
-                "renderer": "default_static_files_renderer",
-            },
-            "root": {
-                "url": "/*",
-                "data": {},
-                "template": "",
-                "renderer": "default_root_dir_renderer",
-            },
-        }
-    ),
+    mappers.DefaultSitemapMapper(),
+    mappers.DefaultStaticFilesMapper(),
+    mappers.DefaultRootDirMapper(),
 ]
 
 kart.map_modifiers = []

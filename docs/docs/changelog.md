@@ -4,6 +4,9 @@ title: Changelog
 
 # Changelog
 
+## v0.14 (not yet released)
+* Update to watchdog 2.0 and PyYaml 6.0
+* New mappers: DefaultSitemapMapper, DefaultStaticFilesMapper and DefaultRootDirMapper
 
 ## v0.13
 

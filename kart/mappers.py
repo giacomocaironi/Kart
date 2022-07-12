@@ -201,46 +201,43 @@ class DefaultFeedMapper(Mapper):
         }
 
 
-# class DefaultSitemapMapper(Mapper):
-#     """Mapper that adds an entry for DefaultFeedMapper"""
-#
-#     def map(self, site: KartDict) -> KartMap:
-#         return {
-#             "feed": {
-#                 "url": "/atom.xml",
-#                 "data": {"collections": self.collections},
-#                 "template": "",
-#                 "renderer": "default_feed_renderer",
-#             }
-#         }
-#
-#
-# class DefaultStaticFilesMapper(Mapper):
-#     """Mapper that adds an entry for DefaultFeedMapper"""
-#
-#     def map(self, site: KartDict) -> KartMap:
-#         return {
-#             "feed": {
-#                 "url": "/atom.xml",
-#                 "data": {"collections": self.collections},
-#                 "template": "",
-#                 "renderer": "default_feed_renderer",
-#             }
-#         }
-#
-#
-# class DefaultRootDirMapper(Mapper):
-#     """Mapper that adds an entry for DefaultFeedMapper"""
-#
-#     def __init__(self, collections: list = []):
-#         self.collections = collections
-#
-#     def map(self, site: KartDict) -> KartMap:
-#         return {
-#             "feed": {
-#                 "url": "/atom.xml",
-#                 "data": {"collections": self.collections},
-#                 "template": "",
-#                 "renderer": "default_feed_renderer",
-#             }
-#         }
+class DefaultSitemapMapper(Mapper):
+    """Mapper that adds an entry for DefaultFeedMapper"""
+
+    def map(elf, config: dict, site: KartDict) -> KartMap:
+        return {
+            "sitemap": {
+                "url": "/sitemap.xml",
+                "data": {},
+                "template": "",
+                "renderer": "default_sitemap_renderer",
+            },
+        }
+
+
+class DefaultStaticFilesMapper(Mapper):
+    """Mapper that adds an entry for DefaultFeedMapper"""
+
+    def map(self, config: dict, site: KartDict) -> KartMap:
+        return {
+            "static": {
+                "url": "/static/*",
+                "data": {},
+                "template": "",
+                "renderer": "default_static_files_renderer",
+            }
+        }
+
+
+class DefaultRootDirMapper(Mapper):
+    """Mapper that adds an entry for DefaultFeedMapper"""
+
+    def map(self, config: dict, site: KartDict) -> KartMap:
+        return {
+            "root": {
+                "url": "/*",
+                "data": {},
+                "template": "",
+                "renderer": "default_root_dir_renderer",
+            }
+        }

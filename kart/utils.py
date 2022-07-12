@@ -22,7 +22,7 @@ class KartObserver(Observer):
         """Ovverrides Observer.run() to execute an function each time an even is handled"""
         while self.should_keep_running():
             try:
-                self.dispatch_events(self.event_queue, self.timeout)
+                self.dispatch_events(self.event_queue)
                 if self.event_queue.empty():
                     self.action()
             except queue.Empty:

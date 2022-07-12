@@ -72,7 +72,7 @@ class DefaultDocumentationMiner(DefaultMarkupMiner):
 
         class Handler(RegexMatchingEventHandler):
             def on_any_event(_, event):
-                self.read_data()
+                self.read_data(config)
 
         self.read_data(config)
         observer.schedule(Handler(), self.dir, recursive=True)
