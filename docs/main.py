@@ -1,5 +1,4 @@
 import pkg_resources
-
 from kart import Kart, mappers, miners, renderers
 from kart.ext import documentation
 from kart.ext.markdown import markdown_to_toc

@@ -1,12 +1,11 @@
 import mistune
 from jinja2 import pass_context
+from kart.ext.documentation import DocumentationDirective
+from kart.ext.markdown import KartMistuneRenderer
 from mistune.directives.admonition import Admonition
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
-
-from kart.ext.documentation import DocumentationDirective
-from kart.ext.markdown import KartMistuneRenderer
 
 
 class Admonition(Admonition):

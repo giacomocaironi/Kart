@@ -1,7 +1,9 @@
-from pathlib import Path
-from kart import renderers
-from bs4 import BeautifulSoup
 import json
+import re
+from pathlib import Path
+
+from bs4 import BeautifulSoup
+from kart import renderers
 
 
 def build_search_index(*args, **kwargs):
@@ -20,22 +22,34 @@ def build_search_index(*args, **kwargs):
     for file in root_dir.glob("**/*.html"):
 
         soup = BeautifulSoup(file.open().read(), "html.parser")
-        content = soup.find_all(class_="content")[0]
+        content = "".join(str(x) for x in soup.find_all(class_="content")[0].contents)
+
+        sections = [x.strip() for x in re.split("<h[0-9].*</h[0-9]>", content)]
+        ids = [""] + re.findall('<h[0-9].*id="(.*)".*>.*</h[0-9]>', content)
+        names = [""] + re.findall("<h[0-9].*>(.*)</h[0-9]>", content)
 
         title = soup.title.text
         location = str(file.parent.relative_to(root_dir))
         if location == ".":
             location = ""
-        id = ""
+        location += "/" if location else ""
 
-        index["docs"].append(
-            {
-                "location": location + ('/' if location else '')  + ("#" if id else '') + id ,
-                "text": str(content),
-                "title": title,
-            }
-        )
+        index["docs"].append({"location": location, "text": content, "title": title})
 
-    dest = Path(kwargs["config"]["site_dir"]) / Path("search/search_index.json")
+        for id, name, section in zip(ids, names, sections):
+
+            if not section:
+                continue
+
+            index["docs"].append(
+                {
+                    "location": location + "#" + id,
+                    "text": section,
+                    "title": name,
+                }
+            )
+
+    dest = Path(kwargs["config"]["site_dir"]) / Path("search", "search_index.json")
+    dest.parent.mkdir(parents=True, exist_ok=True)
 
     json.dump(index, dest.open("w"))
