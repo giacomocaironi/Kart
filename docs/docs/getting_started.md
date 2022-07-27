@@ -27,7 +27,7 @@ The first thing you want to do when you write a post is choosing the title. It i
 ```markdown
 ---
 title: My first post
-date: YYYY/MM/DD
+date: YYYY-MM-DD
 description: This is my first post
 draft: False
 ---
@@ -39,7 +39,7 @@ Everything you write under the front matter is just markdown. It will be convert
 ```markdown
 ---
 title: My first post
-date: YYYY/MM/DD
+date: YYYY-MM-DD
 description: This is my first post
 draft: False
 ---
@@ -97,7 +97,7 @@ Now that we have created a tag we need to assign it to some posts. Go to the pos
 ```markdown
 ---
 title: My first post
-date: YYYY/MM/DD
+date: YYYY-MM-DD
 description: This is my first post
 draft: False
 ---
@@ -107,7 +107,7 @@ Now we can add some tags with the following syntax
 ```markdown
 ---
 title: My first post
-date: YYYY/MM/DD
+date: YYYY-MM-DD
 description: This is my first post
 draft: False
 tags:

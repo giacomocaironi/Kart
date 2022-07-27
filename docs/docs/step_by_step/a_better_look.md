@@ -31,14 +31,7 @@ However if you want to customize a little the style you should also write your o
 
 k.mappers = [
   mappers.DefaultPageMapper(),
-  mappers.ManualMapper(
-    "static": {
-      "url": "/static/*",
-      "data": {},
-      "template": "",
-      "renderer": "default_static_files_renderer",
-    },
-  )
+  mappers.DefaultStaticFilesMapper(),
 ]
 
 k.renderers = [
@@ -49,9 +42,7 @@ k.renderers = [
 k.run()
 ```
 
-You can see that we have added two things: a new mapper and a new renderer. The ``ManualMapper`` is a mapper that lets us create a new page manually, not programmatically, and we use it to say that the ``static`` folder should be used by the ``DefaultStaticFilesRenderer``. We obviously don't need to use the ``static`` folder, but we can choose our own name.
-
-Now we can create some css files in the ``static`` directory. To add them to our page we have to link them in our template with the ``url()`` function, like we did previously
+You can see that we have added two things: a new mapper and a new renderer, ``DefaultStaticFilesMapper`` and ``DefaultStaticFilesRenderer``. They are used in combination to copy files from the ``static`` directory. It is mainly used for css stylesheets and javascript files. To add these files to our page we have to link them in our template with the ``url()`` function, like we did previously
 
 ```html
 <!DOCTYPE html>
@@ -81,20 +72,8 @@ Now we need to modify our ``main.py`` file again, to tell Kart to render this di
 
 k.mappers = [
   mappers.DefaultPageMapper(),
-  mappers.ManualMapper(
-    "static": {
-        "url": "/static/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_static_files_renderer",
-    },
-    "root": {
-        "url": "/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_root_dir_renderer",
-    },
-  )
+  mappers.DefaultStaticFilesMapper(),
+  mappers.DefaultRootDirMapper(),
 ]
 
 k.renderers = [
@@ -108,7 +87,7 @@ k.config['name'] = 'The name of your site'
 k.run()
 ```
 
-Like for the ``static`` directory, we had to add an entry in ``ManualMapper``, and then add a new renderer, in this case ``DefaultRootDirRenderer``. Now if you run ``main.py`` again you should see your favicon instead of the ugly default one.
+Like for the ``static`` directory, we had to add a mapper and a renderer, ``DefaultRootDirMapper`` and ``DefaultRootDirRenderer`` in this case. Now if you run ``main.py`` again you should see your favicon instead of the ugly default one.
 
 ## Title
 

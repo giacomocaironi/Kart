@@ -43,15 +43,7 @@ A sitemap is a file that lists all the pages in a site, so that a search engine 
 
 k.mappers = [
   ...
-  mappers.ManualMapper(
-    ...
-    "sitemap": {
-        "url": "/sitemap.xml",
-        "data": {},
-        "template": "",
-        "renderer": "default_sitemap_renderer",
-    },
-  )
+  mappers.DefaultSitemapMapper()
 ]
 
 k.renderers = [
@@ -61,7 +53,7 @@ k.renderers = [
 ...
 ```
 
-You can see that we have added a new entry within ``ManualMapper`` to specify the location of the sitemap, then we only had to add the new ``DefaultSitemapRenderer`` to the list of renderers.
+You can see that the only thing we need is to add a new mapper, ``DefaultSitemapMapper``, and a new renderer, ``DefaultSitemapRenderer``
 
 ## Robots.txt
 
@@ -81,26 +73,9 @@ By subscribing to Atom feeds users can get notified when a site publishes a new 
 k.mappers = [
   ...
   mappers.DefaultFeedMapper(collections=["posts"]),
-  mappers.ManualMapper(
-    "static": {
-        "url": "/static/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_static_files_renderer",
-    },
-    "root": {
-        "url": "/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_root_dir_renderer",
-    },
-    "sitemap": {
-        "url": "/sitemap.xml",
-        "data": {},
-        "template": "",
-        "renderer": "default_sitemap_renderer",
-    },
-  )
+  mappers.DefaultStaticFilesMapper(),
+  mappers.DefaultRootDirMapper(),
+  mappers.DefaultSitemapMapper(),
 ]
 
 k.renderers = [

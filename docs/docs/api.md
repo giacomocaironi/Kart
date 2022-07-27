@@ -44,6 +44,12 @@ Api reference for every class and function of Kart.
 
 .. class:: kart.mappers.DefaultFeedMapper
 
+.. class:: kart.mappers.DefaultSitemapMapper
+
+.. class:: kart.mappers.DefaultStaticFilesMapper
+
+.. class:: kart.mappers.DefaultRootDirMapper
+
 
 ## Renderers
 

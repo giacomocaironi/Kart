@@ -29,20 +29,8 @@ k.miners = [
 k.mappers = [
   mappers.DefaultCollectionMapper(collection="posts", template="post.html"),
   mappers.DefaultPageMapper(),
-  mappers.ManualMapper(
-    "static": {
-        "url": "/static/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_static_files_renderer",
-    },
-    "root": {
-        "url": "/*",
-        "data": {},
-        "template": "",
-        "renderer": "default_root_dir_renderer",
-    },
-  )
+  mappers.DefaultStaticFilesMapper(),
+  mappers.DefaultRootDirMapper(),
 ]
 ...
 ```

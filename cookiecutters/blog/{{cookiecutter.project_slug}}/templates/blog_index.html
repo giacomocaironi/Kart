@@ -5,22 +5,10 @@
 {% endblock title %}
 
 {% block content %}
-<div class="bg-main" id='main-post'>
-  {% if site.posts|length > 0 %}
-  <div class="col-md-6">
-    <h5>Latest post</h5>
-    {% set first_post = site.posts|first %}
-    <h1><a href="{{ url("posts." + first_post.slug) }}">{{ first_post.title }}</a></h1>
-    <p>{{ first_post["description"] }}</p>
-  </div>
-  {% endif %}
-</div>
-
-
 <div class="row">
   <div class="col-md-12 col-lg-9">
     {% if page.paginator.index == 1 %}
-      <h2>Older posts</h2>
+      <h2>Blog index</h2>
     {% else %}
       <h2>Older posts - page {{page.paginator.index}}</h2>
     {% endif %}

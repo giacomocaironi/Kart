@@ -19,28 +19,10 @@ kart.mappers = [
     mappers.DefaultCollectionMapper(collection="posts", template="post.html"),
     mappers.DefaultPageMapper(),
     mappers.DefaultFeedMapper(collections=["posts"]),
-    mappers.ManualMapper(
-        {
-            "sitemap": {
-                "url": "/sitemap.xml",
-                "data": {},
-                "template": "",
-                "renderer": "default_sitemap_renderer",
-            },
-            "static": {
-                "url": "/static/*",
-                "data": {},
-                "template": "",
-                "renderer": "default_static_files_renderer",
-            },
-            "root": {
-                "url": "/*",
-                "data": {},
-                "template": "",
-                "renderer": "default_root_dir_renderer",
-            },
-        }
-    ),
+    mappers.DefaultSitemapMapper(),
+    mappers.DefaultStaticFilesMapper(),
+    mappers.DefaultRootDirMapper(),
+    mappers.ManualMapper({}),
 ]
 
 kart.map_modifiers = []
@@ -55,6 +37,8 @@ kart.renderers = [
 
 kart.config["name"] = "{{cookiecutter.project_name}}"
 kart.config["site_url"] = "{{cookiecutter.site_url}}"
-kart.config["pagination"] = {"per_page": 5, "skip": 1}
+kart.config["pagination"] = {"per_page": 5}
+kart.config['timezone'] = "{{cookiecutter.timezone}}"
+kart.config["code_highlighting"] = {"style": "material"}
 
 kart.run()
