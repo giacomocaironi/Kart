@@ -1,7 +1,8 @@
+import xml.etree.ElementTree as xml
+from subprocess import PIPE, Popen
+
 from jinja2 import pass_context
 from jinja2.runtime import Context
-from subprocess import Popen, PIPE
-import xml.etree.ElementTree as xml
 
 
 @pass_context

@@ -4,8 +4,8 @@ from jinja2.runtime import Context
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
-from slugify import slugify
 from pygments.styles import get_style_by_name
+from slugify import slugify
 
 
 class KartMistuneRenderer(mistune.HTMLRenderer):

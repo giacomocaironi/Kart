@@ -38,7 +38,7 @@ kart.renderers = [
 kart.config["name"] = "{{cookiecutter.project_name}}"
 kart.config["site_url"] = "{{cookiecutter.site_url}}"
 kart.config["pagination"] = {"per_page": 5}
-kart.config['timezone'] = "{{cookiecutter.timezone}}"
+kart.config["timezone"] = "{{cookiecutter.timezone}}"
 kart.config["code_highlighting"] = {"style": "material"}
 
 kart.run()

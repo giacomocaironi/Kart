@@ -19,8 +19,8 @@ from jinja2 import pass_context
 from jinja2.runtime import Context
 from mistune.directives import Directive
 
-from kart.mappers import Mapper
 from kart.ext.markdown import KartMistuneRenderer, TocRenderer
+from kart.mappers import Mapper
 from kart.utils import KartObserver
 
 
