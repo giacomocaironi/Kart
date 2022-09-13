@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+from fnmatch import fnmatch
 from pathlib import Path
+from typing import Union
 
 from watchdog.events import RegexMatchingEventHandler
 
@@ -9,10 +11,11 @@ try:
     from yaml import CSafeLoader as YamlLoader
 except ImportError:
     from yaml import SafeLoader as YamlLoader
+
+import mimetypes
 from typing import Dict
 
 from kart.utils import KartDict, KartObserver
-import mimetypes
 
 
 class Miner(ABC):
@@ -46,15 +49,16 @@ class DefaultMiner(Miner):
     def collect_single_file(self, file: Path, config: dict):
         """Reads data from a single file"""
 
+    def valid_path(self, path: Union[Path, str]) -> bool:
+        return any(fnmatch(path, "*" + ext) for ext in self.extensions)
+
     def read_data(self, config: dict):
         """Implements Miner.read_data().
 
         It iterates over a directory and calls collect_single_file() for each file
         """
         self.data = KartDict()
-        for file in filter(Path.is_file, self.dir.iterdir()):
-            if file.suffix not in self.extension:
-                continue
+        for file in filter(self.valid_path, filter(Path.is_file, self.dir.iterdir())):
             object = self.collect_single_file(file, config)
             if object:
                 self.data.update(object)
@@ -67,14 +71,23 @@ class DefaultMiner(Miner):
 
         class Handler(RegexMatchingEventHandler):
             def on_moved(_, event):
-                self.data.pop(id_from_path(self.dir, Path(event.src_path)))
-                self.data.update(self.collect_single_file(Path(event.src_path), config))
+                self.data.pop(id_from_path(self.dir, Path(event.src_path)), None)
+                if self.valid_path(event.dest_path):
+                    self.data.update(
+                        self.collect_single_file(Path(event.dest_path), config)
+                    )
 
             def on_modified(_, event):
-                self.data.update(self.collect_single_file(Path(event.src_path), config))
+                if self.valid_path(event.src_path):
+                    self.data.update(
+                        self.collect_single_file(Path(event.src_path), config)
+                    )
+
+            def on_created(_, event):
+                _.on_modified(event)
 
             def on_deleted(_, event):
-                self.data.pop(id_from_path(self.dir, Path(event.src_path)))
+                self.data.pop(id_from_path(self.dir, Path(event.src_path)), None)
 
         self.read_data(config)
         observer.schedule(Handler(ignore_directories=True), self.dir, recursive=False)
@@ -86,7 +99,7 @@ class DefaultMiner(Miner):
 class DefaultMarkupMiner(DefaultMiner):
     """Base miner that implements collect_single_file() for markup files"""
 
-    extension = (".md",)
+    extensions = (".md",)
 
     def collect_single_file(self, file: Path, config: dict) -> str:
         """
@@ -104,7 +117,7 @@ class DefaultMarkupMiner(DefaultMiner):
             slug = id_from_path(self.dir, file)
             object["slug"] = slug
             object["content"] = content
-            object["content_type"] = mimetypes.guess_type(file)
+            object["markup"] = "markdown"
             return {slug: object}
 
 
@@ -140,7 +153,7 @@ class DefaultPageMiner(DefaultMarkupMiner):
 class DefaultDataMiner(DefaultMiner):
     """Miner that get yaml data from the ``data`` folder"""
 
-    extension = (".yml", ".yaml")
+    extensions = (".yml", ".yaml")
 
     def __init__(self, directory: str = "data"):
         "Initializes miner. Sets the ``name`` and ``dir`` variables"

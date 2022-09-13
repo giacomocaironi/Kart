@@ -129,12 +129,16 @@ def id_from_path(base_dir: Path, path: Path) -> str:
 
 def merge_dicts(a: dict, b: dict) -> dict:
     """Merge two dicts"""
-    for key in b:
+    c = {}
+    for key in a.keys():
+        c[key] = a[key]
+    for key in b.keys():
         if key not in a:
-            a[key] = b[key]
+            c[key] = b[key]
         else:
             if isinstance(b[key], dict):
                 if isinstance(a[key], dict):
-                    merge_dicts(a[key], b[key])
+                    c[key] = merge_dicts(a[key], b[key])
                 else:
                     raise Exception
+    return c

@@ -42,7 +42,7 @@ class Kart:
             "timezone": "UTC",
             "serving": False,
         }
-        merge_dicts(self.config, default)
+        self.config = merge_dicts(self.config, default)
 
     def mine_data(self, start: bool = True):
         """Calls miners and content modifiers"""
@@ -50,7 +50,7 @@ class Kart:
         for miner in self.miners:
             if start:
                 miner.read_data(self.config)
-            self.site.update(miner.collect(self.config))
+            self.site = merge_dicts(self.site, miner.collect(self.config))
         for modifier in self.content_modifiers:
             modifier.modify(self.config, self.site)
 
