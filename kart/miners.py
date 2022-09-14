@@ -59,9 +59,9 @@ class DefaultMiner(Miner):
         """
         self.data = KartDict()
         for file in filter(self.valid_path, filter(Path.is_file, self.dir.iterdir())):
-            object = self.collect_single_file(file, config)
-            if object:
-                self.data.update(object)
+            data = self.collect_single_file(file, config)
+            if data:
+                self.data.update(data)
 
     def collect(self, config: dict):
         return {self.name: self.data}
@@ -113,12 +113,13 @@ class DefaultMarkupMiner(DefaultMiner):
             if "draft" in metadata and metadata["draft"] and not config["serving"]:
                 return
             content = "---".join(data[2:])
-            object = metadata
             slug = id_from_path(self.dir, file)
-            object["slug"] = slug
-            object["content"] = content
-            object["markup"] = "markdown"
-            return {slug: object}
+            data = {}
+            data["markup"] = "markdown"
+            data.update(metadata)
+            data["content"] = content
+            data["slug"] = slug
+            return {slug: data}
 
 
 class DefaultCollectionMiner(DefaultMarkupMiner):
