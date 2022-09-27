@@ -12,7 +12,6 @@ try:
 except ImportError:
     from yaml import SafeLoader as YamlLoader
 
-import mimetypes
 from typing import Dict
 
 from kart.utils import KartDict, KartObserver
@@ -106,7 +105,6 @@ class DefaultMarkupMiner(DefaultMiner):
         Stores the data included in the frontmatter in a dictionary, adds
         the content in the ``content`` field and then return the dictionary
         """
-        mimetypes.init()
         with file.open("r") as f:
             data = f.read().split("---")
             metadata = YamlLoader(data[1]).get_data()

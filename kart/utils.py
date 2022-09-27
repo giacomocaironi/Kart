@@ -129,7 +129,7 @@ def id_from_path(base_dir: Path, path: Path) -> str:
 
 def merge_dicts(a: dict, b: dict) -> dict:
     """Merge two dicts"""
-    c = {}
+    c = a.__class__()
     for key in a.keys():
         c[key] = a[key]
     for key in b.keys():
@@ -142,3 +142,11 @@ def merge_dicts(a: dict, b: dict) -> dict:
                 else:
                     raise Exception
     return c
+
+
+def str_to_bool(x: str) -> bool:
+    if x in ("y", "yes", "t", "true", "on", "1"):
+        return True
+    if x in ("n", "no", "f", "false", "off", "0"):
+        return False
+    raise ValueError()

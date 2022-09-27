@@ -6,9 +6,10 @@ title: Changelog
 
 ## v0.14 (not yet released)
 * Update to watchdog 2.0 and PyYaml 6.0
-* New mappers: DefaultSitemapMapper, DefaultStaticFilesMapper and DefaultRootDirMapper
+* New mappers: ``DefaultSitemapMapper``, ``DefaultStaticFilesMapper`` and ``DefaultRootDirMapper``
 * Bugfix: if there where multiple data miners they wouldn't update correctly when there where changed in the filesystem
 * We now support multiple miners watching on the same directory with different extensions
+* Create new miners inside ``kart.ext.asciidoc``, equivalent to default ones but using Asciidoc instead of markdown
 
 ## v0.13
 
