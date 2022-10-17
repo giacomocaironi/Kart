@@ -15,7 +15,10 @@ pygments = "^2.6.1"
 watchdog = "^2.1"
 python-slugify = "^4.0.1"
 python-dateutil = "^2.8.2"
-tomli = "^2.0.1"
+tomli = {version = "^2.0.1", optional = true}
+
+[tool.poetry.extras]
+toml = ["tomli"]
 
 [build-system]
 requires = ["poetry>=0.12"]
