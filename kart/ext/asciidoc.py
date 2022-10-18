@@ -68,6 +68,9 @@ def parse_asciidoc_header(header: str) -> Dict[str, Any]:
             value = [x.strip() for x in value.split(",")]
         if key == "date":
             value = date.fromisoformat(value)
+        if value == "":
+            # https://docs.asciidoctor.org/asciidoc/latest/attributes/boolean-attributes/
+            value = True
         try:
             value = str_to_bool(value)
         except:

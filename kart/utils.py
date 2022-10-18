@@ -145,6 +145,7 @@ def merge_dicts(a: dict, b: dict) -> dict:
 
 
 def str_to_bool(x: str) -> bool:
+    x = x.lower()
     if x in ("y", "yes", "t", "true", "on", "1"):
         return True
     if x in ("n", "no", "f", "false", "off", "0"):
