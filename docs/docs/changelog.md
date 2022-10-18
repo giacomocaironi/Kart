@@ -10,6 +10,7 @@ title: Changelog
 * Bugfix: if there where multiple data miners they wouldn't update correctly when there where changed in the filesystem
 * We now support multiple miners watching on the same directory with different extensions
 * Create new miners inside ``kart.ext.asciidoc``, equivalent to default ones but using Asciidoc instead of markdown
+* Add optional toml support inside ``kart.ext.toml``
 
 ## v0.13
 

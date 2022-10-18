@@ -102,15 +102,21 @@ Api reference for every class and function of Kart.
 .. function:: kart.utils.merge_dicts
 
 
-## Markdown
+## Asciidoc
 
-.. class:: kart.ext.markdown.KartMistuneRenderer
+.. class:: kart.ext.asciidoc.AsciidocMiner
 
-.. function:: kart.ext.markdown.markdown_to_html
+.. function:: kart.ext.asciidoc.asciidoc_to_html
 
-.. class:: kart.ext.markdown.TocRenderer
+.. function:: kart.ext.asciidoc.asciidoc_to_toc
 
-.. function:: kart.ext.markdown.markdown_to_toc
+.. function:: kart.ext.asciidoc.parse_asciidoc_header
+
+.. class:: kart.ext.asciidoc.AsciidocCollectionMiner
+
+.. class:: kart.ext.asciidoc.AsciidocTaxonomyMiner
+
+.. class:: kart.ext.asciidoc.AsciidocPageMiner
 
 
 ## Documentation
@@ -126,3 +132,19 @@ Api reference for every class and function of Kart.
 .. class:: kart.ext.documentation.DocumentationTocRenderer
 
 .. function:: kart.ext.documentation.markdown_to_toc
+
+
+## Markdown
+
+.. class:: kart.ext.markdown.KartMistuneRenderer
+
+.. function:: kart.ext.markdown.markdown_to_html
+
+.. class:: kart.ext.markdown.TocRenderer
+
+.. function:: kart.ext.markdown.markdown_to_toc
+
+
+## Toml
+
+.. class:: kart.ext.toml.TomlDataMiner
