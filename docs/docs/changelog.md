@@ -4,7 +4,9 @@ title: Changelog
 
 # Changelog
 
-## v0.14 (not yet released)
+## v0.15 (not yet released)
+
+## v0.14
 * Update to watchdog 2.0 and PyYaml 6.0
 * New mappers: ``DefaultSitemapMapper``, ``DefaultStaticFilesMapper`` and ``DefaultRootDirMapper``
 * Bugfix: if there where multiple data miners they wouldn't update correctly when there where changed in the filesystem
