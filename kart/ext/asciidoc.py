@@ -92,7 +92,7 @@ class AsciidocMiner(DefaultMiner):
         with file.open("r") as f:
             data = f.read().split("\n\n")
             metadata = parse_asciidoc_header(data[0])
-            if "draft" in metadata and metadata["draft"] and not config["serving"]:
+            if "draft" in metadata and metadata["draft"] and not config["dev_mode"]:
                 return
             content = "\n\n".join(data[1:])
             slug = id_from_path(self.dir, file)

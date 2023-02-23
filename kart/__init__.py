@@ -41,6 +41,7 @@ class Kart:
             "code_highlighting": {"style": "default", "noclasses": True},
             "timezone": "UTC",
             "serving": False,
+            "dev_server_port": 9000,
         }
         self.config = merge_dicts(self.config, default)
 
@@ -158,13 +159,14 @@ class Kart:
             "command", help="command to execute", choices={"build", "serve"}
         )
         parser.add_argument(
-            "-p", "--port", help="port to bind to", default=9000, type=int
+            "-p", "--port", help="port to bind to", default=None, type=int
         )
         parser.add_argument(
             "--url",
             help="specify website url",
             type=str,
         )
+        parser.add_argument("--dev", help="developer mode", action="store_true")
         args = parser.parse_args()
 
         self.config["serving"] = False
@@ -174,7 +176,11 @@ class Kart:
         if args.url:
             self.config["site_url"] = args.url
 
+        if args.port:
+            self.config["dev_server_port"] = args.port
+        self.config["dev_mode"] = args.dev
+
         if args.command == "build":
             self.build()
         if args.command == "serve":
-            self.serve(args.port)
+            self.serve(self.config["dev_server_port"])

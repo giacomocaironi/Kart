@@ -108,7 +108,7 @@ class DefaultMarkupMiner(DefaultMiner):
         with file.open("r") as f:
             data = f.read().split("---")
             metadata = YamlLoader(data[1]).get_data()
-            if "draft" in metadata and metadata["draft"] and not config["serving"]:
+            if "draft" in metadata and metadata["draft"] and not config["dev_mode"]:
                 return
             content = "---".join(data[2:])
             slug = id_from_path(self.dir, file)
